@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <link rel="icon" type="image/png" href="imgs/logo-icon.png" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Exemplo de HLS</title>
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest"></script>
+</head>
+
+<body>
+    <h1>Reprodução de Vídeo HLS</h1>
+
+    <video id="video" controls width="600"></video>
+    <!-- <script>
+        if (Hls.isSupported()) {
+            var video = document.getElementById('video');
+            var hls = new Hls();
+            var hlsUrl = 'https://testvsl1.b-cdn.net/24b5b278-9505-4cb6-acb0-5ec5aa5987e3/ssssss/segment.m3u8';
+            hls.loadSource(hlsUrl);
+            hls.attachMedia(video);
+            hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                video.play();
+            });
+        } else if (video.canPlayType('application/vnd.apple.mpegurl')) {
+            video.src = 'https://exemplo.com/seu-stream.m3u8';
+            video.addEventListener('loadedmetadata', function () {
+                video.play();
+            });
+        } else {
+            console.error('HLS não é suportado neste navegador.');
+        }
+    </script> -->
+    <script>
+        if (Hls.isSupported()) {
+            window.hls = new Hls();
+        }
+
+        const ver = Date.now();
+        const script = document.createElement("script");
+        script.src = "player.js?" + ver;
+        script.async = true;
+        document.getElementsByTagName("head")[0].appendChild(script);
+    </script>
+</body>
+
+</html>
