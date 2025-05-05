@@ -537,11 +537,15 @@ function gerarStringAlfanumerica(tamanho) {
 
 function playPauseVideo() {
   const video = document.getElementById("video");
-  video.muted = false;
-  if (video.paused) {
-    video.play();
+  if (videoElement.muted) {
+    videoElement.muted = false;
+    videoElement.loop = true;
+    videoElement.currentTime = 0;
+  }
+  if (videoElement.paused) {
+    videoElement.play();
   } else {
-    video.pause();
+    videoElement.pause();
   }
 }
 
@@ -770,135 +774,10 @@ const createAutoPlay = () => {
       sessionStorage.setItem("autoPlaySent", true);
     });
 };
-//====
-const createAffiliateLogo = () => {
-  const affiliateBox = document.createElement("a");
-  const affiliateLogo = document.createElement("img");
-
-  affiliateBox.href = videoInfo.urlAffiliate;
-  affiliateBox.setAttribute("target", "_blank");
-  affiliateBox.setAttribute("rel", "noopener noreferrer");
-
-  affiliateLogo.src = "https://dev.hostvsl.com.br/assets/logo-4f3361a7.png";
-  affiliateLogo.style.position = "absolute";
-  affiliateLogo.style.width = "15%";
-  affiliateLogo.style.height = "auto";
-  affiliateLogo.style.maxWidth = "100%";
-  affiliateLogo.style.maxHeight = "100%";
-  affiliateLogo.style.textAlign = "center";
-  affiliateLogo.style.overflow = "hidden";
-  affiliateLogo.style.zIndex = "20";
-  affiliateLogo.style.opacity = videoInfo.transparencyAffiliateLogo;
-
-  switch (videoInfo.selectedAffiliateLogoPosition) {
-    case "I_Meio":
-      affiliateLogo.style.left = "50%";
-      affiliateLogo.style.bottom = "12px";
-      affiliateLogo.style.transform = "translateX(-50%)";
-      break;
-    case "S_Meio":
-      affiliateLogo.style.left = "50%";
-      affiliateLogo.style.top = "12px";
-      affiliateLogo.style.transform = "translateX(-50%)";
-      break;
-    case "S_Esquerda":
-      affiliateLogo.style.left = "12px";
-      affiliateLogo.style.top = "10px";
-      affiliateLogo.style.transform = "translateY(0)";
-      break;
-    case "S_Direita":
-      affiliateLogo.style.right = "12px";
-      affiliateLogo.style.top = "10px";
-      affiliateLogo.style.transform = "translateY(0)";
-      break;
-    case "M_Esquerda":
-      affiliateLogo.style.left = "12px";
-      affiliateLogo.style.top = "50%";
-      affiliateLogo.style.transform = "translateY(-50%)";
-      break;
-    case "M_Direita":
-      affiliateLogo.style.right = "12px";
-      affiliateLogo.style.top = "50%";
-      affiliateLogo.style.transform = "translateY(-50%)";
-      break;
-    case "I_Esquerda":
-      affiliateLogo.style.left = "12px";
-      affiliateLogo.style.bottom = "12px";
-      affiliateLogo.style.transform = "translateY(0)";
-      break;
-    case "I_Direita":
-      affiliateLogo.style.right = "12px";
-      affiliateLogo.style.bottom = "12px";
-      affiliateLogo.style.transform = "translateY(0)";
-      break;
-  }
-
-  affiliateBox.appendChild(affiliateLogo);
-  videoContainer.appendChild(affiliateBox);
-};
 
 //====
-const createLogoMark = () => {
-  const logoMark = document.createElement("img");
-  logoMark.src = videoInfo.logoImg;
-  logoMark.style.position = "absolute";
-  logoMark.style.width = "10%";
-  logoMark.style.height = "auto";
-  logoMark.style.maxHeight = "100%";
-  logoMark.style.maxWidth = "100%";
-  logoMark.style.textAlign = "center";
-  logoMark.style.overflow = "hidden";
-  logoMark.style.zIndex = "25";
-  logoMark.style.cursor = "pointer";
-  switch (videoInfo.selectedLogoPosition) {
-    case "I_Meio":
-      logoMark.style.left = "50%";
-      logoMark.style.bottom = "12px";
-      logoMark.style.transform = "translateX(-50%)";
-      break;
-    case "S_Meio":
-      logoMark.style.left = "50%";
-      logoMark.style.top = "12px";
-      logoMark.style.transform = "translateX(-50%)";
-      break;
-    case "S_Esquerda":
-      logoMark.style.left = "12px";
-      logoMark.style.top = "10px";
-      logoMark.style.transform = "translateY(0)";
-      break;
-    case "S_Direita":
-      logoMark.style.right = "12px";
-      logoMark.style.top = "10px";
-      logoMark.style.transform = "translateY(0)";
-      break;
-    case "M_Esquerda":
-      logoMark.style.left = "12px";
-      logoMark.style.top = "50%";
-      logoMark.style.transform = "translateY(-50%)";
-      break;
-    case "M_Direita":
-      logoMark.style.right = "12px";
-      logoMark.style.top = "50%";
-      logoMark.style.transform = "translateY(-50%)";
-      break;
-    case "I_Esquerda":
-      logoMark.style.left = "12px";
-      logoMark.style.bottom = "12px";
-      logoMark.style.transform = "translateY(0)";
-      break;
-    case "I_Direita":
-      logoMark.style.right = "12px";
-      logoMark.style.bottom = "12px";
-      logoMark.style.transform = "translateY(0)";
-      break;
-  }
-  logoMark.addEventListener("click", () => {
-    window.open(videoInfo.urlLogo, "_blank");
-  });
-  videoContainer.appendChild(logoMark);
-};
-//====
-const createVideo = async () => {
+
+const createVideo = async (videoInfo) => {
   if (!videoInfo) {
     return createCantRunVideoImage();
   }
@@ -2547,6 +2426,2619 @@ const createInitialThumb = () => {
 
   videoContainer.appendChild(thumbInitial);
 };
+//====
+const createFinalThumb = () => {
+  const thumbFinal = document.createElement("img");
+  thumbFinal.style.position = "absolute";
+  thumbFinal.style.top = 0;
+
+  if (videoInfo?.haveBorder) {
+    thumbFinal.style.border = `4px solid ${videoInfo.borderColor}`;
+  }
+  if (videoInfo?.haveBorderRadius) {
+    thumbFinal.style.borderRadius = "12px";
+  }
+
+  thumbFinal.style.zIndex = 4;
+  thumbFinal.id = "thumbFinal";
+  if (videoInfo.haveAutoPlay) {
+    thumbFinal.style.display = "none";
+  }
+  if (!videoInfo.haveAutoPlay) {
+    thumbFinal.style.display = "block";
+  }
+  thumbFinal.style.width = "100%";
+  thumbFinal.style.height = "100%";
+  thumbFinal.style.zIndex = 0;
+  thumbFinal.src = videoInfo.thumbFinal;
+  thumbFinal.style.cursor = "pointer";
+
+  thumbFinal.addEventListener("click", () => {
+    handleUnmuteRestart();
+    thumbFinal.remove();
+  });
+
+  videoContainer.appendChild(thumbFinal);
+};
+//====
+const createThumbButton = () => {
+  const buttonThumb = document.createElement("a");
+  const buttonThumbText = document.createElement("p");
+
+  buttonThumbText.textContent = videoInfo.textButton;
+
+  buttonThumb.style.position = "absolute";
+  buttonThumb.style.zIndex = "999";
+  buttonThumb.style.paddingTop = "1.5%";
+  buttonThumb.style.paddingBottom = "1.5%";
+  buttonThumb.id = "idThumb";
+  buttonThumb.style.display = "none";
+  buttonThumb.style.textAlign = "center";
+  buttonThumb.style.textDecoration = "none";
+  buttonThumb.style.backgroundColor = videoInfo.backgroundButton;
+  buttonThumb.style.borderRadius = "5px";
+  const styleSheet = document.styleSheets[0];
+
+  styleSheet.insertRule(
+    `#idThumb:hover {
+        background-color: ${videoInfo.backgroundButtonHover}
+        }`,
+    styleSheet.cssRules.length
+  );
+
+  buttonThumbText.id = "buttonThumbText";
+  buttonThumbText.style.margin = 0;
+  buttonThumbText.style.color =
+    videoInfo.textButtonColor !== "0"
+      ? videoInfo.textButtonColor
+      : "#f9f9f9";
+
+  styleSheet.insertRule(
+    `#buttonThumbText:hover {
+          color: ${videoInfo.textButtonColorHover !== "0"
+      ? videoInfo.textButtonColorHover
+      : "#f9f9f9"
+    }
+        }`,
+    styleSheet.cssRules.length
+  );
+
+  if (videoInfo.selectedSize === "grande") {
+    buttonThumb.style.width = "30%";
+  }
+
+  if (videoInfo.selectedSize === "medio") {
+    buttonThumb.style.width = "25%";
+  }
+
+  if (videoInfo.selectedSize === "pequeno") {
+    buttonThumb.style.width = "20%";
+  }
+
+  if (
+    videoInfo.selectedPosition === "I_Esquerda" ||
+    videoInfo.selectedPosition === "I_Meio" ||
+    videoInfo.selectedPosition === "I_Direita"
+  ) {
+    buttonThumb.style.bottom = "5%";
+  }
+
+  if (
+    videoInfo.selectedPosition === "S_Esquerda" ||
+    videoInfo.selectedPosition === "S_Meio" ||
+    videoInfo.selectedPosition === "S_Direita"
+  ) {
+    buttonThumb.style.top = "5%";
+  }
+
+  if (
+    videoInfo.selectedPosition === "M_Esquerda" ||
+    videoInfo.selectedPosition === "M_Direita"
+  ) {
+    buttonThumb.style.top = "38%";
+  }
+
+  if (
+    videoInfo.selectedPosition === "S_Esquerda" ||
+    videoInfo.selectedPosition === "M_Esquerda" ||
+    videoInfo.selectedPosition === "I_Esquerda"
+  ) {
+    buttonThumb.style.left = "20px";
+  }
+  if (
+    videoInfo.selectedPosition === "S_Direita" ||
+    videoInfo.selectedPosition === "M_Direita" ||
+    videoInfo.selectedPosition === "I_Direita"
+  ) {
+    buttonThumb.style.right = "20px";
+  }
+
+  if (
+    videoInfo.selectedPosition === "S_Meio" ||
+    videoInfo.selectedPosition === "I_Meio" ||
+    videoInfo.selectedPosition === ""
+  ) {
+    if (videoInfo.selectedSize === "grande") {
+      buttonThumb.style.left = "35%";
+    }
+
+    if (videoInfo.selectedSize === "medio") {
+      buttonThumb.style.left = "37%";
+    }
+
+    if (videoInfo.selectedSize === "pequeno") {
+      buttonThumb.style.left = "39%";
+    }
+  }
+
+  buttonThumb.addEventListener("click", async (event) => {
+    if (
+      !(
+        videoInfo.textLink.startsWith("https://") ||
+        videoInfo.textLink.startsWith("http://")
+      )
+    ) {
+      window.open(`https://${videoInfo.textLink}`, "_blank");
+    }
+    return thumbClick();
+  });
+
+  buttonThumb.appendChild(buttonThumbText);
+  videoContainer.appendChild(buttonThumb);
+};
+//====
+const formatTime = (time) => {
+  const minutes = Math.floor(time / 60);
+  const seconds = Math.floor(time % 60);
+  return `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(
+    2,
+    "0"
+  )}`;
+};
+
+//====
+const seek = (e) => {
+  const videoElement = document.getElementById("my-video_html5_api");
+  const progress = document.getElementById("progress_control");
+  const progressTracker = document.getElementById("progress_tracker");
+  const progressThumb = document.getElementById("progress_thumb");
+
+  const { left, width } = progress.getBoundingClientRect();
+  const x = e.clientX - left;
+  const percent = (x / width) * 100;
+  progressTracker.style.width = `${percent}%`;
+  progressThumb.style.right = `calc(0% - 10px)`;
+  videoElement.currentTime = (percent / 100) * videoElement.duration;
+};
+
+//====
+const handleRewind = () => {
+  const videoElement = document.getElementById("my-video_html5_api");
+  videoElement.currentTime -= 10;
+};
+//====
+
+const handleForward = () => {
+  const videoElement = document.getElementById("my-video_html5_api");
+  videoElement.currentTime += 10;
+};
+
+//====
+const seekHandler = (e, value) => {
+  const videoElement = document.getElementById("my-video_html5_api");
+  // videoElement.currentTime = parseFloat(value);
+};
+
+const createControls = async () => {
+  const videoElement = document.getElementById("my-video_html5_api");
+  const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
+
+  const controlsFullContainerVideo = document.createElement("div");
+
+  controlsFullContainerVideo.id = "controls-container";
+  controlsFullContainerVideo.style.display = "flex";
+  controlsFullContainerVideo.style.width = "100%";
+  controlsFullContainerVideo.style.height = "100%";
+  controlsFullContainerVideo.style.position = "absolute";
+  controlsFullContainerVideo.style.zIndex = 4;
+
+  const control__timer = {
+    display: "flex",
+    color: `${videoInfo.controlColorIcon}`,
+    marginLeft: "10px",
+    width: "25%",
+  };
+
+  const containerControl = document.createElement("div");
+  containerControl.id = "container_controls";
+  containerControl.style.visibility = state.continueWLeftOff
+    ? "hidden"
+    : "visible";
+
+  containerControl.style.position = "absolute";
+  containerControl.style.top = 0;
+  containerControl.style.bottom = 0;
+  containerControl.style.left = 0;
+  containerControl.style.right = 0;
+
+  if (!videoInfo.checkedCaptureTimer) {
+    containerControl.style.display = videoInfo.haveForm ? "none" : "flex";
+  }
+
+  if (videoInfo.checkedCaptureTimer) {
+    containerControl.style.display = "flex";
+  }
+
+  containerControl.style.flexDirection = "column";
+  containerControl.style.zIndex = 4;
+  containerControl.style.justifyContent = "space-between";
+  containerControl.style.height = "100%";
+  containerControl.style.borderRadius = "12px";
+
+  const topContainer = document.createElement("div");
+  topContainer.classList.add("top_container");
+
+  const middleContainer = document.createElement("div");
+  middleContainer.classList.add("mid__container");
+
+  const bottomContainer = document.createElement("div");
+  bottomContainer.classList.add("bottom_container");
+
+  const controlBox = document.createElement("div");
+  controlBox.classList.add("control__box");
+  const innerControls = document.createElement("div");
+  innerControls.classList.add("inner__controls");
+  const leftControls = document.createElement("div");
+  leftControls.classList.add("left__controls");
+  const playPauseContainer = document.createElement("div");
+
+  const progressControl = document.createElement("progress");
+  progressControl.id = "progress_control";
+  progressControl.max = 100;
+  progressControl.value = 0;
+  progressControl.style.width = "98%";
+  progressControl.style.height = "4px";
+  progressControl.style.appearance = "none";
+  progressControl.style.cursor = "pointer";
+
+  progressControl.style.overflow = "hidden";
+  progressControl.style.setProperty(
+    "--webkit-progress-value-bg-color",
+    videoInfo?.controlColor
+  );
+
+  const color = videoInfo?.controlColor.split(",");
+  const newColor = color.slice(0, 3).join(",") + ", 0.5)";
+  progressControl.style.setProperty("--webkit-progress-bg-color", newColor);
+
+  const progressTracker = document.createElement("div");
+  progressTracker.id = "progress_tracker";
+  progressTracker.style.width = "0%";
+  progressTracker.style.height = "100%";
+  progressTracker.style.backgroundColor = videoInfo.controlColor;
+  progressTracker.style.position = "absolute";
+  progressTracker.style.top = "0";
+  progressTracker.style.left = "5px";
+  progressTracker.style.pointerEvents = "none";
+  progressTracker.style.zIndex = "1";
+
+  const progressThumb = document.createElement("div");
+  progressThumb.id = "progress_thumb";
+  progressThumb.style.width = "10px";
+  progressThumb.style.height = "10px";
+  progressThumb.style.backgroundColor = videoInfo.controlColor;
+  progressThumb.style.borderRadius = "50%";
+  progressThumb.style.position = "absolute";
+  progressThumb.style.top = "50%";
+  progressThumb.style.right = "-10px";
+  progressThumb.style.transform = "translate(-50%, -50%)";
+  progressThumb.style.pointerEvents = "none";
+  progressThumb.style.zIndex = "2";
+  progressTracker.appendChild(progressThumb);
+
+  //add a seek event
+
+  const progressStyle = document.createElement("style");
+  progressStyle.textContent = `
+      #progress_control::-webkit-progress-bar {
+        background-color: var(--webkit-progress-bg-color, #2e2bf1);
+      }
+
+      #progress_control::-webkit-progress-value {
+        background-color: var(--webkit-progress-value-bg-color, #2e2bf1);
+      }
+      `;
+  document.head.appendChild(progressStyle);
+
+  const sliderContainer = document.createElement("div");
+
+  sliderContainer.style.display = videoInfo.haveProgresso ? "flex" : "none";
+  sliderContainer.style.position = "relative";
+  sliderContainer.style.justifyContent = "center";
+
+  sliderContainer.appendChild(progressControl);
+  sliderContainer.appendChild(progressTracker);
+
+  bottomContainer.appendChild(sliderContainer);
+
+  if (videoInfo.haveBigPlay) {
+    const circle = document.createElement("div");
+    circle.id = "circle_control";
+    circle.style.backgroundColor = videoInfo?.controlColor;
+    circle.style.display = "block";
+    circle.style.position = "absolute";
+    circle.style.zIndex = 5;
+    if (!videoInfo.haveBigPlay) {
+      circle.style.width = "65px";
+      circle.style.height = "65px";
+      circle.style.fontSize = "40px";
+    }
+
+    if (videoInfo.haveBigPlay) {
+      circle.style.width = "80px";
+      circle.style.height = "80px";
+      circle.style.fontSize = "50px";
+    }
+
+    circle.style.top = "50%";
+    circle.style.left = "50%";
+    circle.style.cursor = "pointer";
+    circle.style.borderRadius = "50%";
+    circle.style.display = "flex";
+    circle.style.zIndex = 5;
+    circle.style.justifyContent = "center";
+    circle.style.alignItems = "center";
+    circle.style.border = "none";
+    circle.style.transform = "translate(-50%, -50%)";
+    circle.style.color = videoInfo?.controlColorIcon;
+
+    const play = document.createElement("i");
+    play.id = "icon_play_control";
+    play.classList.add("fa-solid");
+    play.classList.add("fa-play");
+    play.style.marginLeft = "7%";
+    play.style.fontSize = "2rem";
+
+    if (videoInfo.haveAutoPlay) {
+      play.style.display = "none";
+    }
+
+    const pause = document.createElement("i");
+    pause.id = "icon_pause_control";
+    pause.classList.add("fa-solid");
+    pause.classList.add("fa-pause");
+    pause.style.fontSize = "2rem";
+
+    if (!videoInfo.haveAutoPlay) {
+      pause.style.display = "none";
+    }
+
+    circle.appendChild(play);
+    circle.appendChild(pause);
+    circle.addEventListener("click", handlePlayPauseControl);
+
+    middleContainer.appendChild(circle);
+  }
+
+  if (videoInfo.haveSmallPlay) {
+    const playBottomControl = document.createElement("i");
+    playBottomControl.id = "icon_play_bottom_control";
+    playBottomControl.classList.add("fa-solid");
+    playBottomControl.classList.add("fa-play");
+
+    playPauseContainer.appendChild(playBottomControl);
+  }
+
+  const pauseBottomControl = document.createElement("i");
+  pauseBottomControl.id = "icon_pause_bottom_control";
+  pauseBottomControl.classList.add("fa-solid");
+  pauseBottomControl.classList.add("fa-pause");
+  pauseBottomControl.style.display = "none";
+
+  playPauseContainer.style.color = videoInfo?.controlColorIcon;
+  playPauseContainer.style.fontSize = "16px";
+  playPauseContainer.style.cursor = "pointer";
+
+  const rewindContainer = document.createElement("div");
+  rewindContainer.style.display = !videoInfo.haveRewind && "none";
+  const rewindBottomControl = document.createElement("i");
+  rewindBottomControl.classList.add("fa-solid");
+  rewindBottomControl.classList.add("fa-backward");
+  rewindContainer.appendChild(rewindBottomControl);
+
+  const forwardContainer = document.createElement("div");
+  forwardContainer.style.display = !videoInfo.haveSkip && "none";
+  const forwardBottomControl = document.createElement("i");
+  forwardBottomControl.classList.add("fa-solid");
+  forwardBottomControl.classList.add("fa-forward");
+  forwardContainer.appendChild(forwardBottomControl);
+  const mutedContainer = document.createElement("div");
+  mutedContainer.id = "muted_container";
+
+  mutedContainer.style.display = !videoInfo.haveVolume && "none";
+
+  const mutedBottomControl = document.createElement("i");
+  mutedBottomControl.id = "icon_muted_bottom_control";
+  mutedBottomControl.classList.add("fa-solid");
+  mutedBottomControl.classList.add("fa-volume-xmark");
+  mutedBottomControl.style.display = "none";
+  mutedContainer.appendChild(mutedBottomControl);
+
+  const unmutedBottomControl = document.createElement("i");
+  unmutedBottomControl.id = "icon_unmuted_bottom_control";
+  unmutedBottomControl.classList.add("fa-solid");
+  unmutedBottomControl.classList.add("fa-volume-high");
+  mutedContainer.appendChild(unmutedBottomControl);
+
+  rewindContainer.style.color = videoInfo?.controlColorIcon;
+  rewindContainer.style.fontSize = "16px";
+  rewindContainer.style.cursor = "pointer";
+  forwardContainer.style.color = videoInfo?.controlColorIcon;
+  forwardContainer.style.fontSize = "16px";
+  forwardContainer.style.cursor = "pointer";
+  mutedContainer.style.color = videoInfo?.controlColorIcon;
+  mutedContainer.style.fontSize = "16px";
+  mutedContainer.style.cursor = "pointer";
+  mutedContainer.addEventListener("click", handleMute);
+
+  playPauseContainer.appendChild(pauseBottomControl);
+
+  const timerContainer = document.createElement("div");
+  timerContainer.classList.add("control__timer");
+  timerContainer.style.display = !videoInfo.haveTempoAtual && "none";
+  timerContainer.style.color = videoInfo?.controlColorIcon;
+  timerContainer.style.fontSize = "14px";
+
+  const timer = document.createElement("span");
+  timer.id = "timer";
+  timer.textContent = "00:00";
+  timer.margin = "0";
+
+  const duration = document.createElement("span");
+  duration.id = "duration";
+
+  videoElement.onloadedmetadata = function () {
+    duration.textContent = formatTime(
+      this.duration || videoElement.duration
+    );
+  };
+
+  duration.margin = "0";
+
+  if (videoInfo?.haveAutoPlay) {
+    bottomContainer.style.display = "none";
+  }
+
+  timerContainer.appendChild(timer);
+
+  timerContainer.appendChild(document.createTextNode(" : "));
+
+  timerContainer.appendChild(duration);
+
+  rewindContainer.addEventListener("click", handleRewind);
+  forwardContainer.addEventListener("click", handleForward);
+
+  controlBox.appendChild(innerControls);
+  innerControls.appendChild(leftControls);
+
+  leftControls.appendChild(playPauseContainer);
+  leftControls.appendChild(rewindContainer);
+  leftControls.appendChild(forwardContainer);
+  leftControls.appendChild(mutedContainer);
+  leftControls.appendChild(timerContainer);
+
+  bottomContainer.appendChild(controlBox);
+  containerControl.appendChild(topContainer);
+  containerControl.appendChild(middleContainer);
+  containerControl.appendChild(bottomContainer);
+
+  controlsFullContainerVideo.appendChild(containerControl);
+
+  if (isMobile) {
+    controlsFullContainerVideo.addEventListener("click", handleMouseMove);
+  }
+  playPauseContainer.addEventListener("click", handlePlayPauseControl);
+  progressControl.addEventListener("click", seek);
+
+  videoContainer.appendChild(controlsFullContainerVideo);
+};
+//====
+const handleContinue = async (container) => {
+  const videoElement = document.getElementById("my-video_html5_api");
+  const controlsContainer = document.getElementById("container_controls");
+  const circle = document.getElementById("circle");
+  const circlePlay = document.getElementById("icon_play_control");
+  const circlePause = document.getElementById("icon_pause_control");
+  const circlePlayBottom = document.getElementById(
+    "icon_play_bottom_control"
+  );
+  const circlePauseBottom = document.getElementById(
+    "icon_pause_bottom_control"
+  );
+
+  const time = localStorage.getItem("time");
+  videoElement.currentTime = time;
+  videoElement.play();
+
+  if (circle) circle.style.visibility = "hidden";
+  if (circlePlay) circlePlay.style.display = "none";
+  if (circlePause) circlePause.style.display = "block";
+  if (circlePlayBottom) circlePlayBottom.style.display = "none";
+  if (circlePauseBottom) circlePauseBottom.style.display = "block";
+  if (controlsContainer) controlsContainer.style.visibility = "visible";
+
+  if (videoInfo.haveAutoPlay && !videoInfo.haveControls) {
+    createCirclePlay();
+  }
+
+  await Promise.resolve(localStorage.getItem("clickPlay")).then((resp) => {
+    if (!resp) {
+      if (!state.clickPlay) {
+        const sendData = {
+          id_video: videoInfo.id_video,
+          id_sessao: globalState?.newSessionUserId,
+          lastSession: globalState?.loadedSessionUserFromStorage,
+          play: true,
+        };
+        sendData.clickButton = true;
+        handleUpdateMetric(sendData);
+        localStorage.setItem("clickPlay", true);
+        setClicks(videoInfo.id_user);
+      }
+    }
+  });
+
+  container.remove();
+};
+//====
+const handleRestart = (container) => {
+  const circle = document.getElementById("circle");
+  const circlePlay = document.getElementById("icon_play_control");
+  const circlePause = document.getElementById("icon_pause_control");
+  const circlePlayBottom = document.getElementById(
+    "icon_play_bottom_control"
+  );
+  const circlePauseBottom = document.getElementById(
+    "icon_pause_bottom_control"
+  );
+
+  if (circle) circle.style.visibility = "hidden";
+  if (circlePlay) circlePlay.style.display = "none";
+  if (circlePause) circlePause.style.display = "block";
+  if (circlePlayBottom) circlePlayBottom.style.display = "none";
+  if (circlePauseBottom) circlePauseBottom.style.display = "block";
+  handleUnmuteRestart();
+
+  container.remove();
+};
+//====
+const createContinueDefault = () => {
+  const continueContainer = document.createElement("div");
+  continueContainer.id = "continue_container";
+  continueContainer.style.position = "absolute";
+  continueContainer.style.zIndex = 999;
+  continueContainer.style.display = "flex";
+  continueContainer.style.justifyContent = "center";
+  continueContainer.style.alignItems = "center";
+  continueContainer.style.width = "100%";
+  continueContainer.style.height = "100%";
+  continueContainer.style.top = 0;
+  continueContainer.style.backgroundColor =
+    videoInfo.backgroundContinue ?? "rbga(1,32,140,1)";
+  continueContainer.style.flexDirection = "column";
+
+  continueContainer.style.gap = "1rem";
+
+  if (videoInfo.haveBorder) {
+    continueContainer.style.border = `2px solid ${videoInfo.borderColor}`;
+  }
+  if (videoInfo.haveBorderRadius) {
+    continueContainer.style.borderRadius = "12px";
+  }
+  const continueText = document.createElement("h6");
+
+  continueText.textContent = videoInfo.textMessage
+    ? videoInfo.textMessage
+    : "Você já começou a assistir esse vídeo";
+  continueText.style.color = videoInfo.continueTextColor ?? "#fff";
+  continueText.style.fontSize = "24px";
+  continueText.style.fontWeight = 600;
+  continueText.style.margin = 0;
+  continueText.style.textAlign = "center";
+  continueText.id = "continueTitle";
+
+  //create two div with a icon and a text to continue or restart the video
+  const continueButton = document.createElement("div");
+  continueButton.style.display = "flex";
+  continueButton.style.justifyContent = "center";
+  continueButton.style.alignItems = "center";
+  continueButton.style.cursor = "pointer";
+  continueButton.style.gap = "5px";
+  continueButton.style.color = videoInfo.continueTextColor ?? "#fff";
+
+  const continueIcon = document.createElement("i");
+  continueIcon.classList.add("fa-solid");
+  continueIcon.classList.add("fa-play");
+  continueIcon.style.width = "50%";
+  continueIcon.style.height = "auto";
+  continueIcon.classList.add("autoCentro");
+
+  //create a new div for continueIcon
+  const continueIconDiv = document.createElement("div");
+  continueIconDiv.style.height = "1.5rem";
+  continueIconDiv.style.width = "1.5rem";
+  continueIconDiv.style.borderRadius = "200px";
+  continueIconDiv.style.border = `2px solid ${videoInfo.continueTextColor ?? "#fff"
+    }`;
+  continueIconDiv.style.display = "flex";
+  continueIconDiv.style.alignItems = "center";
+  continueIconDiv.style.justifyContent = "center";
+
+  const autoCentro = document.createElement("style");
+  autoCentro.textContent = `
+        .autoCentro {
+          margin-left: 2px;
+        }
+      `;
+  document.head.appendChild(autoCentro);
+
+  const Centro = document.createElement("style");
+  Centro.textContent = `
+        .Centro {
+          margin-left: 1.5px;
+        }
+      `;
+  document.head.appendChild(Centro);
+
+  const mediaQuery = document.createElement("style");
+  mediaQuery.textContent = `
+        @media only screen and (min-width: 800px) {
+          continueButton.style.height = "2.5rem";
+          continueButton.style.width = "2.5rem";
+        }
+      `;
+  document.head.appendChild(mediaQuery);
+
+  continueIconDiv.appendChild(continueIcon);
+
+  const continueTextButton = document.createElement("p");
+  continueTextButton.textContent = videoInfo.textContinue
+    ? videoInfo.textContinue
+    : "Continuar";
+
+  continueTextButton.style.fontSize = "0.9rem";
+  continueTextButton.style.margin = "0";
+  continueTextButton.id = "continueText";
+
+  const mediaQuery2 = document.createElement("style");
+  mediaQuery2.textContent = `
+        @media only screen and (min-width: 800px) {
+          continueTextButton.style.fontSize = "1.15rem";
+        }
+      `;
+  document.head.appendChild(mediaQuery2);
+
+  continueButton.appendChild(continueIconDiv);
+  continueButton.appendChild(continueTextButton);
+
+  //create a event when the user click in the continueButton the video will play the saved value
+  continueButton.addEventListener("click", () =>
+    handleContinue(continueContainer)
+  );
+
+  const restartButton = document.createElement("div");
+  restartButton.style.display = "flex";
+  restartButton.style.justifyContent = "center";
+  restartButton.style.alignItems = "center";
+  restartButton.style.cursor = "pointer";
+  restartButton.style.gap = "5px";
+  restartButton.style.color = videoInfo.continueTextColor ?? "#fff";
+
+  const restartIcon = document.createElement("i");
+  restartIcon.classList.add("fa-solid");
+  restartIcon.classList.add("fa-undo");
+  restartIcon.style.width = "50%";
+  restartIcon.style.height = "auto";
+  restartIcon.style.marginRight = "2.5px";
+
+  const restartIconDiv = document.createElement("div");
+  restartIconDiv.style.height = "1.5rem";
+  restartIconDiv.style.width = "1.5rem";
+  restartIconDiv.style.borderRadius = "200px";
+  restartIconDiv.style.border = `2px solid ${videoInfo.continueTextColor ?? "#fff"
+    }`;
+  restartIconDiv.style.display = "flex";
+  restartIconDiv.style.alignItems = "center";
+  restartIconDiv.style.justifyContent = "center";
+
+  restartIconDiv.appendChild(restartIcon);
+
+  const restartTextButton = document.createElement("p");
+  restartTextButton.textContent = videoInfo.textRestart
+    ? videoInfo.textRestart
+    : "Recomeçar";
+
+  restartTextButton.style.fontSize = "0.9rem";
+  restartTextButton.style.margin = "0";
+  restartTextButton.id = "restartText";
+
+  restartButton.appendChild(restartIconDiv);
+  restartButton.appendChild(restartTextButton);
+
+  restartButton.addEventListener("click", () =>
+    handleRestart(continueContainer)
+  );
+
+  const buttonContainer = document.createElement("div");
+  buttonContainer.style.display = "flex";
+  buttonContainer.style.justifyContent = "center";
+  buttonContainer.style.gap = "30px";
+  buttonContainer.style.alignItems = "center";
+
+  continueContainer.appendChild(continueText);
+  buttonContainer.appendChild(continueButton);
+  buttonContainer.appendChild(restartButton);
+  continueContainer.appendChild(buttonContainer);
+  videoContainer.appendChild(continueContainer);
+};
+
+//====
+const createContinueSmall = () => {
+  // caixa do continuar de onde parou ajustada ao tamanho do video.
+  const continueContainer = document.createElement("div");
+  continueContainer.id = "continue_container_small";
+
+  continueContainer.style.position = "absolute";
+  continueContainer.style.display = "flex";
+  continueContainer.style.width = "100%";
+  continueContainer.style.height = "100%";
+  continueContainer.style.margin = "0 auto";
+  continueContainer.style.flexDirection = "column";
+  continueContainer.style.zIndex = "5";
+
+  // caixa do continuar de onde parou.
+  const continueBox = document.createElement("section");
+  continueBox.id = "continue_box_small";
+  continueBox.style.height = "40%";
+  continueBox.style.width = "60%";
+  continueBox.style.position = "absolute";
+  continueBox.style.top = "50%";
+  continueBox.style.left = "50%";
+  continueBox.style.transform = "translate(-50%, -50%)";
+  continueBox.style.backgroundColor = "rgba(0, 0, 0, 0.7)";
+  continueBox.style.display = "flex";
+  continueBox.style.justifyContent = "center";
+  continueBox.style.flexDirection = "column";
+  continueBox.style.alignItems = "center";
+  continueBox.style.zIndex = "25";
+  continueBox.style.borderRadius = "8px";
+
+  // titulo do continuar de onde parou.
+  const continueTitle = document.createElement("h6");
+  continueTitle.id = "continue_title_small";
+  continueTitle.style.color = videoInfo.continueTextColor;
+  continueTitle.innerText =
+    videoInfo.textContinue !== ""
+      ? videoInfo.textContinue
+      : "Você já começou a assistir esse vídeo";
+
+  // caixa dos botões do continuar de onde parou.
+  const continueButtonsBox = document.createElement("div");
+  continueButtonsBox.style.width = "100%";
+  continueButtonsBox.style.maxWidth = "90%";
+  continueButtonsBox.style.display = "flex";
+  continueButtonsBox.style.alignItems = "center";
+  continueButtonsBox.style.justifyContent = "center";
+  continueButtonsBox.style.gap = "10px";
+  continueButtonsBox.style.overflow = "auto";
+  continueButtonsBox.style.whiteSpace = "nowrap";
+
+  // botão de "continuar" do continuar de onde parou.
+  const continueButtonContinue = document.createElement("button");
+  continueButtonContinue.id = "continue_button";
+  continueButtonContinue.innerText =
+    videoInfo.textContinue !== ""
+      ? videoInfo.textContinue
+      : "Continuar assistindo?";
+
+  // icone para o botão de continuar onde parou.
+  const continueIcon = document.createElement("i");
+  continueIcon.classList.add("fa-solid");
+  continueIcon.classList.add("fa-play");
+  continueIcon.style.width = "50%";
+  continueIcon.style.height = "auto";
+  continueIcon.classList.add("autoCentro");
+
+  // botão de reiniciar do continuar de onde parou.
+  const continueButtonRestart = document.createElement("button");
+  continueButtonRestart.id = "continue_button_restart";
+  continueButtonRestart.innerText =
+    videoInfo.textContinue !== ""
+      ? videoInfo.textContinue
+      : "Continuar assistindo?";
+
+  const continueStyling = document.createElement("style");
+
+  continueStyling.innerHTML = `
+            #continue_title_small {
+              font-weight: 600;
+              text-align: center;
+              font-size: 1.425em;
+              margin: 0;
+              margin-bottom: 1.25rem;
+            }
+
+            #continue_button {
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: rgb(88, 88, 88);
+              gap: 0.5rem;
+              border-radius: 5px;
+              border: none;
+              padding: 1rem;
+              min-width: 60px;
+              color: #fff;
+            }
+
+            #continue_button_restart {
+              cursor: pointer;
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              background-color: rgb(0, 170, 255);
+              gap: 0.5rem;
+              border-radius: 5px;
+              border: none;
+              padding: 1rem;
+              min-width: 60px;
+              color: #fff;
+            }
+
+            @media (max-width: 720px) {
+              #continue_box_small {
+                width: 65% !important;
+                height: 45% !important;
+              }
+
+              #continue_title_small {
+                font-size: 1.125rem;
+              }
+
+              #continue_button, #continue_button_restart {
+                padding: 0.6rem;
+                font-size: 0.85rem;
+                gap: 0.3rem;
+              }
+            }
+
+            @media (max-width: 550px) {
+              #continue_box_small {
+                width: 70% !important;
+                height: 50% !important;
+              }
+
+              #continue_title_small {
+                font-size: 0.95rem;
+              }
+
+              #continue_button, #continue_button_restart {
+                padding: 0.6rem;
+                font-size: 0.7rem;
+                gap: 0.3rem;
+              }
+            }
+
+            @media (max-width: 450px) {
+              #continue_box_small {
+                width: 75% !important;
+                height: 55% !important;
+              }
+
+              #continue_title_small {
+                font-size: 0.8rem;
+              }
+
+              #continue_button, #continue_button_restart {
+                padding: 0.6rem;
+                font-size: 0.6rem;
+                gap: 0.3rem;
+              }
+            }
+
+            @media (max-width: 350px) {
+              #continue_box_small {
+                width: 85% !important;
+                height: 60% !important;
+              }
+
+              #continue_title_small {
+                font-size: 0.8rem;
+              }
+
+              #continue_button, #continue_button_restart {
+                padding: 0.5rem;
+                font-size: 0.6rem;
+                gap: 0.3rem;
+              }
+            }
+          `;
+
+  document.head.append(continueStyling);
+
+  // icone para o botão de reiniciar.
+  const restartIcon = document.createElement("i");
+  restartIcon.classList.add("fa-solid");
+  restartIcon.classList.add("fa-undo");
+  restartIcon.style.width = "50%";
+  restartIcon.style.height = "auto";
+  restartIcon.style.marginRight = "2.5px";
+
+  // função para avançar o vídeo para o tempo guardado antes de reiniciar a página.
+  continueButtonContinue.addEventListener("click", () =>
+    handleContinue(continueContainer)
+  );
+
+  // função para reiniciar o vídeo para 0.
+  continueButtonRestart.addEventListener("click", () =>
+    handleRestart(continueContainer)
+  );
+
+  // adicionando o icone de continuar de onde parou e de reiniciar ao inicio do botão, antes do texto.
+  continueButtonContinue.prepend(continueIcon);
+  continueButtonRestart.prepend(restartIcon);
+
+  //adicionando o botão de continuar de onde parou e reiniciar ao container dos botões.
+  continueButtonsBox.appendChild(continueButtonContinue);
+  continueButtonsBox.appendChild(continueButtonRestart);
+
+  continueBox.appendChild(continueTitle);
+  continueBox.appendChild(continueButtonsBox);
+  continueContainer.appendChild(continueBox);
+
+  videoContainer.appendChild(continueContainer);
+};
+
+//====
+const createDelayButton = () => {
+  const delayButton = document.createElement("a");
+  delayButton.id = "delayButton";
+  delayButton.style.zIndex = 10;
+  delayButton.style.textAlign = "center";
+  delayButton.style.textDecoration = "none";
+  delayButton.textContent =
+    videoInfo.textDelayButton !== ""
+      ? videoInfo.textDelayButton
+      : "Clique Aqui";
+  if (videoInfo.linkDelayButton !== "")
+    delayButton.href = videoInfo.linkDelayButton;
+  delayButton.target = "_blank";
+  delayButton.style.color = videoInfo.textColorDelayButton
+    ? videoInfo.textColorDelayButton
+    : "#f9f9f9";
+  delayButton.style.backgroundColor = videoInfo.backgroundDelayButton
+    ? videoInfo.backgroundDelayButton
+    : "#2e2bf1";
+
+  if (videoInfo.sizeDelayButton === "pequeno") {
+    delayButton.style.width = "30%";
+  }
+  if (videoInfo.sizeDelayButton === "medio") {
+    delayButton.style.width = "40%";
+  }
+  if (videoInfo.sizeDelayButton === "grande") {
+    delayButton.style.width = "50%";
+  }
+
+  const styleHover = document.createElement("style");
+  styleHover.textContent = `
+        #delayButton:hover {
+          background-color: ${videoInfo.backgroundDelayButtonHover
+      ? videoInfo.backgroundDelayButtonHover
+      : "#2e2bf1"
+    }!important;
+          color: ${videoInfo.textColorDelayButtonHover
+      ? videoInfo.textColorDelayButtonHover
+      : "#f9f9f9"
+    }!important;
+        }
+      `;
+
+  document.head.appendChild(styleHover);
+
+  if (videoInfo.actionButtonMode === "bellowVideo") {
+    delayButton.style.display = "block";
+    delayButton.classList.add("bellowVideo");
+    delayButton.style.borderRadius = "5px";
+    delayButton.style.alignSelf = "center";
+    delayButton.style.marginTop = "2%";
+    delayButton.style.cursor = "pointer";
+    delayButton.style.paddingTop = "1.5%";
+    delayButton.style.paddingBottom = "1.5%";
+    delayButton.style.zIndex = "100";
+    delayButton.addEventListener("click", async (event) => {
+      return thumbClick();
+    });
+
+    const bellowVideoStyle = document.createElement("style");
+
+    bellowVideoStyle.textContent = `
+          .bellowVideo {
+            bottom: -16%;
+          }
+
+          @media (max-width: 410px) {
+            .bellowVideo {
+              bottom: -22%;
+            }
+          }
+
+          @media (max-width: 305px) {
+            .bellowVideo {
+              bottom: -25%;
+            }
+          }
+
+          @media (max-width: 288px) {
+            .bellowVideo {
+              bottom: -45%;
+            }
+          }
+        `;
+
+    document.head.appendChild(bellowVideoStyle);
+  }
+
+  if (videoInfo.actionButtonMode === "insideVideo") {
+    delayButton.style.position = "absolute";
+    delayButton.style.paddingTop = "1.5%";
+    delayButton.style.paddingBottom = "1.5%";
+    delayButton.style.borderRadius = "5px";
+    delayButton.addEventListener("click", async (event) => {
+      return thumbClick();
+    });
+
+    if (videoInfo.selectedPosition === "S_Meio") {
+      delayButton.style.transform = "translate(-50%, 50%)";
+      delayButton.style.left = "50%";
+      delayButton.style.top = "0";
+    }
+
+    if (videoInfo.selectedPosition === "I_Meio") {
+      delayButton.style.transform = "translate(-50%, -50%)";
+      delayButton.style.left = "50%";
+      delayButton.style.bottom = "0";
+    }
+
+    if (videoInfo.selectedPosition === "M_Esquerda") {
+      delayButton.style.transform = "translate(-50%, -50%)";
+      delayButton.style.left = "20%";
+      delayButton.style.top = "50%";
+    }
+
+    if (videoInfo.selectedPosition === "M_Direita") {
+      delayButton.style.transform = "translate(50%, -50%)";
+      delayButton.style.right = "20%";
+      delayButton.style.top = "50%";
+    }
+
+    if (videoInfo.selectedPosition === "S_Esquerda") {
+      delayButton.style.transform = "translate(-50%, 50%)";
+      delayButton.style.left = "20%";
+      delayButton.style.top = "0";
+    }
+
+    if (videoInfo.selectedPosition === "S_Direita") {
+      delayButton.style.transform = "translate(50%, 50%)";
+      delayButton.style.right = "20%";
+      delayButton.style.top = "0";
+    }
+  }
+
+  container.appendChild(delayButton);
+};
+
+//====
+const handleCapturePassword = async (e) => {
+  e.preventDefault();
+  const inputCapture = document.getElementById("inputCapture");
+  const createErrorText = document.getElementById("createErrorText");
+
+  const controls = document.getElementById("container_controls");
+  const aoVivo = document.getElementById("aoVivo");
+  const unmute = document.getElementById("unmute");
+  const unmuteSmall = document.getElementById("unmute-small");
+
+  const formSection = document.getElementById("formSection");
+
+  const circlePlay = document.getElementById("circle");
+
+  if (inputCapture.value !== "") {
+    const api = await fetch(`${api_utl}capture/video-login`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        id_video: videoInfo.id_video,
+        password: inputCapture.value,
+      }),
+    });
+
+    const json = await api.json();
+    if (json.success) {
+      if (aoVivo) aoVivo.style.display = "flex";
+      if (unmuteSmall) unmuteSmall.style.display = "flex";
+      if (unmute) unmute.style.display = "flex";
+      if (controls) controls.style.display = "flex";
+      if (circlePlay)
+        (circlePlay.style.display = "flex"),
+          (circlePlay.style.visibility = "hidden");
+
+      formSection.remove();
+
+      sessionStorage.setItem("formSent", true);
+      localStorage.removeItem("formOnScreen");
+
+      if (!videoInfo.checkedCaptureTimer) {
+        handleUnmuteRestart();
+      }
+
+      if (videoInfo.checkedCaptureTimer) {
+        videoElement.play();
+        if (aoVivo) aoVivo.style.display = "none";
+        if (unmute) unmute.style.display = "none";
+        if (unmuteSmall) unmuteSmall.style.display = "none";
+        if (aoVivo) aoVivo.style.display = "flex";
+      }
+    } else {
+      var start = Date.now();
+      var end = start + 1650;
+
+      function spinWheel() {
+        start = Date.now();
+        createErrorText.style.display = "block";
+        if (start > end) {
+          clearInterval(timer);
+          createErrorText.style.display = "none";
+        }
+      }
+      var timer = setInterval(spinWheel, 100);
+    }
+  } else {
+    var start = Date.now();
+    var end = start + 1650;
+
+    function spinWheel() {
+      start = Date.now();
+      createErrorText.style.display = "block";
+      createErrorText.innerText = "Digite uma senha válida.";
+      if (start > end) {
+        clearInterval(timer);
+        createErrorText.style.display = "none";
+      }
+    }
+    var timer = setInterval(spinWheel, 100);
+  }
+};
+
+//====
+const createFormPassword = () => {
+  const createFormSection = document.createElement("section");
+  createFormSection.id = "formSection";
+  createFormSection.style.height = "100%";
+  createFormSection.style.width = "100%";
+  createFormSection.style.position = "absolute";
+  createFormSection.style.zIndex = 999;
+  createFormSection.style.bottom = 0;
+  createFormSection.style.backgroundColor = videoInfo.captureBackgroundColor
+    ? videoInfo.captureBackgroundColor
+    : "rgba(0,0,0,0.3)";
+  createFormSection.style.backdropFilter = "blur(4px)";
+  createFormSection.style.display = "flex";
+  createFormSection.style.flexDirection = "column";
+  createFormSection.style.boxSizing = "border-box";
+  createFormSection.style.alignItems = "center";
+  createFormSection.style.justifyContent = "center";
+  if (videoInfo.haveBorderRadius) {
+    createFormSection.style.borderRadius = "12px";
+  }
+
+  const titleCapture = document.createElement("h6");
+  titleCapture.id = "titleCapture";
+  titleCapture.textContent = videoInfo.captureTitle
+    ? videoInfo.captureTitle
+    : "Insira a senha para acessar o vídeo";
+
+  titleCapture.style.color = videoInfo.captureTitleColor
+    ? videoInfo.captureTitleColor
+    : "#f9f9f9";
+  titleCapture.style.textAlign = "center";
+  titleCapture.style.margin = "0";
+  titleCapture.style.marginBottom = "0.5rem";
+
+  const mediaQuery1 = document.createElement("style");
+  mediaQuery1.textContent = `
+        @media (max-width: 630px) {
+          #titleCapture{
+            font-size: 1rem !important;
+          }
+        }
+
+        @media (max-width: 500px) {
+          #titleCapture{
+            font-size: 0.9rem !important;
+          }
+        }
+
+        @media (max-width: 440px) {
+          #titleCapture{
+            font-size: 0.65rem !important;
+          }
+        }
+      `;
+  document.head.appendChild(mediaQuery1);
+
+  //haveBigTitle ? "1.10rem" : "1rem"
+
+  if (videoInfo.haveCaptureBigTitle) {
+    titleCapture.style.fontSize = "1.10rem";
+  } else {
+    titleCapture.style.fontSize = "1rem";
+  }
+
+  const createCapturePass = document.createElement("div");
+  createCapturePass.id = "createCapturePass";
+  createCapturePass.style.display = "flex";
+  createCapturePass.style.justifyContent = "center";
+  createCapturePass.style.width = "70%";
+  createCapturePass.style.flexWrap = "wrap";
+
+  createCaptureForm = document.createElement("form");
+  createCaptureForm.id = "createCaptureForm";
+
+  createCaptureForm.addEventListener("onsubmit", (e) => {
+    e.preventDefault();
+  });
+
+  createCaptureForm.style.display = "flex";
+  createCaptureForm.style.justifyContent = "space-between";
+  createCaptureForm.style.width = "100%";
+
+  const inputCapture = document.createElement("input");
+  inputCapture.id = "inputCapture";
+  const inputDiv = document.createElement("div");
+
+  inputDiv.style.position = "relative";
+  inputDiv.style.display = "flex";
+  inputDiv.style.flexWrap = "wrap";
+  inputDiv.style.alignItems = "stretch";
+  inputDiv.style.width = "100%";
+  inputDiv.style.padding = "0.15rem";
+
+  inputCapture.style.backgroundColor = videoInfo.captureInputColor
+    ? videoInfo.captureInputColor
+    : "rgba(0,0,0,0.46)";
+  inputCapture.style.position = "relative";
+  inputCapture.style.color = "#b9b9b9";
+  inputCapture.style.flex = "1 1 auto";
+  inputCapture.style.width = "1%";
+  inputCapture.style.minWidth = "0";
+  inputCapture.style.border = "none";
+  inputCapture.style.borderRadius = "0";
+  inputCapture.style.padding = "0.875rem";
+
+  inputCapture.placeholder = "Digite a senha";
+  inputCapture.required = true;
+  inputCapture.type = "password";
+  const mediaQuery2 = document.createElement("style");
+  mediaQuery2.textContent = `
+      #inputCapture:focus {
+        color: #fff;
+        outline: none;
+      }
+
+      #inputCapture::placeholder {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #b9b9b9;
+      }
+
+        @media (max-width: 500px) {
+          #buttonCapture{ font-size: 0.8rem;}
+          #createAuxText{
+            width:  80%
+          }
+          #inputCapture::placeholder {
+            font-size: 0.6rem;
+            font-weight: 600;
+          }
+        }
+
+        @media (max-width: 440px) {
+          #createAuxText{
+            font-size: 0.5rem !important;
+          }
+        }
+
+        @media (max-width: 630px) {
+          #createAuxText{font-size: 0.8rem !important;}
+        }
+
+        @media (min-width: 700px) {
+          #buttonCapture{ padding:  "15px 20px";}
+          #createAuxText {
+            font-size: 1rem !important;
+          }
+          #inputCapture{
+            padding: 0.675rem;
+          }
+        }
+
+        @media (min-width: 950px) {
+          #inputCapture{
+            padding: 1.3rem 1rem;
+          }
+        }
+
+        @media (min-width: 900px) {
+          #inputCapture::placeholder {
+            font-size: 1rem;
+            font-weight: 600;
+          }
+        }
+
+      @media (min-width: 1200px) {
+        #createAuxText{
+          font-size: 1.5rem;
+        }
+      }
+      `;
+
+  document.head.appendChild(mediaQuery2);
+
+  const buttonCapture = document.createElement("button");
+  buttonCapture.id = "buttonCapture";
+
+  buttonCapture.type = "submit";
+  buttonCapture.textContent = videoInfo.captureButtonText
+    ? videoInfo.captureButtonText
+    : "Play";
+  buttonCapture.style.borderRadius = "0rem";
+  buttonCapture.style.border = "none";
+  buttonCapture.style.color = videoInfo.captureButtonTextColor
+    ? videoInfo.captureButtonTextColor
+    : "#333";
+  buttonCapture.style.backgroundColor = videoInfo.captureButtonColor
+    ? videoInfo.captureButtonColor
+    : "#f9f9f9";
+
+  buttonCapture.style.fontSize = "0.9rem";
+  buttonCapture.style.fontWeight = 600;
+  buttonCapture.style.cursor = "pointer";
+
+  buttonCapture.addEventListener("click", handleCapturePassword);
+
+  createFormSection.appendChild(titleCapture);
+  createCapturePass.appendChild(createCaptureForm);
+  createFormSection.appendChild(createCapturePass);
+  createCaptureForm.appendChild(inputDiv);
+  inputDiv.appendChild(inputCapture);
+  inputDiv.appendChild(buttonCapture);
+
+  const ErrorMessage = localStorage.getItem("ErrorMessage");
+
+  const createErrorText = document.createElement("h6");
+  createErrorText.id = "createErrorText";
+
+  createErrorText.textContent = videoInfo.captureAuxText
+    ? videoInfo.captureAuxText
+    : "Senha incorreta, digite novamente.";
+  createErrorText.style.fontSize = "0.75rem";
+  createErrorText.style.color = videoInfo.captureAuxTextColor
+    ? videoInfo.captureAuxTextColor
+    : "#f9f9f9";
+  createErrorText.style.margin = "0";
+  createErrorText.style.marginTop = "5px";
+  createErrorText.style.textAlign = "center";
+  createErrorText.style.width = "50%";
+  createErrorText.style.lineHeight = "150%";
+  createErrorText.style.background = "#ff4122";
+  createErrorText.style.padding = "5px";
+  createErrorText.style.borderRadius = "4px";
+  createErrorText.style.display = "none";
+
+  createFormSection.appendChild(createErrorText);
+
+  if (videoInfo.haveCaptureAuxText) {
+    const createAuxText = document.createElement("h6");
+    createAuxText.id = "createAuxText";
+
+    createAuxText.textContent = videoInfo.captureAuxText
+      ? videoInfo.captureAuxText
+      : "Insira a senha fornecida pelo dono do video para receber acesso ao vídeo.";
+    createAuxText.style.fontSize = "1.2rem";
+    createAuxText.style.color = videoInfo.captureAuxTextColor
+      ? videoInfo.captureAuxTextColor
+      : "#f9f9f9";
+    createAuxText.style.margin = "0";
+    createAuxText.style.marginTop = "5px";
+    createAuxText.style.textAlign = "center";
+    createAuxText.style.width = "60%";
+    createAuxText.style.lineHeight = "150%";
+
+    createFormSection.appendChild(createAuxText);
+  }
+
+  videoContainer.appendChild(createFormSection);
+};
+
+//====
+//create function to get the input infos and send to the api
+const handleCaptureData = async (e) => {
+  e.preventDefault();
+
+  const videoElement = document.getElementById("my-video_html5_api");
+  const actualDate = () => {
+    const date = new Date();
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const year = date.getFullYear();
+
+    return `${day}/${month}/${year}`;
+  };
+  const name = document.getElementById("inputCapture2")?.value;
+  const email = document.getElementById("inputCaptureEmail")?.value;
+  const whatsapp = document.getElementById("inputCaptureNumber")?.value;
+
+  const formSection = document.getElementById("formCaptureSection");
+  const controls = document.getElementById("container_controls");
+  const thumbInitial = document.getElementById("thumbInitial");
+  const unmuteSmall = document.getElementById("unmute-small");
+  const circlePlay = document.getElementById("circle");
+  const aoVivo = document.getElementById("aoVivo");
+  const unmute = document.getElementById("unmute");
+
+  if (videoInfo.haveInputWhatsapp) {
+    if (name !== "" && email !== "" && whatsapp.length >= 10) {
+      const api = await fetch(`${api_utl}capture/create`, {
+        method: "POST",
+        headers: {
+          Accept: "application/json",
+          "Content-type": "application/json",
+        },
+        body: JSON.stringify({
+          id_video: videoInfo.id_video,
+          data: actualDate(),
+          email: email,
+          telefone: whatsapp,
+          nome: name,
+        }),
+      });
+
+      const json = await api.json();
+      if (json.success) {
+        if (aoVivo) aoVivo.style.display = "flex";
+        if (unmuteSmall) unmuteSmall.style.display = "flex";
+        if (unmute) unmute.style.display = "flex";
+        if (controls) controls.style.display = "flex";
+        if (circlePlay) circlePlay.style.display = "flex";
+        if (circlePlay) circlePlay.style.visibility = "hidden";
+        if (thumbInitial) thumbInitial.remove();
+        formSection.remove();
+
+        sessionStorage.setItem("formSent", true);
+        localStorage.removeItem("formOnScreen");
+
+        if (!videoInfo.checkedCaptureTimer) {
+          handleUnmuteRestart();
+        }
+
+        if (videoInfo.checkedCaptureTimer) {
+          videoElement.play();
+          if (aoVivo) aoVivo.style.display = "none";
+          if (unmute) unmute.style.display = "none";
+          if (unmuteSmall) unmuteSmall.style.display = "none";
+          if (aoVivo) aoVivo.style.display = "flex";
+        }
+      }
+    }
+  }
+
+  if (!videoInfo.haveInputWhatsapp && name !== "" && email !== "") {
+    const api = await fetch(`${api_utl}capture/create`, {
+      method: "POST",
+      headers: {
+        Accept: "application/json",
+        "Content-type": "application/json",
+      },
+      body: JSON.stringify({
+        id_video: videoInfo.id_video,
+        data: actualDate(),
+        email: email,
+        telefone: whatsapp,
+        nome: name,
+      }),
+    });
+
+    const json = await api.json();
+    if (json.success) {
+      if (aoVivo) aoVivo.style.display = "flex";
+      if (unmuteSmall) unmuteSmall.style.display = "flex";
+      if (unmute) unmute.style.display = "flex";
+      if (controls) controls.style.display = "flex";
+      if (circlePlay)
+        (circlePlay.style.display = "flex"),
+          (circlePlay.style.visibility = "hidden");
+      formSection.remove();
+
+      sessionStorage.setItem("formSent", true);
+      localStorage.removeItem("formOnScreen");
+
+      if (!videoInfo.checkedCaptureTimer) {
+        handleUnmuteRestart();
+      }
+
+      if (videoInfo.checkedCaptureTimer) {
+        videoElement.play();
+        if (aoVivo) aoVivo.style.display = "none";
+        if (unmute) unmute.style.display = "none";
+        if (unmuteSmall) unmuteSmall.style.display = "none";
+        if (aoVivo) aoVivo.style.display = "flex";
+      }
+    }
+  }
+};
+
+//====
+const createForm = () => {
+  const createFormSection = document.createElement("section");
+  createFormSection.id = "formCaptureSection";
+  createFormSection.style.height = "100%";
+  createFormSection.style.width = videoInfo.checkedCaptureVertical
+    ? "45%"
+    : "100%";
+  createFormSection.style.position = "absolute";
+  createFormSection.style.zIndex = 999;
+  createFormSection.style.bottom = 0;
+  createFormSection.style.backgroundColor = videoInfo.captureBackgroundColor
+    ? videoInfo.captureBackgroundColor
+    : "rgba(0,0,0,0.3)";
+  createFormSection.style.backdropFilter = "blur(4px)";
+  createFormSection.style.display = videoInfo.checkedCaptureTimer
+    ? "none"
+    : "flex";
+
+  createFormSection.style.flexDirection = "column";
+  createFormSection.style.boxSizing = "border-box";
+  createFormSection.style.alignItems = "center";
+  createFormSection.style.justifyContent = "center";
+  if (videoInfo.haveBorderRadius) {
+    createFormSection.style.borderRadius = videoInfo.checkedCaptureVertical
+      ? "12px 0 0 12px"
+      : "12px";
+  }
+
+  const titleCapture = document.createElement("h6");
+  titleCapture.id = "titleCaptureData";
+  titleCapture.textContent = videoInfo.captureTitle
+    ? videoInfo.captureTitle
+    : "Insira o(s) dado(s) requiridos para acessar o vídeo.";
+
+  titleCapture.style.color = videoInfo.captureTitleColor
+    ? videoInfo.captureTitleColor
+    : "#f9f9f9";
+  titleCapture.style.textAlign = "center";
+  titleCapture.style.margin = "0";
+  titleCapture.style.marginBottom = "0.5rem";
+
+  const mediaQuery1 = document.createElement("style");
+  mediaQuery1.textContent = `
+        @media (max-width: 500px) {
+          #titleCaptureData{
+            font-size: 0.9rem !important;
+          }
+        }
+
+        @media (max-width: 440px) {
+          #titleCaptureData{
+            font-size: 0.65rem !important;
+          }
+        }
+
+        .NameWhatsAppTitle div:nth-child(1) {
+          width: 48%;
+        }
+
+        .NameWhatsAppTitle div:nth-child(2) {
+          width: 49%;
+        }
+
+        .NameWhatsAppTitle div:nth-child(3) {
+          width: 100%;
+        }
+
+        @media (min-width: 550px) {
+        .NameWhatsAppTitle div:nth-child(1) {
+          width: 48%;
+        }
+
+        .NameWhatsAppTitle div:nth-child(2) {
+          width: 49%;
+        }
+          .NameWhatsAppTitle div:nth-child(3) {
+            width: 100%;
+          }
+        }
+
+        @media (min-width: 760px) {
+        .NameWhatsAppTitle div:nth-child(1) {
+          width: 48%;
+        }
+
+        .NameWhatsAppTitle div:nth-child(2) {
+          width: 49%;
+        }
+
+          .NameWhatsAppTitle div:nth-child(3) {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 360px) {
+        .NameWhatsAppTitle div:nth-child(1) {
+          width: 48%;
+        }
+
+        .NameWhatsAppTitle div:nth-child(2) {
+          width: 48%;
+        }
+
+          .NameWhatsAppTitle div:nth-child(3) {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 455px) {
+        .NameWhatsAppTitle div:nth-child(1) {
+          width: 48%;
+        }
+
+        .NameWhatsAppTitle div:nth-child(2) {
+          width: 48%;
+        }
+
+          .NameWhatsAppTitle div:nth-child(3) {
+            width: 100%;
+          }
+        }
+
+        @media (max-width: 350px) {
+        .NameWhatsAppTitle div:nth-child(1) {
+          width: 47%;
+        }
+
+        .NameWhatsAppTitle div:nth-child(2) {
+          width: 47%;
+        }
+
+          .NameWhatsAppTitle div:nth-child(3) {
+            width: 100%;
+          }
+        }
+
+        .inputVertical div {
+          width: 100% !important;
+        }
+
+        @media (min-width: 600px) {
+          #inputCapture2 {
+            height: 40px !important;
+          }
+
+          #inputCaptureNumber {
+            height: 40px !important;
+          }
+
+          #inputCaptureEmail {
+            height: 40px !important;
+          }
+
+          #buttonCaptureEmailVertical {
+            height: 30px !important;
+          }
+        }
+
+        @media (min-width: 860px) {
+          #titleCaptureData {
+            font-size: 1.45rem !important;
+          }
+
+          #inputCapture2 {
+            height: 40px !important;
+          }
+
+          #inputCaptureNumber {
+            height: 40px !important;
+          }
+
+          #inputCaptureEmail {
+            height: 40px !important;
+          }
+
+          #buttonCaptureEmailVertical {
+            height: 40px !important;
+          }
+
+          #createAuxText2Vertical {
+            font-size: 1.35rem !important;
+          }
+        }
+      `;
+  document.head.appendChild(mediaQuery1);
+
+  if (videoInfo.haveCaptureBigTitle) {
+    titleCapture.style.fontSize = "1.5rem";
+  } else {
+    titleCapture.style.fontSize = "1.4rem";
+  }
+
+  createFormSection.appendChild(titleCapture);
+
+  const formContainer = document.createElement("div");
+  formContainer.id = "formContainer";
+  formContainer.style.display = "flex";
+  formContainer.style.justifyContent = "center";
+  formContainer.style.width = videoInfo.checkedCaptureVertical
+    ? "90%"
+    : "75%";
+
+  createFormSection.appendChild(formContainer);
+
+  const createDisplayForm = document.createElement("div");
+  createDisplayForm.id = "createDisplayForm2";
+  createDisplayForm.style.display = "flex";
+  createDisplayForm.style.justifyContent = "center";
+  createDisplayForm.style.width = "100%";
+  createDisplayForm.style.flexFlow = "wrap";
+
+  createDisplayForm.classList.add("NameWhatsAppTitle");
+
+  createDisplayForm.classList.add(
+    videoInfo.checkedCaptureVertical && "inputVertical"
+  );
+
+  formContainer.appendChild(createDisplayForm);
+
+  const createForm = document.createElement("form");
+  createForm.id = videoInfo.checkedCaptureTimer
+    ? "createCaptureForm2Vertical"
+    : "createCaptureForm2";
+  createForm.style.display = "flex";
+  createForm.style.justifyContent = "space-between";
+  createForm.style.width = "100%";
+  createForm.style.flexFlow = "wrap";
+
+  createDisplayForm.appendChild(createForm);
+
+  const mediaQuery2 = document.createElement("style");
+  mediaQuery2.textContent = `
+      .inputCapture:focus {
+        color: #fff;
+        outline: none;
+      }
+
+      .inputCapture::placeholder {
+        font-size: 0.8rem;
+        font-weight: 600;
+        color: #b9b9b9;
+      }
+
+      #buttonCaptureEmailVertical {
+        width: auto !important;
+      }
+
+
+        @media (max-width: 440px) {
+          #createAuxText2{
+            font-size: 0.5rem !important;
+          }
+        }
+
+        @media (max-width: 630px) {
+          #createAuxText2Vertical {
+            font-size: 0.7rem !important;
+          }
+        }
+
+        @media (max-width: 500px) {
+          #buttonCapture2 {
+            font-size: 0.8rem;
+            }
+
+          .inputCapture::placeholder {
+            font-size: 0.6rem;
+            font-weight: 600;
+          }
+
+          #createAuxText2Vertical {
+            font-size: 0.6rem !important;
+          }
+
+          #buttonCaptureEmailVertical {
+            height: 20px !important;
+          }
+
+          #createAuxText2 {
+            font-size: 0.8rem !important;
+          }
+
+          #createCaptureForm2Vertical input {
+            height: 25px !important;
+          }
+        }
+
+        @media (max-width: 440px) {
+          #createAuxText2{
+            font-size: 0.7rem !important;
+          }
+        }
+
+        @media (max-width: 380px) {
+          #buttonCapture2 {
+            font-size: 0.8rem;
+            }
+
+          .inputCapture::placeholder {
+            font-size: 0.5rem;
+            font-weight: 600;
+          }
+
+          #createAuxText2Vertical {
+            font-size: 0.5rem !important;
+          }
+
+          #titleCaptureData {
+            font-size: 0.55rem !important;
+            width: 95%;
+          }
+
+          #buttonCaptureEmailVertical {
+            height: 20px !important;
+            font-size: 0.5rem !important;
+          }
+
+          #createCaptureForm2Vertical input {
+            height: 20px !important;
+          }
+        }
+
+        @media (max-width: 350px) {
+          #buttonCapture2 {
+            font-size: 0.6rem;
+            }
+
+          .inputCapture::placeholder {
+            font-size: 0.5rem;
+            font-weight: 600;
+          }
+
+          #createAuxText2Vertical {
+            font-size: 0.4rem !important;
+          }
+
+          #createAuxText2 {
+            font-size: 0.55rem !important;
+          }
+
+          #titleCaptureData {
+            font-size: 0.5rem !important;
+            width: 95%;
+          }
+
+          #buttonCaptureEmailVertical {
+            height: 15px !important;
+            font-size: 0.5rem !important;
+          }
+
+          #createCaptureForm2Vertical input {
+            height: 15px !important;
+          }
+        }
+
+        @media (min-width: 700px) {
+          #buttonCapture2{ padding:  "15px 20px";}
+          #createAuxText2 {
+            font-size: 1rem !important;
+          }
+          .inputCapture{
+          }
+        }
+
+        @media (min-width: 950px) {
+          .inputCapture{
+          }
+        }
+
+        @media (min-width: 900px) {
+          .inputCapture::placeholder {
+            font-size: 1rem;
+            font-weight: 600;
+          }
+        }
+
+      @media (min-width: 1200px) {
+        #createAuxText2{
+          font-size: 1.5rem;
+        }
+      }
+      `;
+
+  document.head.appendChild(mediaQuery2);
+
+  //creation of name input
+  if (videoInfo.haveInputName) {
+    const inputCapture = document.createElement("input");
+    inputCapture.id = "inputCapture2";
+    const inputDiv = document.createElement("div");
+
+    inputDiv.style.position = "relative";
+    inputDiv.style.display = "flex";
+    inputDiv.style.flexWrap = "wrap";
+    inputDiv.style.alignItems = "stretch";
+    inputDiv.style.width =
+      videoInfo.checkedCaptureVertical && "100% !important";
+    if (
+      !videoInfo.checkedCaptureVertical &&
+      !videoInfo.haveInputEmail &&
+      !videoInfo.haveInputWhatsapp
+    ) {
+      inputDiv.style.width = "100%";
+    }
+
+    inputDiv.style.padding = "0.15rem";
+    inputDiv.style.flexDirection =
+      videoInfo.checkedCaptureVertical && "column";
+    createForm.appendChild(inputDiv);
+    inputDiv.appendChild(inputCapture);
+
+    inputCapture.style.backgroundColor = videoInfo.captureInputColor
+      ? videoInfo.captureInputColor
+      : "rgba(0,0,0,0.46)";
+    inputCapture.style.position = "relative";
+    inputCapture.style.color = "#b9b9b9";
+    inputCapture.style.flex = "1 1 auto";
+    inputCapture.style.width = "1%";
+    inputCapture.style.minWidth = "0";
+    inputCapture.style.border = "none";
+    inputCapture.style.borderRadius = "0";
+    inputCapture.style.height = videoInfo.checkedCaptureVertical && "30px";
+    inputCapture.style.width = videoInfo.checkedCaptureVertical && "100%";
+    inputCapture.style.padding =
+      videoInfo.checkedCaptureVertical && "0 0 0 10px";
+    inputCapture.placeholder = "Digite seu nome";
+    inputCapture.required = true;
+    inputCapture.type = "text";
+    inputCapture.style.height = "42px";
+    inputCapture.style.height = videoInfo.checkedCaptureVertical && "25px";
+    inputCapture.style.paddingLeft = "10px";
+    inputCapture.classList.add("inputCapture");
+
+    const buttonCapture = document.createElement("button");
+    buttonCapture.id = "buttonCapture";
+
+    buttonCapture.type = "submit";
+    buttonCapture.textContent = videoInfo.captureButtonText
+      ? videoInfo.captureButtonText
+      : "Play";
+    buttonCapture.style.borderRadius = "0rem";
+    buttonCapture.style.border = "none";
+    buttonCapture.style.color = videoInfo.captureButtonTextColor
+      ? videoInfo.captureButtonTextColor
+      : "#333";
+    buttonCapture.style.backgroundColor = videoInfo.captureButtonColor
+      ? videoInfo.captureButtonColor
+      : "#f9f9f9";
+
+    buttonCapture.style.height = videoInfo.checkedCaptureVertical && "25px";
+    buttonCapture.style.marginTop =
+      videoInfo.checkedCaptureVertical && "5px";
+
+    if (!videoInfo.haveInputEmail) {
+      buttonCapture.style.display = "none";
+    } else if (!videoInfo.haveInputWhatsapp) {
+      buttonCapture.style.display = "none";
+    }
+
+    if (
+      videoInfo.haveInputName &&
+      videoInfo.haveInputWhatsapp &&
+      videoInfo.haveInputEmail
+    ) {
+      buttonCapture.style.display = "none";
+    }
+
+    if (
+      videoInfo.haveInputName &&
+      !videoInfo.haveInputWhatsapp &&
+      !videoInfo.haveInputEmail
+    ) {
+      buttonCapture.style.display = "block";
+    }
+
+    buttonCapture.style.fontSize = "0.9rem";
+    buttonCapture.style.fontWeight = 600;
+    buttonCapture.style.cursor = "pointer";
+    buttonCapture.addEventListener("click", handleCaptureData);
+    inputDiv.appendChild(buttonCapture);
+  }
+  //creation of number input
+  if (videoInfo.haveInputWhatsapp) {
+    const inputCaptureNumber = document.createElement("input");
+    inputCaptureNumber.id = "inputCaptureNumber";
+    const inputDivNumber = document.createElement("div");
+
+    inputDivNumber.style.position = "relative";
+    inputDivNumber.style.display = "flex";
+    inputDivNumber.style.flexWrap = "wrap";
+    inputDivNumber.style.alignItems = "stretch";
+    inputDivNumber.style.padding = "0.15rem";
+    inputDivNumber.style.flexDirection =
+      videoInfo.checkedCaptureVertical && "column";
+    createForm.appendChild(inputDivNumber);
+    inputDivNumber.appendChild(inputCaptureNumber);
+
+    if (
+      !videoInfo.checkedCaptureVertical &&
+      !videoInfo.haveInputEmail &&
+      !videoInfo.haveInputName
+    ) {
+      inputDivNumber.style.width = "100%";
+    }
+
+    inputCaptureNumber.style.backgroundColor = videoInfo.captureInputColor
+      ? videoInfo.captureInputColor
+      : "rgba(0,0,0,0.46)";
+    inputCaptureNumber.style.position = "relative";
+    inputCaptureNumber.style.color = "#b9b9b9";
+    inputCaptureNumber.style.flex = "1 1 auto";
+    inputCaptureNumber.style.width = "1%";
+    inputCaptureNumber.style.minWidth = "0";
+    inputCaptureNumber.style.border = "none";
+    inputCaptureNumber.style.borderRadius = "0";
+    inputCaptureNumber.style.height = "42px";
+    inputCaptureNumber.style.height =
+      videoInfo.checkedCaptureVertical && "25px";
+    inputCaptureNumber.style.paddingLeft = "10px";
+    inputCaptureNumber.style.width =
+      videoInfo.checkedCaptureVertical && "100%";
+    inputCaptureNumber.style.padding =
+      videoInfo.checkedCaptureVertical && "0 0 0 10px";
+
+    inputCaptureNumber.placeholder = "Digite seu telefone";
+    inputCaptureNumber.required = true;
+    inputCaptureNumber.type = "text";
+    inputCaptureNumber.className = "inputCapture";
+
+    if (!videoInfo.haveInputEmail) {
+      const buttonCaptureNumber = document.createElement("button");
+      buttonCaptureNumber.id = "buttonCaptureNumber";
+
+      buttonCaptureNumber.type = "submit";
+      buttonCaptureNumber.textContent = videoInfo.captureButtonText
+        ? videoInfo.captureButtonText
+        : "Play";
+      buttonCaptureNumber.style.borderRadius = "0rem";
+      buttonCaptureNumber.style.border = "none";
+      buttonCaptureNumber.style.color = videoInfo.captureButtonTextColor
+        ? videoInfo.captureButtonTextColor
+        : "#333";
+      buttonCaptureNumber.style.backgroundColor =
+        videoInfo.captureButtonColor
+          ? videoInfo.captureButtonColor
+          : "#f9f9f9";
+
+      buttonCaptureNumber.style.height =
+        videoInfo.checkedCaptureVertical && "30px";
+
+      buttonCaptureNumber.style.marginTop =
+        videoInfo.checkedCaptureVertical && "5px";
+
+      buttonCaptureNumber.style.fontSize = "0.9rem";
+      buttonCaptureNumber.style.fontWeight = 600;
+      buttonCaptureNumber.style.cursor = "pointer";
+      buttonCaptureNumber.addEventListener("click", handleCaptureData);
+      inputDivNumber.appendChild(buttonCaptureNumber);
+    }
+  }
+  //creation of number input
+  if (videoInfo.haveInputEmail) {
+    const inputCaptureEmail = document.createElement("input");
+    inputCaptureEmail.id = "inputCaptureEmail";
+    const inputDivEmail = document.createElement("div");
+
+    inputDivEmail.style.position = "relative";
+    inputDivEmail.style.display = "flex";
+    inputDivEmail.style.flexWrap = "wrap";
+    inputDivEmail.style.alignItems = "stretch";
+    inputDivEmail.style.padding = "0.15rem";
+    inputDivEmail.style.flexDirection =
+      videoInfo.checkedCaptureVertical && "column";
+    createForm.appendChild(inputDivEmail);
+    inputDivEmail.appendChild(inputCaptureEmail);
+
+    if (
+      !videoInfo.checkedCaptureVertical &&
+      !videoInfo.haveInputName &&
+      !videoInfo.haveInputWhatsapp
+    ) {
+      inputDivEmail.style.width = "100%";
+    }
+
+    inputCaptureEmail.style.backgroundColor = videoInfo.captureInputColor
+      ? videoInfo.captureInputColor
+      : "rgba(0,0,0,0.46)";
+    inputCaptureEmail.style.position = "relative";
+    inputCaptureEmail.style.color = "#b9b9b9";
+    inputCaptureEmail.style.flex = "1 1 auto";
+    inputCaptureEmail.style.width = "1%";
+    inputCaptureEmail.style.minWidth = "0";
+    inputCaptureEmail.style.border = "none";
+    inputCaptureEmail.style.borderRadius = "0";
+    inputCaptureEmail.style.height = "42px";
+    inputCaptureEmail.style.paddingLeft = "10px";
+
+    inputCaptureEmail.style.height =
+      videoInfo.checkedCaptureVertical && "25px";
+    inputCaptureEmail.style.width =
+      videoInfo.checkedCaptureVertical && "100%";
+
+    inputCaptureEmail.style.padding =
+      videoInfo.checkedCaptureVertical && "0 0 0 10px";
+
+    inputCaptureEmail.placeholder = "Digite seu email";
+    inputCaptureEmail.required = true;
+    inputCaptureEmail.type = "email";
+    inputCaptureEmail.classList = "inputCapture";
+
+    const buttonCaptureEmail = document.createElement("button");
+    buttonCaptureEmail.id = videoInfo.checkedCaptureVertical
+      ? "buttonCaptureEmailVertical"
+      : "buttonCaptureEmail";
+
+    buttonCaptureEmail.type = "submit";
+    buttonCaptureEmail.textContent = videoInfo.captureButtonText
+      ? videoInfo.captureButtonText
+      : "Play";
+    buttonCaptureEmail.style.borderRadius = "0rem";
+    buttonCaptureEmail.style.border = "none";
+    buttonCaptureEmail.style.color = videoInfo.captureButtonTextColor
+      ? videoInfo.captureButtonTextColor
+      : "#333";
+    buttonCaptureEmail.style.backgroundColor = videoInfo.captureButtonColor
+      ? videoInfo.captureButtonColor
+      : "#f9f9f9";
+
+    buttonCaptureEmail.style.height =
+      videoInfo.checkedCaptureVertical && "30px";
+
+    buttonCaptureEmail.style.marginTop =
+      videoInfo.checkedCaptureVertical && "5px";
+
+    buttonCaptureEmail.style.fontSize = "0.9rem";
+    buttonCaptureEmail.style.width = "60px";
+    buttonCaptureEmail.style.fontWeight = 600;
+    buttonCaptureEmail.style.cursor = "pointer";
+    buttonCaptureEmail.style.display = "flex";
+    buttonCaptureEmail.style.justifyContent = "center";
+    buttonCaptureEmail.style.alignItems = "center";
+    buttonCaptureEmail.addEventListener("click", handleCaptureData);
+    inputDivEmail.appendChild(buttonCaptureEmail);
+  }
+
+  if (videoInfo.haveCaptureAuxText) {
+    const createAuxText = document.createElement("h6");
+    createAuxText.id = videoInfo.checkedCaptureVertical
+      ? "createAuxText2Vertical"
+      : "createAuxText2";
+    createAuxText.textContent = videoInfo.captureAuxText
+      ? videoInfo.captureAuxText
+      : "Insira o(s) dado(s) requirido(s) e te enviaremos conteúdos exclusivos.";
+    createAuxText.style.fontSize = "1rem";
+    createAuxText.style.color = videoInfo.captureAuxTextColor
+      ? videoInfo.captureAuxTextColor
+      : "#f9f9f9";
+    createAuxText.style.margin = "0";
+    createAuxText.style.marginTop = "5px";
+    createAuxText.style.textAlign = "center";
+    createAuxText.style.width = videoInfo.checkedCaptureVertical
+      ? "95%"
+      : "70%";
+    createAuxText.style.lineHeight = "150%";
+
+    createFormSection.appendChild(createAuxText);
+  }
+
+  if (videoInfo.skipLead) {
+    const skipLeadButton = document.createElement("button");
+    skipLeadButton.id = "skipLeadButton";
+    skipLeadButton.style.backgroundColor = "rgba(0,0,0,0.5)";
+    skipLeadButton.style.color = "#fff";
+    skipLeadButton.style.border = "none";
+    skipLeadButton.style.borderRadius = "5px";
+    skipLeadButton.style.padding = "0.6rem 0.9rem";
+    skipLeadButton.style.fontSize = "0.8rem";
+    skipLeadButton.style.cursor = "pointer";
+    skipLeadButton.style.borderRadius = "5px";
+    skipLeadButton.style.position = "absolute";
+    skipLeadButton.style.bottom = "1rem";
+    skipLeadButton.style.right = "1rem";
+    skipLeadButton.style.zIndex = "10";
+    skipLeadButton.style.display = "flex";
+    skipLeadButton.style.gap = "0.5rem";
+    skipLeadButton.style.alignItems = "center";
+    skipLeadButton.innerText = "Ignorar";
+
+    const skipLeadIcon = document.createElement("i");
+    skipLeadIcon.classList.add("fa-solid");
+    skipLeadIcon.classList.add("fa-angle-right");
+    skipLeadIcon.style.width = "10px";
+    skipLeadIcon.style.height = "10px";
+
+    skipLeadButton.appendChild(skipLeadIcon);
+
+    skipLeadButton.addEventListener("click", () => {
+      const videoElement = document.getElementById("my-video_html5_api");
+      const controls = document.getElementById("container_controls");
+      const aoVivo = document.getElementById("aoVivo");
+      const unmute = document.getElementById("unmute");
+      const unmuteSmall = document.getElementById("unmute-small");
+      const thumbInitial = document.getElementById("thumbInitial");
+
+      const formSection = document.getElementById("formCaptureSection");
+
+      const circlePlay = document.getElementById("circle");
+
+      if (aoVivo) aoVivo.style.display = "flex";
+      if (unmuteSmall) unmuteSmall.style.display = "flex";
+      if (unmute) unmute.style.display = "flex";
+      if (controls) controls.style.display = "flex";
+      if (circlePlay) circlePlay.style.display = "flex";
+      if (circlePlay) circlePlay.style.visibility = "hidden";
+      if (thumbInitial) thumbInitial.remove();
+      formSection.remove();
+
+      sessionStorage.setItem("formSent", true);
+      localStorage.removeItem("formOnScreen");
+
+      if (!videoInfo.checkedCaptureTimer) {
+        handleUnmuteRestart();
+      }
+
+      if (videoInfo.checkedCaptureTimer) {
+        videoElement.play();
+        if (aoVivo) aoVivo.style.display = "none";
+        if (unmute) unmute.style.display = "none";
+        if (unmuteSmall) unmuteSmall.style.display = "none";
+        if (aoVivo) aoVivo.style.display = "flex";
+      }
+    });
+    createFormSection.appendChild(skipLeadButton);
+  }
+
+  videoContainer.appendChild(createFormSection);
+};
+
+//====
+const createCirclePlay = async () => {
+  const circleContainer = document.createElement("div");
+  const videoElement = document.getElementById("my-video_html5_api");
+
+  circleContainer.id = "circle-container";
+  circleContainer.style.display = "flex";
+  circleContainer.style.width = "100%";
+  circleContainer.style.height = "100%";
+  circleContainer.style.position = "absolute";
+  circleContainer.style.zIndex = 5;
+
+  const circle = document.createElement("div");
+  circle.id = "circle";
+  circle.style.backgroundColor = videoInfo?.cor;
+  circle.style.display = "flex";
+  circle.style.position = "absolute";
+  circle.style.width = "65px";
+  circle.style.height = "65px";
+  circle.style.top = "50%";
+  circle.style.left = "50%";
+  circle.style.cursor = "pointer";
+  circle.style.borderRadius = "50%";
+  circle.style.zIndex = 5;
+  circle.style.justifyContent = "center";
+  circle.style.alignItems = "center";
+  circle.style.border = "none";
+  circle.style.transform = "translate(-50%, -50%)";
+  circle.style.fontSize = "80px";
+  circle.style.color = "#fff";
+
+  if (!videoInfo.haveControls && !videoInfo.haveAutoPlay) {
+    circle.style.visibility = "visible";
+  } else {
+    circle.style.visibility = "hidden";
+  }
+
+  const play = document.createElement("i");
+  play.id = "icon_play_control";
+  play.classList.add("fa-solid");
+  play.classList.add("fa-play");
+  play.style.marginLeft = "7%";
+  play.style.fontSize = "2rem";
+
+  const pause = document.createElement("i");
+  pause.id = "icon_pause_control";
+  pause.classList.add("fa-solid");
+  pause.classList.add("fa-pause");
+  pause.style.fontSize = "2rem";
+
+  if (!videoInfo.haveControls && !videoInfo.haveAutoPlay) {
+    pause.style.display = "none";
+  }
+
+  circle.appendChild(play);
+  circle.appendChild(pause);
+
+  circleContainer.appendChild(circle);
+
+  videoContainer.appendChild(circleContainer);
+
+  circleContainer.addEventListener("click", handlePlayPause);
+};
+
+//====
+const createFakeBar = () => {
+  const videoElement = document.getElementById("my-video_html5_api");
+  const progressBar = document.createElement("progress");
+
+  progressBar.id = "progress";
+  progressBar.className = "progress";
+  progressBar.max = videoElement.duration.toFixed(1);
+
+  progressBar.style.width = "100%";
+  progressBar.style.height = "10px";
+  progressBar.style.appearance = "none";
+  progressBar.style.overflow = "hidden";
+  progressBar.style.position = "absolute";
+  progressBar.style.left = 0;
+  progressBar.style.bottom = "0";
+  progressBar.style.setProperty(
+    "--webkit-progress-value-bg-color",
+    videoInfo?.corBar
+  );
+
+  if (videoInfo?.haveBorderRadius) {
+    progressBar.style.borderRadius = "0 0 12px 12px";
+  }
+
+  videoContainer.appendChild(progressBar);
+};
+
+//====
+const createCantRunVideoImage = () => {
+  if (allowDomain) {
+    const cantRunVideoImg = document.createElement("img");
+    cantRunVideoImg.src =
+      "https://stream.evideovsl.com.br/assets/ErrorVideoImage-BptOT_yl.jpg";
+    videoContainer.appendChild(cantRunVideoImg);
+  }
+};
+
+//====
+const createHeadline = () => {
+  const headlineContainer = document.createElement("div");
+  const headline = document.createElement("h1");
+  const subHeadline = document.createElement("h2");
+
+  headlineContainer.className = "headline-container";
+  headline.className = "headline";
+  subHeadline.className = "sub-headline";
+
+  headlineContainer.style.textAlign = "center";
+  headlineContainer.style.width = "100%";
+  headlineContainer.style.display = "flex";
+  headlineContainer.style.flexDirection = "column";
+  headlineContainer.style.gap = "0.675rem";
+  headlineContainer.style.alignItems = "center";
+  headlineContainer.style.margin = "0 0 0.625rem 0";
+
+  if (!videoInfo.isHTMLSelected) {
+    headline.style.margin = "0";
+    headline.style.color = videoInfo.headlineColor;
+    headline.style.fontFamily = videoInfo.headlineTypeFont;
+    headline.style.fontWeight = videoInfo.headlineFontWeight;
+    headline.style.fontSize =
+      videoInfo.headlineSize === "pequeno"
+        ? "1.725rem"
+        : videoInfo.headlineSize === "medio"
+          ? "2.5rem"
+          : videoInfo.headlineSize === "grande"
+            ? "3rem"
+            : null;
+    headline.textContent =
+      videoInfo.headlineText !== ""
+        ? videoInfo.headlineText
+        : "Não perca essa oportunidade!";
+
+    subHeadline.style.margin = "0";
+    subHeadline.style.color = videoInfo.subHeadlineColor;
+    subHeadline.style.fontFamily = videoInfo.headlineTypeFont;
+    subHeadline.style.fontWeight = videoInfo.headlineFontWeight;
+    subHeadline.style.fontSize =
+      videoInfo.subHeadlineSize === "pequeno"
+        ? "1.5rem"
+        : videoInfo.subHeadlineSize === "medio"
+          ? "1.875rem"
+          : videoInfo.subHeadlineSize === "grande"
+            ? "2.125rem"
+            : null;
+    subHeadline.textContent =
+      videoInfo.subHeadlineText !== ""
+        ? videoInfo.subHeadlineText
+        : "Garanta agora!";
+  }
+
+  if (videoInfo.isHTMLSelected) {
+    headline.style.margin = "0";
+    headline.innerHTML = videoInfo.headlineText;
+
+    subHeadline.style.margin = "0";
+    subHeadline.innerHTML = videoInfo.subHeadlineText;
+
+    const headlineStyle = document.createElement("style");
+    headlineStyle.textContent = `
+          .headline > *, .sub-headline > * {
+            margin: 0;
+            text-align: center;
+          }
+        `;
+
+    document.head.appendChild(headlineStyle);
+  }
+
+  headlineContainer.appendChild(headline);
+  headlineContainer.appendChild(subHeadline);
+
+  container.appendChild(headlineContainer);
+};
+
+//====
+const createAffiliateLogo = () => {
+  const affiliateBox = document.createElement("a");
+  const affiliateLogo = document.createElement("img");
+
+  affiliateBox.href = videoInfo.urlAffiliate;
+  affiliateBox.setAttribute("target", "_blank");
+  affiliateBox.setAttribute("rel", "noopener noreferrer");
+
+  affiliateLogo.src = "https://dev.hostvsl.com.br/assets/logo-4f3361a7.png";
+  affiliateLogo.style.position = "absolute";
+  affiliateLogo.style.width = "15%";
+  affiliateLogo.style.height = "auto";
+  affiliateLogo.style.maxWidth = "100%";
+  affiliateLogo.style.maxHeight = "100%";
+  affiliateLogo.style.textAlign = "center";
+  affiliateLogo.style.overflow = "hidden";
+  affiliateLogo.style.zIndex = "20";
+  affiliateLogo.style.opacity = videoInfo.transparencyAffiliateLogo;
+
+  switch (videoInfo.selectedAffiliateLogoPosition) {
+    case "I_Meio":
+      affiliateLogo.style.left = "50%";
+      affiliateLogo.style.bottom = "12px";
+      affiliateLogo.style.transform = "translateX(-50%)";
+      break;
+    case "S_Meio":
+      affiliateLogo.style.left = "50%";
+      affiliateLogo.style.top = "12px";
+      affiliateLogo.style.transform = "translateX(-50%)";
+      break;
+    case "S_Esquerda":
+      affiliateLogo.style.left = "12px";
+      affiliateLogo.style.top = "10px";
+      affiliateLogo.style.transform = "translateY(0)";
+      break;
+    case "S_Direita":
+      affiliateLogo.style.right = "12px";
+      affiliateLogo.style.top = "10px";
+      affiliateLogo.style.transform = "translateY(0)";
+      break;
+    case "M_Esquerda":
+      affiliateLogo.style.left = "12px";
+      affiliateLogo.style.top = "50%";
+      affiliateLogo.style.transform = "translateY(-50%)";
+      break;
+    case "M_Direita":
+      affiliateLogo.style.right = "12px";
+      affiliateLogo.style.top = "50%";
+      affiliateLogo.style.transform = "translateY(-50%)";
+      break;
+    case "I_Esquerda":
+      affiliateLogo.style.left = "12px";
+      affiliateLogo.style.bottom = "12px";
+      affiliateLogo.style.transform = "translateY(0)";
+      break;
+    case "I_Direita":
+      affiliateLogo.style.right = "12px";
+      affiliateLogo.style.bottom = "12px";
+      affiliateLogo.style.transform = "translateY(0)";
+      break;
+  }
+
+  affiliateBox.appendChild(affiliateLogo);
+  videoContainer.appendChild(affiliateBox);
+};
+
+//====
+const createLogoMark = () => {
+  const logoMark = document.createElement("img");
+  logoMark.src = videoInfo.logoImg;
+  logoMark.style.position = "absolute";
+  logoMark.style.width = "10%";
+  logoMark.style.height = "auto";
+  logoMark.style.maxHeight = "100%";
+  logoMark.style.maxWidth = "100%";
+  logoMark.style.textAlign = "center";
+  logoMark.style.overflow = "hidden";
+  logoMark.style.zIndex = "25";
+  logoMark.style.cursor = "pointer";
+  switch (videoInfo.selectedLogoPosition) {
+    case "I_Meio":
+      logoMark.style.left = "50%";
+      logoMark.style.bottom = "12px";
+      logoMark.style.transform = "translateX(-50%)";
+      break;
+    case "S_Meio":
+      logoMark.style.left = "50%";
+      logoMark.style.top = "12px";
+      logoMark.style.transform = "translateX(-50%)";
+      break;
+    case "S_Esquerda":
+      logoMark.style.left = "12px";
+      logoMark.style.top = "10px";
+      logoMark.style.transform = "translateY(0)";
+      break;
+    case "S_Direita":
+      logoMark.style.right = "12px";
+      logoMark.style.top = "10px";
+      logoMark.style.transform = "translateY(0)";
+      break;
+    case "M_Esquerda":
+      logoMark.style.left = "12px";
+      logoMark.style.top = "50%";
+      logoMark.style.transform = "translateY(-50%)";
+      break;
+    case "M_Direita":
+      logoMark.style.right = "12px";
+      logoMark.style.top = "50%";
+      logoMark.style.transform = "translateY(-50%)";
+      break;
+    case "I_Esquerda":
+      logoMark.style.left = "12px";
+      logoMark.style.bottom = "12px";
+      logoMark.style.transform = "translateY(0)";
+      break;
+    case "I_Direita":
+      logoMark.style.right = "12px";
+      logoMark.style.bottom = "12px";
+      logoMark.style.transform = "translateY(0)";
+      break;
+  }
+  logoMark.addEventListener("click", () => {
+    window.open(videoInfo.urlLogo, "_blank");
+  });
+  videoContainer.appendChild(logoMark);
+};
+
 //====
 
 //========================================================================================================================
