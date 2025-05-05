@@ -1,6 +1,11 @@
-//created - 01-05-2025 ====================================================================================================
-// PLAYER JS WITH HSL
-//setup environment -------------------------------------------------------------------------------------------------------
+//************************************************************************************************************************|
+//                                                   PLAYER JS WITH HSL                                                   |
+//                                                  created - 01-05-2025                                                  |
+//************************************************************************************************************************|
+
+//=========================================================================================================================
+//--------------------------------------------------SETUP ENVIRONMENTS-----------------------------------------------------
+//=========================================================================================================================
 let ENV_TYPES = [];
 ENV_TYPES["DEV"] = "dev";
 ENV_TYPES["STAGE"] = "stage";
@@ -26,9 +31,10 @@ function loadEnvs() {
   }
 }
 loadEnvs();
-//-----------------------------------------------------------------------------------------------------------------------
+
 //=======================================================================================================================
-///styles and adds
+// ----------------------------------------------styles and adds---------------------------------------------------------
+//=======================================================================================================================
 
 const styles = `
       <style>
@@ -309,7 +315,8 @@ const styles = `
       </style>
     `;
 //=======================================================================================================================
-//GLOBAL VARS============================================================================================================
+//-------------------------------------------------GLOBAL VARS-----------------------------------------------------------
+//=======================================================================================================================
 window.globalState = {};
 let globalState = {};
 let videoUrl = "";
@@ -332,8 +339,9 @@ let state = {
   circlePlay: "",
   iPhoneAutoPlay: "",
 };
-
-//------------------------------------------ELEMENTS---------------------------------------------------------------------
+//=======================================================================================================================
+//-------------------------------------------------------ELEMENTS--------------------------------------------------------
+//=======================================================================================================================
 //VIDEO ELEMENT
 const videoElement = document.querySelector("#video");
 videoElement.style.display = "flex";
@@ -349,8 +357,9 @@ const playButton = document.getElementById('playButton');
 videoContainer.append(videoElement);
 document.body.append(videoContainer);
 
-//-----------------------------------------------------------------------------------------------------------------------
-//load video
+//=======================================================================================================================
+//-------------------------------------LOAD AND PLAY VIDEO BEFORE ANOTHER CONFIGS----------------------------------------
+//=======================================================================================================================
 (() => {
   const url = new URL(window.location.href);
   const params = new URLSearchParams(url.search);
@@ -381,12 +390,16 @@ document.body.append(videoContainer);
   }
 
 })()
-//load other stats
+
+//=========================================================================================================
+//---------------------------------MAIN DATA AND STATS AFTER LOADED VIDEO----------------------------------
+//=========================================================================================================
 window.addEventListener("load", async function () {
   window.clicked = false;
   playButton.addEventListener('click', function () {
     playPauseVideo();
   });
+  //===================================start/load session==================================================
   globalState.newSessionUserId = uuId()
   if (localStorage.getItem("lastSession")) {
     globalState.loadedSessionUserFromStorage = localStorage.getItem("lastSession")
@@ -394,10 +407,14 @@ window.addEventListener("load", async function () {
     globalState.loadedSessionUserFromStorage = globalState.newSessionUserId
     localStorage.setItem("lastSession", globalState.newSessionUserId)
   }
+
+  //===================================domain data========================================================
   window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
   console.log("Domain Data: ", domainData)
   videoId = "b3f4389c-ca69-49f6-a2a8-9e00958e15ed"
   globalState.videoId = videoId
+
+  //===================================create metrics at the video========================================
   if (videoId) {
     const dataVideo = await getVideo(videoId);
     videoInfo = dataVideo?.response;
@@ -429,24 +446,21 @@ window.addEventListener("load", async function () {
     //   iPhoneAutoPlay: sessionStorage.getItem("iPhoneAutoPlay"),
     // };
 
-
-
-    //====INTERFACE===========================================================================================
-
+    //===========================================INTERFACE TOOLS===============================================
     const sound =
       "data:image/svg+xml;base64,ICAgIDxzdmcgdmVyc2lvbj0iMS4xIiBmaWxsPSIjRkZGRkZGIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIg0KICAgICAgICB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQ2Ljc1cHgiIGhlaWdodD0iMzIuNTYzcHgiIHZpZXdCb3g9IjcuOTk5IDkuMDYyIDQ2Ljc1IDMyLjU2MyINCiAgICAgICAgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyA3Ljk5OSA5LjA2MiA0Ni43NSAzMi41NjMiIHhtbDpzcGFjZT0icHJlc2VydmUiDQogICAgPg0KICAgICAgPHN0eWxlPg0KICAgICAgICBALXdlYmtpdC1rZXlmcmFtZXMgQkxJTksgew0KICAgICAgICAgIDAlIHsgb3BhY2l0eTogMDsgfQ0KICAgICAgICAgIDMzJSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgICAgICA2NiUgeyBvcGFjaXR5OiAxOyB9DQogICAgICAgICAgMTAwJSB7IG9wYWNpdHk6IDA7IH0NCiAgICAgICAgfQ0KDQogICAgICAgIEBrZXlmcmFtZXMgQkxJTksgew0KICAgICAgICAgIDAlIHsgb3BhY2l0eTogMDsgfQ0KICAgICAgICAgIDMzJSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgICAgICA2NiUgeyBvcGFjaXR5OiAxOyB9DQogICAgICAgICAgMTAwJSB7IG9wYWNpdHk6IDA7IH0NCiAgICAgICAgfQ0KDQogICAgICAgIC5hbmltYXRpb24gLmJsaW5rXzEgew0KICAgICAgICAgIC13ZWJraXQtYW5pbWF0aW9uOiBCTElOSyAycyBpbmZpbml0ZTsNCiAgICAgICAgICBhbmltYXRpb246IEJMSU5LIDJzIGluZmluaXRlOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5ibGlua18yIHsNCiAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjNzOw0KICAgICAgICAgIGFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjNzOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5ibGlua18zIHsNCiAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjZzOw0KICAgICAgICAgIGFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjZzOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5zbWFydHBsYXktc3ZnLWNvbG9yIHsNCiAgICAgICAgICBmaWxsOiAnI0ZGRkZGRicgIWltcG9ydGFudDsNCiAgICAgICAgfQ0KDQogICAgICAgIC5hbmltYXRpb24uYWRqdXN0YWJsZSB7DQogICAgICAgICAgYm9yZGVyOiA0cHggc29saWQgJyNGRkZGRkYnOw0KICAgICAgICB9DQogICAgICA8L3N0eWxlPg0KDQogICAgICA8ZyBjbGFzcz0iYWRqdXN0YWJsZSBmZyBhbmltYXRpb24iPg0KICAgICAgICA8cGF0aCBjbGFzcz0ic21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTUzLjI0OSwzOS42MTZjLTAuMTg2LDAtMC4zNzEtMC4wNTEtMC41MzctMC4xNTdsLTQzLjUtMjcuNzVjLTAuNDY2LTAuMjk3LTAuNjAzLTAuOTE2LTAuMzA2LTEuMzgxYzAuMjk4LTAuNDY2LDAuOTE3LTAuNjAxLDEuMzgxLTAuMzA2bDQzLjUsMjcuNzVjMC40NjcsMC4yOTcsMC42MDQsMC45MTYsMC4zMDcsMS4zODFDNTMuOTAxLDM5LjQ1Myw1My41NzksMzkuNjE2LDUzLjI0OSwzOS42MTZ6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18zIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik00OC44OTYsMzMuNDY3bDEuNjk5LDEuMDg1YzMuNDk3LTcuNzkxLDIuMDczLTE3LjI3MS00LjMxMy0yMy42NTljLTAuMzkxLTAuMzkxLTEuMDIzLTAuMzkxLTEuNDE0LDBzLTAuMzkxLDEuMDIzLDAsMS40MTRDNTAuNTgxLDE4LjAxOSw1MS45MTMsMjYuNDYzLDQ4Ljg5NiwzMy40Njd6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18zIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik00Ni45MjYsMzYuOTU2Yy0wLjYxMiwwLjg2My0xLjI4NiwxLjY5NS0yLjA1OSwyLjQ2OWMtMC4zOTIsMC4zOTEtMC4zOTIsMS4wMjMsMCwxLjQxNGMwLjE5NCwwLjE5NSwwLjQ1LDAuMjkzLDAuNzA3LDAuMjkzYzAuMjU2LDAsMC41MTItMC4wOTgsMC43MDYtMC4yOTNjMC44NzgtMC44NzgsMS42NDItMS44MjQsMi4zMzMtMi44MDdMNDYuOTI2LDM2Ljk1NnoiPjwvcGF0aD4NCiAgICAgICAgPHBhdGggY2xhc3M9ImJsaW5rXzIgc21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTQyLjU0MywyOS40MTVsMS43NzcsMS4xMzVjMS41NDUtNS4zMTUsMC4yMjktMTEuMjkzLTMuOTUzLTE1LjQ3NmMtMC4zOTItMC4zOTEtMS4wMjMtMC4zOTEtMS40MTQsMGMtMC4zOTIsMC4zOTEtMC4zOTIsMS4wMjMsMCwxLjQxNEM0Mi40NTQsMTkuOTg3LDQzLjYzOSwyNC45MjUsNDIuNTQzLDI5LjQxNXoiPjwvcGF0aD4NCiAgICAgICAgPHBhdGggY2xhc3M9ImJsaW5rXzIgc21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTQxLDMzLjE3NGMtMC41NjMsMC45NC0xLjIzNSwxLjgzNy0yLjA0NywyLjY0NmMtMC4zOTEsMC4zOTItMC4zOTEsMS4wMjMsMCwxLjQxNGMwLjE5NSwwLjE5NSwwLjQ1MSwwLjI5MywwLjcwNywwLjI5M3MwLjUxMi0wLjA5OCwwLjcwNy0wLjI5M2MwLjkxNi0wLjkxNCwxLjY3Ni0xLjkyNCwyLjMxNy0yLjk4NEw0MSwzMy4xNzR6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18xIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik0zNS43NzEsMjUuMDk0bDIuMDAzLDEuMjc3YzAuMDEyLTAuMjAzLDAuMDI5LTAuNDA0LDAuMDI5LTAuNjA5YzAtMy4wNzktMS4yLTUuOTc0LTMuMzgxLTguMTUzYy0wLjM5MS0wLjM5MS0xLjAyMi0wLjM5MS0xLjQxNCwwYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0QzM0LjY1MiwyMC42NjYsMzUuNjEzLDIyLjgwMiwzNS43NzEsMjUuMDk0eiI+PC9wYXRoPg0KICAgICAgICA8cGF0aCBjbGFzcz0iYmxpbmtfMSBzbWFydHBsYXktc3ZnLWNvbG9yIiBkPSJNMzUuMDg0LDI5LjQwMWMtMC40NzQsMS4xNDUtMS4xNzIsMi4xOTctMi4wNzYsMy4xYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0YzAuMTk1LDAuMTk1LDAuNDUxLDAuMjkzLDAuNzA3LDAuMjkzYzAuMjU3LDAsMC41MTMtMC4wOTgsMC43MDctMC4yOTNjMS4wMDgtMS4wMDYsMS43OTUtMi4xNywyLjM2MS0zLjQzTDM1LjA4NCwyOS40MDF6Ij48L3BhdGg+DQogICAgICAgIDxwb2x5Z29uIGNsYXNzPSJzbWFydHBsYXktc3ZnLWNvbG9yIiBwb2ludHM9IjI4LjEyNCwyMC4yMTUgMjguMTI0LDE0Ljk5MSAyNC42MzUsMTcuOTkgICI+PC9wb2x5Z29uPg0KICAgICAgICA8cGF0aCBjbGFzcz0ic21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTIwLjkyMSwyMC4zNjZoLTYuNDIzYy0wLjU1MywwLTEsMC41MDgtMSwxLjEzNXY4LjIyOWMwLDAuNjI3LDAuNDQ3LDEuMTM1LDEsMS4xMzVoNy4zNzVsNi4yNSw1Ljg3NVYyNC45NkwyMC45MjEsMjAuMzY2eiI+PC9wYXRoPg0KICAgICAgPC9nPg0KICAgIDwvc3ZnPg0KICA=";
     await appendScriptOnHead('https://kit.fontawesome.com/839085c966.js')
     await appendScriptOnHead('https://code.jquery.com/jquery-3.2.1.min.js')
     document.head.insertAdjacentHTML("beforeend", styles);
-    document.head.appendChild(fontAwesomeScript);
-    document.head.appendChild(jquery);
+
     //========================================================================================================
   }
 });
 
-
-//=========FUNCTIONS====================
-
+//=============================================================================================================|
+//=============================================================================================================|
+//                                             GENERALS FUNCTIONS                                              |
+//=============================================================================================================|
 async function appendScriptOnHead(url) {
   return new Promise((onFulfilled, onRejected) => {
     const script = document.createElement("script");
@@ -469,6 +483,7 @@ async function appendScriptOnHead(url) {
   });
 }
 
+//--------------------------------------------------------------------
 async function appendScriptOnFooter(url) {
   return new Promise((onFulfilled, onRejected) => {
     const script = document.createElement("script");
@@ -489,6 +504,7 @@ async function appendScriptOnFooter(url) {
   });
 }
 
+//----------------------------------------------------------------------
 function getBrowserName() {
   const userAgent = navigator.userAgent;
 
@@ -510,6 +526,7 @@ function getBrowserName() {
   }
 }
 
+//---------------------------------------------------------------------
 function uuId() {
   return (
     gerarStringAlfanumerica(8) +
@@ -524,6 +541,7 @@ function uuId() {
   );
 }
 
+//----------------------------------------------------------------------
 function gerarStringAlfanumerica(tamanho) {
   const caracteres =
     "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
@@ -535,6 +553,7 @@ function gerarStringAlfanumerica(tamanho) {
   return resultado;
 }
 
+//---------------------------------------------------------------------
 function playPauseVideo() {
   const video = document.getElementById("video");
   if (videoElement.muted) {
@@ -563,6 +582,7 @@ async function getVideo(videoId) {
   return json;
 }
 
+//-------------------------------------------------------------------------------------------------
 async function setClick(data) {
   const API = globalState.api;
   const api = await fetch(`${API}metric/click`, {
@@ -576,6 +596,8 @@ async function setClick(data) {
   const json = await api.json();
   return json;
 }
+
+//------------------------------------------------------------------------------------------------
 async function setThumbClick(idVideo, idSessao) {
   const API = globalState.api;
   const api = await fetch(`${API}metric/thumb-click`, {
@@ -589,6 +611,8 @@ async function setThumbClick(idVideo, idSessao) {
   const json = await api.json();
   return json;
 }
+
+//-----------------------------------------------------------------------------------------------
 async function handleSendCapture(data) {
   const API = globalState.api;
   const api = await fetch(`${API}capture/create`, {
@@ -604,6 +628,7 @@ async function handleSendCapture(data) {
   return json;
 }
 
+//-----------------------------------------------------------------------------------------------
 async function handleVideoLogin(data) {
   const API = globalState.api;
   const api = await fetch(`${API}capture/video-login`, {
@@ -618,6 +643,7 @@ async function handleVideoLogin(data) {
   return json;
 }
 
+//----------------------------------------------------------------------------------------------
 async function handleCreateMetric(data) {
   const API = globalState.api;
   const res = await fetch(`${API}metric/create`, {
@@ -630,6 +656,8 @@ async function handleCreateMetric(data) {
   });
   console.log("metrica Criada: ", res)
 }
+
+//--------------------------------------------------------------------------------------------
 async function handleUpdateMetric(data) {
   const API = globalState.api;
   await fetch(`${API}metric/update`, {
@@ -641,6 +669,8 @@ async function handleUpdateMetric(data) {
     body: JSON.stringify(data),
   });
 }
+
+//-------------------------------------------------------------------------------------------
 async function handleLasteUpdateMetric(data) {
   const API = globalState.api;
   await fetch(`${API}metric/update/last`, {
@@ -652,8 +682,9 @@ async function handleLasteUpdateMetric(data) {
     body: JSON.stringify(data),
   });
 }
+
+//---------------------------------------------------------------------------------------------------------------------------
 //CREATE ELEMENTS============================================================================================================
-//====
 const createThumb = () => {
   const thumbPause = document.createElement("img");
   thumbPause.style.position = "absolute";
@@ -678,7 +709,7 @@ const createThumb = () => {
   thumbPause.addEventListener("click", handlePlayPause);
   videoContainer.appendChild(thumbPause);
 };
-//====
+//----------------------------------------------------------------------------
 const createAutoPlay = () => {
   const autoPlayFullContainerVideo = document.createElement("div");
   const autoPlayContainer = document.createElement("div");
@@ -775,7 +806,7 @@ const createAutoPlay = () => {
     });
 };
 
-//====
+//--------------------------------------------------------------------------------
 
 const createVideo = async (videoInfo) => {
   if (!videoInfo) {
@@ -1046,7 +1077,7 @@ const createVideo = async (videoInfo) => {
   }
 };
 
-//====
+//---------------------------------------------------------------------------
 const handlePlayPause = async () => {
   const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const formOnScreen = localStorage.getItem("formOnScreen");
@@ -1150,7 +1181,7 @@ const handlePlayPause = async () => {
   }
 };
 
-//====
+//-------------------------------------------------------------------------------
 const handlePlayPauseControl = async () => {
   const videoElement = document.getElementById("my-video_html5_api");
   const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
@@ -1245,7 +1276,7 @@ const handlePlayPauseControl = async () => {
   }
 };
 
-//====
+//----------------------------------------------------------------------------
 const handleUnmuteRestart = async () => {
   const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const containerControl = document.getElementById("container_controls");
@@ -1341,7 +1372,7 @@ const handleUnmuteRestart = async () => {
   }
 };
 
-//====
+//-------------------------------------------------------------------------------
 const handleMouseMove = async () => {
   const videoElement = document.querySelector("video");
   const controlElement = document.getElementById("container_controls");
@@ -1354,7 +1385,7 @@ const handleMouseMove = async () => {
   if (controlElement) controlElement.style.visibility = "visible";
 };
 
-//====
+//---------------------------------------------------------------------------
 const handleOnProgress = async () => {
   const videoElement = document.querySelector("video");
   const progressElement = document.getElementById("progress");
@@ -1475,7 +1506,7 @@ const handleOnProgress = async () => {
     }
   }
 };
-//====
+//-----------------------------------------------------------------------------------
 const handleMute = () => {
   const videoElement = document.getElementById("my-video_html5_api");
   const mutedElement = document.getElementById("icon_muted_bottom_control");
@@ -1494,7 +1525,7 @@ const handleMute = () => {
   }
 };
 
-//====
+//--------------------------------------------------------------------------
 const createCustomAutoPlay = () => {
   const formOnScreen = localStorage.getItem("formOnScreen");
 
@@ -1556,7 +1587,7 @@ const createCustomAutoPlay = () => {
     });
 };
 
-//====
+//--------------------------------------------------------------------------
 const createSmallAutoPlay = () => {
   const autoPlayFullContainerVideo = document.createElement("div");
   const autoPlayContainer = document.createElement("div");
@@ -1646,7 +1677,7 @@ const createSmallAutoPlay = () => {
     });
 };
 
-//====
+//----------------------------------------------------------------------------
 const createLargeAutoPlay = () => {
   const formOnScreen = localStorage.getItem("formOnScreen");
 
@@ -1790,7 +1821,7 @@ const createLargeAutoPlay = () => {
     });
 };
 
-//====
+//------------------------------------------------------------------------
 const createTransparentAutoPlay = () => {
   const formOnScreen = localStorage.getItem("formOnScreen");
 
@@ -1878,7 +1909,7 @@ const createTransparentAutoPlay = () => {
     });
 };
 
-//====
+//-------------------------------------------------------------------------
 const createEyeBlurAutoPlay = () => {
   const formOnScreen = localStorage.getItem("formOnScreen");
 
@@ -2025,7 +2056,7 @@ const createEyeBlurAutoPlay = () => {
     });
 };
 
-//====
+//-----------------------------------------------------------------------
 const createFullScreenAutoPlay = () => {
   const formOnScreen = localStorage.getItem("formOnScreen");
 
@@ -2139,7 +2170,7 @@ const createFullScreenAutoPlay = () => {
     });
 };
 
-//====
+//-----------------------------------------------------------------------
 const createAnimatedAutoPlay = () => {
   const formOnScreen = localStorage.getItem("formOnScreen");
 
@@ -2280,7 +2311,7 @@ const createAnimatedAutoPlay = () => {
     });
 };
 
-//====
+//----------------------------------------------------------------------------
 const createAoVivo = () => {
   const aoVivoContainer = document.createElement("div");
   const aoVivoText = document.createElement("small");
@@ -2390,7 +2421,7 @@ const createAoVivo = () => {
 
   videoContainer.appendChild(aoVivoContainer);
 };
-//====
+//--------------------------------------------------------------------------
 const createInitialThumb = () => {
   const circlePlay = document.getElementById("circle");
 
@@ -2460,7 +2491,7 @@ const createFinalThumb = () => {
 
   videoContainer.appendChild(thumbFinal);
 };
-//====
+//----------------------------------------------------------------------------
 const createThumbButton = () => {
   const buttonThumb = document.createElement("a");
   const buttonThumbText = document.createElement("p");
@@ -2586,7 +2617,7 @@ const createThumbButton = () => {
   buttonThumb.appendChild(buttonThumbText);
   videoContainer.appendChild(buttonThumb);
 };
-//====
+//---------------------------------------------------------------------------
 const formatTime = (time) => {
   const minutes = Math.floor(time / 60);
   const seconds = Math.floor(time % 60);
@@ -2596,7 +2627,7 @@ const formatTime = (time) => {
   )}`;
 };
 
-//====
+//--------------------------------------------------------------------------
 const seek = (e) => {
   const videoElement = document.getElementById("my-video_html5_api");
   const progress = document.getElementById("progress_control");
@@ -2611,24 +2642,25 @@ const seek = (e) => {
   videoElement.currentTime = (percent / 100) * videoElement.duration;
 };
 
-//====
+//---------------------------------------------------------------------
 const handleRewind = () => {
   const videoElement = document.getElementById("my-video_html5_api");
   videoElement.currentTime -= 10;
 };
-//====
 
+//--------------------------------------------------------------------------
 const handleForward = () => {
   const videoElement = document.getElementById("my-video_html5_api");
   videoElement.currentTime += 10;
 };
 
-//====
+//--------------------------------------------------------------------------
 const seekHandler = (e, value) => {
   const videoElement = document.getElementById("my-video_html5_api");
   // videoElement.currentTime = parseFloat(value);
 };
 
+//--------------------------------------------------------------------------
 const createControls = async () => {
   const videoElement = document.getElementById("my-video_html5_api");
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
@@ -2942,7 +2974,8 @@ const createControls = async () => {
 
   videoContainer.appendChild(controlsFullContainerVideo);
 };
-//====
+
+//-----------------------------------------------------------------------------
 const handleContinue = async (container) => {
   const videoElement = document.getElementById("my-video_html5_api");
   const controlsContainer = document.getElementById("container_controls");
@@ -2990,7 +3023,8 @@ const handleContinue = async (container) => {
 
   container.remove();
 };
-//====
+
+//-----------------------------------------------------------------------------
 const handleRestart = (container) => {
   const circle = document.getElementById("circle");
   const circlePlay = document.getElementById("icon_play_control");
@@ -3011,7 +3045,8 @@ const handleRestart = (container) => {
 
   container.remove();
 };
-//====
+
+//--------------------------------------------------------------------------
 const createContinueDefault = () => {
   const continueContainer = document.createElement("div");
   continueContainer.id = "continue_container";
@@ -3182,7 +3217,7 @@ const createContinueDefault = () => {
   videoContainer.appendChild(continueContainer);
 };
 
-//====
+//--------------------------------------------------------------------------
 const createContinueSmall = () => {
   // caixa do continuar de onde parou ajustada ao tamanho do video.
   const continueContainer = document.createElement("div");
@@ -3400,7 +3435,7 @@ const createContinueSmall = () => {
   videoContainer.appendChild(continueContainer);
 };
 
-//====
+//--------------------------------------------------------------------------
 const createDelayButton = () => {
   const delayButton = document.createElement("a");
   delayButton.id = "delayButton";
@@ -3539,7 +3574,7 @@ const createDelayButton = () => {
   container.appendChild(delayButton);
 };
 
-//====
+//--------------------------------------------------------------------------
 const handleCapturePassword = async (e) => {
   e.preventDefault();
   const inputCapture = document.getElementById("inputCapture");
@@ -3624,7 +3659,7 @@ const handleCapturePassword = async (e) => {
   }
 };
 
-//====
+//--------------------------------------------------------------------------
 const createFormPassword = () => {
   const createFormSection = document.createElement("section");
   createFormSection.id = "formSection";
@@ -3875,8 +3910,9 @@ const createFormPassword = () => {
   videoContainer.appendChild(createFormSection);
 };
 
-//====
-//create function to get the input infos and send to the api
+//--------------------------------------------------------------------------
+//       create function to get the input infos and send to the api
+//--------------------------------------------------------------------------
 const handleCaptureData = async (e) => {
   e.preventDefault();
 
@@ -3992,7 +4028,7 @@ const handleCaptureData = async (e) => {
   }
 };
 
-//====
+//--------------------------------------------------------------------------
 const createForm = () => {
   const createFormSection = document.createElement("section");
   createFormSection.id = "formCaptureSection";
@@ -4731,7 +4767,7 @@ const createForm = () => {
   videoContainer.appendChild(createFormSection);
 };
 
-//====
+//--------------------------------------------------------------------------
 const createCirclePlay = async () => {
   const circleContainer = document.createElement("div");
   const videoElement = document.getElementById("my-video_html5_api");
@@ -4795,7 +4831,7 @@ const createCirclePlay = async () => {
   circleContainer.addEventListener("click", handlePlayPause);
 };
 
-//====
+//--------------------------------------------------------------------------
 const createFakeBar = () => {
   const videoElement = document.getElementById("my-video_html5_api");
   const progressBar = document.createElement("progress");
@@ -4823,7 +4859,7 @@ const createFakeBar = () => {
   videoContainer.appendChild(progressBar);
 };
 
-//====
+//--------------------------------------------------------------------------
 const createCantRunVideoImage = () => {
   if (allowDomain) {
     const cantRunVideoImg = document.createElement("img");
@@ -4833,7 +4869,7 @@ const createCantRunVideoImage = () => {
   }
 };
 
-//====
+//--------------------------------------------------------------------------
 const createHeadline = () => {
   const headlineContainer = document.createElement("div");
   const headline = document.createElement("h1");
@@ -4911,7 +4947,7 @@ const createHeadline = () => {
   container.appendChild(headlineContainer);
 };
 
-//====
+//--------------------------------------------------------------------------
 const createAffiliateLogo = () => {
   const affiliateBox = document.createElement("a");
   const affiliateLogo = document.createElement("img");
@@ -4978,7 +5014,7 @@ const createAffiliateLogo = () => {
   videoContainer.appendChild(affiliateBox);
 };
 
-//====
+//--------------------------------------------------------------------------
 const createLogoMark = () => {
   const logoMark = document.createElement("img");
   logoMark.src = videoInfo.logoImg;
@@ -5039,7 +5075,7 @@ const createLogoMark = () => {
   videoContainer.appendChild(logoMark);
 };
 
-//====
+//--------------------------------------------------------------------------
 
 //========================================================================================================================
 //================================================INJECT ON DE WINDOW=====================================================
