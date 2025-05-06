@@ -317,6 +317,9 @@ const styles = `
 //=======================================================================================================================
 //-------------------------------------------------GLOBAL VARS-----------------------------------------------------------
 //=======================================================================================================================
+const sound =
+  "data:image/svg+xml;base64,ICAgIDxzdmcgdmVyc2lvbj0iMS4xIiBmaWxsPSIjRkZGRkZGIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIg0KICAgICAgICB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQ2Ljc1cHgiIGhlaWdodD0iMzIuNTYzcHgiIHZpZXdCb3g9IjcuOTk5IDkuMDYyIDQ2Ljc1IDMyLjU2MyINCiAgICAgICAgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyA3Ljk5OSA5LjA2MiA0Ni43NSAzMi41NjMiIHhtbDpzcGFjZT0icHJlc2VydmUiDQogICAgPg0KICAgICAgPHN0eWxlPg0KICAgICAgICBALXdlYmtpdC1rZXlmcmFtZXMgQkxJTksgew0KICAgICAgICAgIDAlIHsgb3BhY2l0eTogMDsgfQ0KICAgICAgICAgIDMzJSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgICAgICA2NiUgeyBvcGFjaXR5OiAxOyB9DQogICAgICAgICAgMTAwJSB7IG9wYWNpdHk6IDA7IH0NCiAgICAgICAgfQ0KDQogICAgICAgIEBrZXlmcmFtZXMgQkxJTksgew0KICAgICAgICAgIDAlIHsgb3BhY2l0eTogMDsgfQ0KICAgICAgICAgIDMzJSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgICAgICA2NiUgeyBvcGFjaXR5OiAxOyB9DQogICAgICAgICAgMTAwJSB7IG9wYWNpdHk6IDA7IH0NCiAgICAgICAgfQ0KDQogICAgICAgIC5hbmltYXRpb24gLmJsaW5rXzEgew0KICAgICAgICAgIC13ZWJraXQtYW5pbWF0aW9uOiBCTElOSyAycyBpbmZpbml0ZTsNCiAgICAgICAgICBhbmltYXRpb246IEJMSU5LIDJzIGluZmluaXRlOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5ibGlua18yIHsNCiAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjNzOw0KICAgICAgICAgIGFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjNzOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5ibGlua18zIHsNCiAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjZzOw0KICAgICAgICAgIGFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjZzOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5zbWFydHBsYXktc3ZnLWNvbG9yIHsNCiAgICAgICAgICBmaWxsOiAnI0ZGRkZGRicgIWltcG9ydGFudDsNCiAgICAgICAgfQ0KDQogICAgICAgIC5hbmltYXRpb24uYWRqdXN0YWJsZSB7DQogICAgICAgICAgYm9yZGVyOiA0cHggc29saWQgJyNGRkZGRkYnOw0KICAgICAgICB9DQogICAgICA8L3N0eWxlPg0KDQogICAgICA8ZyBjbGFzcz0iYWRqdXN0YWJsZSBmZyBhbmltYXRpb24iPg0KICAgICAgICA8cGF0aCBjbGFzcz0ic21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTUzLjI0OSwzOS42MTZjLTAuMTg2LDAtMC4zNzEtMC4wNTEtMC41MzctMC4xNTdsLTQzLjUtMjcuNzVjLTAuNDY2LTAuMjk3LTAuNjAzLTAuOTE2LTAuMzA2LTEuMzgxYzAuMjk4LTAuNDY2LDAuOTE3LTAuNjAxLDEuMzgxLTAuMzA2bDQzLjUsMjcuNzVjMC40NjcsMC4yOTcsMC42MDQsMC45MTYsMC4zMDcsMS4zODFDNTMuOTAxLDM5LjQ1Myw1My41NzksMzkuNjE2LDUzLjI0OSwzOS42MTZ6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18zIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik00OC44OTYsMzMuNDY3bDEuNjk5LDEuMDg1YzMuNDk3LTcuNzkxLDIuMDczLTE3LjI3MS00LjMxMy0yMy42NTljLTAuMzkxLTAuMzkxLTEuMDIzLTAuMzkxLTEuNDE0LDBzLTAuMzkxLDEuMDIzLDAsMS40MTRDNTAuNTgxLDE4LjAxOSw1MS45MTMsMjYuNDYzLDQ4Ljg5NiwzMy40Njd6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18zIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik00Ni45MjYsMzYuOTU2Yy0wLjYxMiwwLjg2My0xLjI4NiwxLjY5NS0yLjA1OSwyLjQ2OWMtMC4zOTIsMC4zOTEtMC4zOTIsMS4wMjMsMCwxLjQxNGMwLjE5NCwwLjE5NSwwLjQ1LDAuMjkzLDAuNzA3LDAuMjkzYzAuMjU2LDAsMC41MTItMC4wOTgsMC43MDYtMC4yOTNjMC44NzgtMC44NzgsMS42NDItMS44MjQsMi4zMzMtMi44MDdMNDYuOTI2LDM2Ljk1NnoiPjwvcGF0aD4NCiAgICAgICAgPHBhdGggY2xhc3M9ImJsaW5rXzIgc21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTQyLjU0MywyOS40MTVsMS43NzcsMS4xMzVjMS41NDUtNS4zMTUsMC4yMjktMTEuMjkzLTMuOTUzLTE1LjQ3NmMtMC4zOTItMC4zOTEtMS4wMjMtMC4zOTEtMS40MTQsMGMtMC4zOTIsMC4zOTEtMC4zOTIsMS4wMjMsMCwxLjQxNEM0Mi40NTQsMTkuOTg3LDQzLjYzOSwyNC45MjUsNDIuNTQzLDI5LjQxNXoiPjwvcGF0aD4NCiAgICAgICAgPHBhdGggY2xhc3M9ImJsaW5rXzIgc21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTQxLDMzLjE3NGMtMC41NjMsMC45NC0xLjIzNSwxLjgzNy0yLjA0NywyLjY0NmMtMC4zOTEsMC4zOTItMC4zOTEsMS4wMjMsMCwxLjQxNGMwLjE5NSwwLjE5NSwwLjQ1MSwwLjI5MywwLjcwNywwLjI5M3MwLjUxMi0wLjA5OCwwLjcwNy0wLjI5M2MwLjkxNi0wLjkxNCwxLjY3Ni0xLjkyNCwyLjMxNy0yLjk4NEw0MSwzMy4xNzR6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18xIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik0zNS43NzEsMjUuMDk0bDIuMDAzLDEuMjc3YzAuMDEyLTAuMjAzLDAuMDI5LTAuNDA0LDAuMDI5LTAuNjA5YzAtMy4wNzktMS4yLTUuOTc0LTMuMzgxLTguMTUzYy0wLjM5MS0wLjM5MS0xLjAyMi0wLjM5MS0xLjQxNCwwYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0QzM0LjY1MiwyMC42NjYsMzUuNjEzLDIyLjgwMiwzNS43NzEsMjUuMDk0eiI+PC9wYXRoPg0KICAgICAgICA8cGF0aCBjbGFzcz0iYmxpbmtfMSBzbWFydHBsYXktc3ZnLWNvbG9yIiBkPSJNMzUuMDg0LDI5LjQwMWMtMC40NzQsMS4xNDUtMS4xNzIsMi4xOTctMi4wNzYsMy4xYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0YzAuMTk1LDAuMTk1LDAuNDUxLDAuMjkzLDAuNzA3LDAuMjkzYzAuMjU3LDAsMC41MTMtMC4wOTgsMC43MDctMC4yOTNjMS4wMDgtMS4wMDYsMS43OTUtMi4xNywyLjM2MS0zLjQzTDM1LjA4NCwyOS40MDF6Ij48L3BhdGg+DQogICAgICAgIDxwb2x5Z29uIGNsYXNzPSJzbWFydHBsYXktc3ZnLWNvbG9yIiBwb2ludHM9IjI4LjEyNCwyMC4yMTUgMjguMTI0LDE0Ljk5MSAyNC42MzUsMTcuOTkgICI+PC9wb2x5Z29uPg0KICAgICAgICA8cGF0aCBjbGFzcz0ic21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTIwLjkyMSwyMC4zNjZoLTYuNDIzYy0wLjU1MywwLTEsMC41MDgtMSwxLjEzNXY4LjIyOWMwLDAuNjI3LDAuNDQ3LDEuMTM1LDEsMS4xMzVoNy4zNzVsNi4yNSw1Ljg3NVYyNC45NkwyMC45MjEsMjAuMzY2eiI+PC9wYXRoPg0KICAgICAgPC9nPg0KICAgIDwvc3ZnPg0KICA=";
+
 window.globalState = {};
 let globalState = {};
 let videoUrl = "";
@@ -339,6 +342,10 @@ let state = {
   circlePlay: "",
   iPhoneAutoPlay: "",
 };
+
+let isMobile = false;
+if (window) isMobile = window.innerWidth <= 500;
+
 //=======================================================================================================================
 //-------------------------------------------------------ELEMENTS--------------------------------------------------------
 //=======================================================================================================================
@@ -353,8 +360,22 @@ videoContainer.style.display = "flex";
 videoContainer.style.position = "relative";
 let isAuto = false;
 
+// const controlsContainer = document.createElement("container_controls");
+const controlsContainer = document.createElement("div");
+controlsContainer.id = "container_controls"
+// controlsContainer.className = "video-container";
+// controlsContainer.style.display = "flex";
+// controlsContainer.style.position = "relative";
+
+const containerElements = document.createElement("div");
+containerElements.className = "video-container";
+containerElements.style.display = "flex";
+containerElements.style.position = "relative";
+
+
 const playButton = document.getElementById('playButton');
 videoContainer.append(videoElement);
+videoContainer.append(controlsContainer);
 document.body.append(videoContainer);
 
 //=======================================================================================================================
@@ -366,24 +387,24 @@ document.body.append(videoContainer);
   videoUrl = params.get("video");
   videoId = params.get("idvideo");
   console.log({ videoUrl })
-  videoElement.controls = true
+  videoElement.controls = false
   videoUrl ? videoUrl : videoUrl = 'https://testvsl1.b-cdn.net/24b5b278-9505-4cb6-acb0-5ec5aa5987e3/ssssss/segment.m3u8';
   if (window.hls) {
     window.hls.loadSource(videoUrl);
     window.hls.attachMedia(videoElement);
     window.hls.on(window.Hls.Events.MANIFEST_PARSED, function () {        // Adicionar um ouvinte para o evento canplay
       videoElement.addEventListener('canplay', function () {
-        videoElement.play().catch(function (error) {
-          console.error('Erro ao tentar reproduzir:', error);
-        });
+        // videoElement.play().catch(function (error) {
+        //   console.error('Erro ao tentar reproduzir:', error);
+        // });
       });
     });
   } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
     videoElement.src = videoUrl;
     videoElement.addEventListener('loadedmetadata', function () {
-      videoElement.play().catch(function (error) {
-        console.error('Erro ao tentar reproduzir:', error);
-      });
+      // videoElement.play().catch(function (error) {
+      //   console.error('Erro ao tentar reproduzir:', error);
+      // });
     });
   } else {
     console.error('HLS não é suportado neste navegador.');
@@ -396,9 +417,9 @@ document.body.append(videoContainer);
 //=========================================================================================================
 window.addEventListener("load", async function () {
   window.clicked = false;
-  playButton.addEventListener('click', function () {
-    playPauseVideo();
-  });
+  // playButton.addEventListener('click', function () {
+  //   playPauseVideo();
+  // });
   //===================================start/load session==================================================
   globalState.newSessionUserId = uuId()
   if (localStorage.getItem("lastSession")) {
@@ -418,10 +439,9 @@ window.addEventListener("load", async function () {
   if (videoId) {
     const dataVideo = await getVideo(videoId);
     videoInfo = dataVideo?.response;
-    console.log({ videoInfo })
+    console.log({ videoInfo }, isMobile)
     allowDomain = !!dataVideo?.response?.video
     console.log({ allowDomain })
-    const isMobile = window.innerWidth <= 500;
     const clientConnectData = {
       id_sessao: globalState?.newSessionUserId,
       id_video: globalState.videoId,
@@ -447,13 +467,13 @@ window.addEventListener("load", async function () {
     // };
 
     //===========================================INTERFACE TOOLS===============================================
-    const sound =
-      "data:image/svg+xml;base64,ICAgIDxzdmcgdmVyc2lvbj0iMS4xIiBmaWxsPSIjRkZGRkZGIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIg0KICAgICAgICB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQ2Ljc1cHgiIGhlaWdodD0iMzIuNTYzcHgiIHZpZXdCb3g9IjcuOTk5IDkuMDYyIDQ2Ljc1IDMyLjU2MyINCiAgICAgICAgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyA3Ljk5OSA5LjA2MiA0Ni43NSAzMi41NjMiIHhtbDpzcGFjZT0icHJlc2VydmUiDQogICAgPg0KICAgICAgPHN0eWxlPg0KICAgICAgICBALXdlYmtpdC1rZXlmcmFtZXMgQkxJTksgew0KICAgICAgICAgIDAlIHsgb3BhY2l0eTogMDsgfQ0KICAgICAgICAgIDMzJSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgICAgICA2NiUgeyBvcGFjaXR5OiAxOyB9DQogICAgICAgICAgMTAwJSB7IG9wYWNpdHk6IDA7IH0NCiAgICAgICAgfQ0KDQogICAgICAgIEBrZXlmcmFtZXMgQkxJTksgew0KICAgICAgICAgIDAlIHsgb3BhY2l0eTogMDsgfQ0KICAgICAgICAgIDMzJSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgICAgICA2NiUgeyBvcGFjaXR5OiAxOyB9DQogICAgICAgICAgMTAwJSB7IG9wYWNpdHk6IDA7IH0NCiAgICAgICAgfQ0KDQogICAgICAgIC5hbmltYXRpb24gLmJsaW5rXzEgew0KICAgICAgICAgIC13ZWJraXQtYW5pbWF0aW9uOiBCTElOSyAycyBpbmZpbml0ZTsNCiAgICAgICAgICBhbmltYXRpb246IEJMSU5LIDJzIGluZmluaXRlOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5ibGlua18yIHsNCiAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjNzOw0KICAgICAgICAgIGFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjNzOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5ibGlua18zIHsNCiAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjZzOw0KICAgICAgICAgIGFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjZzOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5zbWFydHBsYXktc3ZnLWNvbG9yIHsNCiAgICAgICAgICBmaWxsOiAnI0ZGRkZGRicgIWltcG9ydGFudDsNCiAgICAgICAgfQ0KDQogICAgICAgIC5hbmltYXRpb24uYWRqdXN0YWJsZSB7DQogICAgICAgICAgYm9yZGVyOiA0cHggc29saWQgJyNGRkZGRkYnOw0KICAgICAgICB9DQogICAgICA8L3N0eWxlPg0KDQogICAgICA8ZyBjbGFzcz0iYWRqdXN0YWJsZSBmZyBhbmltYXRpb24iPg0KICAgICAgICA8cGF0aCBjbGFzcz0ic21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTUzLjI0OSwzOS42MTZjLTAuMTg2LDAtMC4zNzEtMC4wNTEtMC41MzctMC4xNTdsLTQzLjUtMjcuNzVjLTAuNDY2LTAuMjk3LTAuNjAzLTAuOTE2LTAuMzA2LTEuMzgxYzAuMjk4LTAuNDY2LDAuOTE3LTAuNjAxLDEuMzgxLTAuMzA2bDQzLjUsMjcuNzVjMC40NjcsMC4yOTcsMC42MDQsMC45MTYsMC4zMDcsMS4zODFDNTMuOTAxLDM5LjQ1Myw1My41NzksMzkuNjE2LDUzLjI0OSwzOS42MTZ6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18zIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik00OC44OTYsMzMuNDY3bDEuNjk5LDEuMDg1YzMuNDk3LTcuNzkxLDIuMDczLTE3LjI3MS00LjMxMy0yMy42NTljLTAuMzkxLTAuMzkxLTEuMDIzLTAuMzkxLTEuNDE0LDBzLTAuMzkxLDEuMDIzLDAsMS40MTRDNTAuNTgxLDE4LjAxOSw1MS45MTMsMjYuNDYzLDQ4Ljg5NiwzMy40Njd6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18zIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik00Ni45MjYsMzYuOTU2Yy0wLjYxMiwwLjg2My0xLjI4NiwxLjY5NS0yLjA1OSwyLjQ2OWMtMC4zOTIsMC4zOTEtMC4zOTIsMS4wMjMsMCwxLjQxNGMwLjE5NCwwLjE5NSwwLjQ1LDAuMjkzLDAuNzA3LDAuMjkzYzAuMjU2LDAsMC41MTItMC4wOTgsMC43MDYtMC4yOTNjMC44NzgtMC44NzgsMS42NDItMS44MjQsMi4zMzMtMi44MDdMNDYuOTI2LDM2Ljk1NnoiPjwvcGF0aD4NCiAgICAgICAgPHBhdGggY2xhc3M9ImJsaW5rXzIgc21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTQyLjU0MywyOS40MTVsMS43NzcsMS4xMzVjMS41NDUtNS4zMTUsMC4yMjktMTEuMjkzLTMuOTUzLTE1LjQ3NmMtMC4zOTItMC4zOTEtMS4wMjMtMC4zOTEtMS40MTQsMGMtMC4zOTIsMC4zOTEtMC4zOTIsMS4wMjMsMCwxLjQxNEM0Mi40NTQsMTkuOTg3LDQzLjYzOSwyNC45MjUsNDIuNTQzLDI5LjQxNXoiPjwvcGF0aD4NCiAgICAgICAgPHBhdGggY2xhc3M9ImJsaW5rXzIgc21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTQxLDMzLjE3NGMtMC41NjMsMC45NC0xLjIzNSwxLjgzNy0yLjA0NywyLjY0NmMtMC4zOTEsMC4zOTItMC4zOTEsMS4wMjMsMCwxLjQxNGMwLjE5NSwwLjE5NSwwLjQ1MSwwLjI5MywwLjcwNywwLjI5M3MwLjUxMi0wLjA5OCwwLjcwNy0wLjI5M2MwLjkxNi0wLjkxNCwxLjY3Ni0xLjkyNCwyLjMxNy0yLjk4NEw0MSwzMy4xNzR6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18xIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik0zNS43NzEsMjUuMDk0bDIuMDAzLDEuMjc3YzAuMDEyLTAuMjAzLDAuMDI5LTAuNDA0LDAuMDI5LTAuNjA5YzAtMy4wNzktMS4yLTUuOTc0LTMuMzgxLTguMTUzYy0wLjM5MS0wLjM5MS0xLjAyMi0wLjM5MS0xLjQxNCwwYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0QzM0LjY1MiwyMC42NjYsMzUuNjEzLDIyLjgwMiwzNS43NzEsMjUuMDk0eiI+PC9wYXRoPg0KICAgICAgICA8cGF0aCBjbGFzcz0iYmxpbmtfMSBzbWFydHBsYXktc3ZnLWNvbG9yIiBkPSJNMzUuMDg0LDI5LjQwMWMtMC40NzQsMS4xNDUtMS4xNzIsMi4xOTctMi4wNzYsMy4xYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0YzAuMTk1LDAuMTk1LDAuNDUxLDAuMjkzLDAuNzA3LDAuMjkzYzAuMjU3LDAsMC41MTMtMC4wOTgsMC43MDctMC4yOTNjMS4wMDgtMS4wMDYsMS43OTUtMi4xNywyLjM2MS0zLjQzTDM1LjA4NCwyOS40MDF6Ij48L3BhdGg+DQogICAgICAgIDxwb2x5Z29uIGNsYXNzPSJzbWFydHBsYXktc3ZnLWNvbG9yIiBwb2ludHM9IjI4LjEyNCwyMC4yMTUgMjguMTI0LDE0Ljk5MSAyNC42MzUsMTcuOTkgICI+PC9wb2x5Z29uPg0KICAgICAgICA8cGF0aCBjbGFzcz0ic21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTIwLjkyMSwyMC4zNjZoLTYuNDIzYy0wLjU1MywwLTEsMC41MDgtMSwxLjEzNXY4LjIyOWMwLDAuNjI3LDAuNDQ3LDEuMTM1LDEsMS4xMzVoNy4zNzVsNi4yNSw1Ljg3NVYyNC45NkwyMC45MjEsMjAuMzY2eiI+PC9wYXRoPg0KICAgICAgPC9nPg0KICAgIDwvc3ZnPg0KICA=";
     await appendScriptOnHead('https://kit.fontawesome.com/839085c966.js')
     await appendScriptOnHead('https://code.jquery.com/jquery-3.2.1.min.js')
     document.head.insertAdjacentHTML("beforeend", styles);
 
-    //========================================================================================================
+    //===========================================INTEFACE ADDS================================================
+    await createVideo(dataVideo?.response)
+
   }
 });
 
@@ -482,6 +502,19 @@ async function appendScriptOnHead(url) {
     return script
   });
 }
+
+//--------------------------------------------------------------------
+const setClicks = async (id_user) => {
+  const api = await fetch(`${api_utl}clicks-per-plan/${id_user}`, {
+    method: "POST",
+    headers: {
+      Accept: "application/json",
+      "Content-type": "application/json",
+    },
+  });
+  const res = api.json();
+  return res;
+};
 
 //--------------------------------------------------------------------
 async function appendScriptOnFooter(url) {
@@ -693,7 +726,7 @@ const createThumb = () => {
   thumbPause.style.display = "none";
   thumbPause.style.top = 0;
   if (videoInfo?.haveBorder) {
-    thumbPause.style.border = `4px solid ${videoInfo.borderColor}`;
+    thumbPause.style.border = `4px solid ${videoInfo?.borderColor}`;
   }
   if (videoInfo?.haveBorderRadius) {
     thumbPause.style.borderRadius = "12px";
@@ -737,7 +770,6 @@ const createAutoPlay = () => {
   imgSound.id = "iconSound";
   imgSound.style.marginTop = 3;
   imgSound.style.marginBottom = 3;
-
   superiorText.textContent =
     videoInfo?.textSuperior !== ""
       ? videoInfo?.textSuperior
@@ -798,7 +830,6 @@ const createAutoPlay = () => {
   autoPlayFullContainerVideo.appendChild(autoPlayContainer);
 
   videoContainer.appendChild(autoPlayFullContainerVideo);
-
   if (!formOnScreen)
     autoPlayFullContainerVideo.addEventListener("click", function () {
       handleUnmuteRestart();
@@ -809,10 +840,8 @@ const createAutoPlay = () => {
 //--------------------------------------------------------------------------------
 
 const createVideo = async (videoInfo) => {
-  if (!videoInfo) {
-    return createCantRunVideoImage();
-  }
-  const videoElement = document.createElement("video");
+  createCantRunVideoImage(false, controlsContainer);// imagem informando que o video não pode ser exibido
+  // const videoElement = document.createElement("video");
   videoElement.style.width = "100%";
   videoElement.style.height = "100%";
   videoElement.setAttribute("crossorigin", "anonymous");
@@ -882,6 +911,7 @@ const createVideo = async (videoInfo) => {
   ) {
     if (!videoInfo.typesAutoplay) {
       if (!videoInfo.haveSmallTemplate) {
+        console.log("Autoplay")
         createAutoPlay();
       } else if (videoInfo.haveSmallTemplate) {
         createSmallAutoPlay();
@@ -937,7 +967,7 @@ const createVideo = async (videoInfo) => {
     videoElement.style.border = `4px solid ${videoInfo.borderColor}`;
   }
   if (videoInfo?.haveBorderRadius) {
-    container.style.borderRadius = "12px";
+    videoContainer.style.borderRadius = "12px";
     videoElement.style.borderRadius = "12px";
   }
 
@@ -977,22 +1007,25 @@ const createVideo = async (videoInfo) => {
   source.type = "application/x-mpegURL";
   videoElement.appendChild(source);
 
-  const player = videojs(videoElement);
-  player.options_.loop = false;
-
-  player?.ready(() => console.log("player inicializado"));
+  videoElement.loop = false;
 
   if (isLeadTest) {
-    player.options_.loop = false;
-    player.on("ended", function () {
-      player.dispose();
+    videoElement.loop = false;
+    // videoElement.on("ended", function () {
+    //   videoElement.dispose();
+    //   videoInfo = leadTestMainContentVideo;
+    //   createVideo();
+    // });
+    videoElement.addEventListener('ended', () => {
+      console.log('O vídeo terminou!');
+      videoElement.dispose();
       videoInfo = leadTestMainContentVideo;
       createVideo();
     });
   }
 
   videoContainer.appendChild(videoElement);
-  container.appendChild(videoContainer);
+  // containerElements.appendChild(videoContainer);
 
   if (videoInfo.logoImg) {
     createLogoMark();
@@ -1081,7 +1114,6 @@ const createVideo = async (videoInfo) => {
 const handlePlayPause = async () => {
   const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
   const formOnScreen = localStorage.getItem("formOnScreen");
-  const videoElement = document.getElementById("my-video_html5_api");
   const thumbPause = document.getElementById("thumbPause");
   const thumbInitial = document.getElementById("thumbInitial");
   const thumbButton = document.getElementById("idThumb");
@@ -1138,7 +1170,8 @@ const handlePlayPause = async () => {
     }
 
     if (videoElement?.paused) {
-      videoElement.play();
+      // videoElement.play();
+      playPauseVideo();
 
       if (pauseElement) pauseElement.style.display = "none";
       if (circlePause) circlePause.style.display = "none";
@@ -1183,7 +1216,6 @@ const handlePlayPause = async () => {
 
 //-------------------------------------------------------------------------------
 const handlePlayPauseControl = async () => {
-  const videoElement = document.getElementById("my-video_html5_api");
   const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
   const thumbPause = document.getElementById("thumbPause");
@@ -1234,7 +1266,8 @@ const handlePlayPauseControl = async () => {
   }
 
   if (videoElement?.paused) {
-    videoElement.play();
+    // videoElement.play();
+    playPauseVideo();
 
     if (videoInfo.thumb) {
       thumbPause.style.display = "none";
@@ -1283,7 +1316,7 @@ const handleUnmuteRestart = async () => {
   const unMuteButton = document.getElementById("unmute-container");
   const unMuteButtonSmall = document.getElementById("unSmall-container");
   const unMuteButtonCustom = document.getElementById("unmute-custom");
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   const circlePlay = document.getElementById("icon_play_control");
   const circlePause = document.getElementById("icon_pause_control");
   const progressBar = document.getElementById("progress");
@@ -1353,7 +1386,8 @@ const handleUnmuteRestart = async () => {
     }
   }
 
-  videoElement.play();
+  // videoElement.play();
+  playPauseVideo();
 
   if (!videoInfo.haveControls && videoInfo?.haveFakeBar) {
     await Promise.resolve(sessionStorage.getItem("fakeBar")).then((res) => {
@@ -1422,7 +1456,8 @@ const handleOnProgress = async () => {
 
   if (videoInfo.haveRestart) {
     videoElement.addEventListener("ended", () => {
-      videoElement.play();
+      // videoElement.play();
+      playPauseVideo();
     });
   }
 
@@ -1508,7 +1543,7 @@ const handleOnProgress = async () => {
 };
 //-----------------------------------------------------------------------------------
 const handleMute = () => {
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   const mutedElement = document.getElementById("icon_muted_bottom_control");
   const unmutedElement = document.getElementById(
     "icon_unmuted_bottom_control"
@@ -2423,8 +2458,6 @@ const createAoVivo = () => {
 };
 //--------------------------------------------------------------------------
 const createInitialThumb = () => {
-  const circlePlay = document.getElementById("circle");
-
   const thumbInitial = document.createElement("img");
   thumbInitial.style.position = "absolute";
   thumbInitial.style.top = 0;
@@ -2629,7 +2662,7 @@ const formatTime = (time) => {
 
 //--------------------------------------------------------------------------
 const seek = (e) => {
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   const progress = document.getElementById("progress_control");
   const progressTracker = document.getElementById("progress_tracker");
   const progressThumb = document.getElementById("progress_thumb");
@@ -2644,25 +2677,25 @@ const seek = (e) => {
 
 //---------------------------------------------------------------------
 const handleRewind = () => {
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   videoElement.currentTime -= 10;
 };
 
 //--------------------------------------------------------------------------
 const handleForward = () => {
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   videoElement.currentTime += 10;
 };
 
 //--------------------------------------------------------------------------
 const seekHandler = (e, value) => {
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   // videoElement.currentTime = parseFloat(value);
 };
 
 //--------------------------------------------------------------------------
 const createControls = async () => {
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
   const controlsFullContainerVideo = document.createElement("div");
@@ -2977,7 +3010,7 @@ const createControls = async () => {
 
 //-----------------------------------------------------------------------------
 const handleContinue = async (container) => {
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   const controlsContainer = document.getElementById("container_controls");
   const circle = document.getElementById("circle");
   const circlePlay = document.getElementById("icon_play_control");
@@ -2991,7 +3024,8 @@ const handleContinue = async (container) => {
 
   const time = localStorage.getItem("time");
   videoElement.currentTime = time;
-  videoElement.play();
+  // videoElement.play();
+  playPauseVideo();
 
   if (circle) circle.style.visibility = "hidden";
   if (circlePlay) circlePlay.style.display = "none";
@@ -3622,7 +3656,8 @@ const handleCapturePassword = async (e) => {
       }
 
       if (videoInfo.checkedCaptureTimer) {
-        videoElement.play();
+        // videoElement.play();
+        playPauseVideo();
         if (aoVivo) aoVivo.style.display = "none";
         if (unmute) unmute.style.display = "none";
         if (unmuteSmall) unmuteSmall.style.display = "none";
@@ -3916,7 +3951,7 @@ const createFormPassword = () => {
 const handleCaptureData = async (e) => {
   e.preventDefault();
 
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   const actualDate = () => {
     const date = new Date();
     const day = date.getDate().toString().padStart(2, "0");
@@ -3973,7 +4008,8 @@ const handleCaptureData = async (e) => {
         }
 
         if (videoInfo.checkedCaptureTimer) {
-          videoElement.play();
+          // videoElement.play();
+          playPauseVideo();
           if (aoVivo) aoVivo.style.display = "none";
           if (unmute) unmute.style.display = "none";
           if (unmuteSmall) unmuteSmall.style.display = "none";
@@ -3983,49 +4019,50 @@ const handleCaptureData = async (e) => {
     }
   }
 
-  if (!videoInfo.haveInputWhatsapp && name !== "" && email !== "") {
-    const api = await fetch(`${api_utl}capture/create`, {
-      method: "POST",
-      headers: {
-        Accept: "application/json",
-        "Content-type": "application/json",
-      },
-      body: JSON.stringify({
-        id_video: videoInfo.id_video,
-        data: actualDate(),
-        email: email,
-        telefone: whatsapp,
-        nome: name,
-      }),
-    });
+  // if (!videoInfo.haveInputWhatsapp && name !== "" && email !== "") {
+  //   const api = await fetch(`${api_utl}capture/create`, {
+  //     method: "POST",
+  //     headers: {
+  //       Accept: "application/json",
+  //       "Content-type": "application/json",
+  //     },
+  //     body: JSON.stringify({
+  //       id_video: videoInfo.id_video,
+  //       data: actualDate(),
+  //       email: email,
+  //       telefone: whatsapp,
+  //       nome: name,
+  //     }),
+  //   });
 
-    const json = await api.json();
-    if (json.success) {
-      if (aoVivo) aoVivo.style.display = "flex";
-      if (unmuteSmall) unmuteSmall.style.display = "flex";
-      if (unmute) unmute.style.display = "flex";
-      if (controls) controls.style.display = "flex";
-      if (circlePlay)
-        (circlePlay.style.display = "flex"),
-          (circlePlay.style.visibility = "hidden");
-      formSection.remove();
+  // const json = await api.json();
+  // if (json.success) {
+  //   if (aoVivo) aoVivo.style.display = "flex";
+  //   if (unmuteSmall) unmuteSmall.style.display = "flex";
+  //   if (unmute) unmute.style.display = "flex";
+  //   if (controls) controls.style.display = "flex";
+  //   if (circlePlay)
+  //     (circlePlay.style.display = "flex"),
+  //       (circlePlay.style.visibility = "hidden");
+  //   formSection.remove();
 
-      sessionStorage.setItem("formSent", true);
-      localStorage.removeItem("formOnScreen");
+  //   sessionStorage.setItem("formSent", true);
+  //   localStorage.removeItem("formOnScreen");
 
-      if (!videoInfo.checkedCaptureTimer) {
-        handleUnmuteRestart();
-      }
+  //   if (!videoInfo.checkedCaptureTimer) {
+  //     handleUnmuteRestart();
+  //   }
 
-      if (videoInfo.checkedCaptureTimer) {
-        videoElement.play();
-        if (aoVivo) aoVivo.style.display = "none";
-        if (unmute) unmute.style.display = "none";
-        if (unmuteSmall) unmuteSmall.style.display = "none";
-        if (aoVivo) aoVivo.style.display = "flex";
-      }
-    }
-  }
+  //   if (videoInfo.checkedCaptureTimer) {
+  //     // videoElement.play();
+  //     playPauseVideo();
+  //     if (aoVivo) aoVivo.style.display = "none";
+  //     if (unmute) unmute.style.display = "none";
+  //     if (unmuteSmall) unmuteSmall.style.display = "none";
+  //     if (aoVivo) aoVivo.style.display = "flex";
+  //   }
+  // }
+  // }
 };
 
 //--------------------------------------------------------------------------
@@ -4051,8 +4088,8 @@ const createForm = () => {
   createFormSection.style.boxSizing = "border-box";
   createFormSection.style.alignItems = "center";
   createFormSection.style.justifyContent = "center";
-  if (videoInfo.haveBorderRadius) {
-    createFormSection.style.borderRadius = videoInfo.checkedCaptureVertical
+  if (videoInfo?.haveBorderRadius) {
+    createFormSection.style.borderRadius = videoInfo?.checkedCaptureVertical
       ? "12px 0 0 12px"
       : "12px";
   }
@@ -4726,7 +4763,7 @@ const createForm = () => {
     skipLeadButton.appendChild(skipLeadIcon);
 
     skipLeadButton.addEventListener("click", () => {
-      const videoElement = document.getElementById("my-video_html5_api");
+      // const videoElement = document.getElementById("my-video_html5_api");
       const controls = document.getElementById("container_controls");
       const aoVivo = document.getElementById("aoVivo");
       const unmute = document.getElementById("unmute");
@@ -4754,7 +4791,8 @@ const createForm = () => {
       }
 
       if (videoInfo.checkedCaptureTimer) {
-        videoElement.play();
+        // videoElement.play();
+        playPauseVideo();
         if (aoVivo) aoVivo.style.display = "none";
         if (unmute) unmute.style.display = "none";
         if (unmuteSmall) unmuteSmall.style.display = "none";
@@ -4770,7 +4808,7 @@ const createForm = () => {
 //--------------------------------------------------------------------------
 const createCirclePlay = async () => {
   const circleContainer = document.createElement("div");
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
 
   circleContainer.id = "circle-container";
   circleContainer.style.display = "flex";
@@ -4833,7 +4871,7 @@ const createCirclePlay = async () => {
 
 //--------------------------------------------------------------------------
 const createFakeBar = () => {
-  const videoElement = document.getElementById("my-video_html5_api");
+  // const videoElement = document.getElementById("my-video_html5_api");
   const progressBar = document.createElement("progress");
 
   progressBar.id = "progress";
@@ -4860,12 +4898,28 @@ const createFakeBar = () => {
 };
 
 //--------------------------------------------------------------------------
-const createCantRunVideoImage = () => {
-  if (allowDomain) {
+const createCantRunVideoImage = (allowDomain, constrols) => {
+  if (!!allowDomain) {
     const cantRunVideoImg = document.createElement("img");
+    // videoElement.pause()
+    // videoElement.muted = true
+    videoUrl = null;
+    videoElement.pause()
+    videoElement.remove();
+    constrols.remove()
     cantRunVideoImg.src =
       "https://stream.evideovsl.com.br/assets/ErrorVideoImage-BptOT_yl.jpg";
+    cantRunVideoImg.style.position = 'absolute';
+    cantRunVideoImg.style.top = '0';
+    cantRunVideoImg.style.left = '0';
+    cantRunVideoImg.style.width = '100%';
+    cantRunVideoImg.style.objectFit = 'cover'; // Para cobrir o contêiner
+    cantRunVideoImg.style.display = 'block'; // Exibe a imagem de erro
     videoContainer.appendChild(cantRunVideoImg);
+    cantRunVideoImg.clicked = false
+    console.clear()
+
+    return
   }
 };
 
