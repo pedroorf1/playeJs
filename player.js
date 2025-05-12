@@ -350,7 +350,13 @@ try {
   //-------------------------------------------------------ELEMENTS--------------------------------------------------------
   //=======================================================================================================================
   //VIDEO ELEMENT
-  const videoElement = document.querySelector("#video");
+  let videoElement = {};
+  if (document.querySelector("#video")) {
+    videoElement = document.querySelector("#video")
+  } else {
+    videoElement = document.createElement("div")
+    videoElement.id = "video"
+  }
   videoElement.style.display = "flex";
   videoElement.style.flexDirection = "column";
 
@@ -390,17 +396,21 @@ try {
       window.hls.attachMedia(videoElement);
       window.hls.on(window.Hls.Events.MANIFEST_PARSED, function () {        // Adicionar um ouvinte para o evento canplay
         videoElement.addEventListener('canplay', function () {
-          // videoElement.play().catch(function (error) {
-          //   console.error('Erro ao tentar reproduzir:', error);
-          // });
+          videoElement.play().catch(function (error) {
+            console.error('Erro ao tentar reproduzir:', error);
+          }).then(() => {
+            videoElement.pause
+          });
         });
       });
     } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
       videoElement.src = videoUrl;
       videoElement.addEventListener('loadedmetadata', function () {
-        // videoElement.play().catch(function (error) {
-        //   console.error('Erro ao tentar reproduzir:', error);
-        // });
+        videoElement.play().catch(function (error) {
+          console.error('Erro ao tentar reproduzir:', error);
+        }).then(() => {
+          videoElement.pause
+        });
       });
     } else {
       console.error('HLS não é suportado neste navegador.');
@@ -436,8 +446,10 @@ try {
     if (videoId) {
       videoInfo = await HaveTests()
       const dataVideo = await getVideo(videoId);
+      const dataVideoMongo = await getVideoFromMongo(videoId);
       videoInfo = dataVideo?.response;
-      console.log({ videoInfo }, isMobile)
+      console.log({ videoInfo })
+      console.log({ dataVideoMongo })
       allowDomain = !!dataVideo?.response?.video
       console.log({ allowDomain })
       const clientConnectData = {
@@ -456,15 +468,15 @@ try {
       })
 
       //============================ADD VIDEO STATS ===========================================================
-      // let state = {
-      //   countControl: 0,
-      //   notCountingAutoPlay: false,
-      //   clickPlay: localStorage.getItem("clickPlay"),
-      //   fakeBar: sessionStorage.getItem("fakeBar"),
-      //   continueWLeftOff: localStorage.getItem("time"),
-      //   circlePlay: localStorage.getItem("circlePlay"),
-      //   iPhoneAutoPlay: sessionStorage.getItem("iPhoneAutoPlay"),
-      // };
+      let state = {
+        countControl: 0,
+        notCountingAutoPlay: false,
+        clickPlay: localStorage.getItem("clickPlay"),
+        fakeBar: sessionStorage.getItem("fakeBar"),
+        continueWLeftOff: localStorage.getItem("time"),
+        circlePlay: localStorage.getItem("circlePlay"),
+        iPhoneAutoPlay: sessionStorage.getItem("iPhoneAutoPlay"),
+      };
 
       //===========================================INTERFACE TOOLS===============================================
       await appendScriptOnHead('https://kit.fontawesome.com/839085c966.js')
@@ -588,8 +600,12 @@ try {
   }
 
   //---------------------------------------------------------------------
-  function playPauseVideo() {
-    const video = document.getElementById("video");
+  function playPauseVideo(initial = false) {
+    if (initial) {
+      videoElement.currentTime = 0;
+      videoElement.paused
+      videoElement.muted
+    }
     if (videoElement.muted) {
       videoElement.muted = false;
       videoElement.loop = true;
@@ -603,6 +619,18 @@ try {
   }
 
   //=========================API STRUCTURE============================================================
+
+  async function getVideoFromMongo(videoId) {
+    const api = await fetch(`${api_utl}videos/mongo/${videoId}`, {
+      headers: {
+        "Content-Type": "application/json",
+        "x-client-ip-address": domainData ? domainData.ip : "",
+        "x-client-host-origin": window.location.origin,
+      },
+    });
+    const json = await api.json();
+    return json;
+  }
 
   async function getVideo(videoId) {
     const api = await fetch(`${api_utl}videos/get-by-id/${videoId}`, {
@@ -1040,6 +1068,8 @@ try {
       !state.continueWLeftOff &&
       !videoInfo?.noneControlsMoreAutoplay
     ) {
+      videoElement.pause;
+      videoElement.currentTime = 0;
       createInitialThumb();
     }
 
@@ -1388,7 +1418,7 @@ try {
     }
 
     // videoElement.play();
-    playPauseVideo();
+    playPauseVideo(true);
 
     if (!videoInfo?.haveControls && videoInfo?.haveFakeBar) {
       await Promise.resolve(sessionStorage.getItem("fakeBar")).then((res) => {
@@ -5139,15 +5169,16 @@ try {
 
     if (haveTestAB) {
       const [ref_AB, id_AB] = videoId.split("/");
-      const api = await fetch(`${api_utl}test-ab/${id_AB}/videos`);
+      const api = await fetch(`${api_utl}test-ab/${id_AB}/allvideos`);
 
       console.log({ api })
 
-      const json = await api.json();
-      const id_Video_AB = json?.data?.id_video;
+      const response = await api.json();
+      console.log({ response })
+      // const id_Video_AB = response?.data?.id_video;
 
-      const videoInfo = await getVideo(id_Video_AB);
-      return videoInfo;
+      // const videoInfo = await getVideo(id_Video_AB);
+      // return videoInfo;
     }
 
     if (haveTurboAutomatic) {
