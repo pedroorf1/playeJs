@@ -438,19 +438,27 @@ try {
     //===================================domain data========================================================
     window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
     console.log("Domain Data: ", domainData)
-    videoId = "b3f4389c-ca69-49f6-a2a8-9e00958e15ed"
-    // videoId = "test-ab/0a3bda6b-ef00-4957-93c8-db1654eabc06"
+    // videoId = "b3f4389c-ca69-49f6-a2a8-9e00958e15ed"
+    videoId = "test-ab/4efbe613-dd64-485f-aa27-c020b4d3ad94"
     globalState.videoId = videoId
 
     //===================================create metrics at the video========================================
     if (videoId) {
-      videoInfo = await HaveTests()
-      const dataVideo = await getVideo(videoId);
-      const dataVideoMongo = await getVideoFromMongo(videoId);
-      videoInfo = dataVideo?.response;
+      const isTestAB = videoId.indexOf("/");
+      console.log({ isTestAB })
+      if (isTestAB) {
+        console.log("aqui")
+        videoInfo = await HaveTests()
+      } else {
+        videoInfo = await getVideoFromMongo(videoId);
+      }
+      videoInfo = videoInfo.data
       console.log({ videoInfo })
-      console.log({ dataVideoMongo })
-      allowDomain = !!dataVideo?.response?.video
+      allowDomain = !!videoInfo?.video
+
+      // videoInfo = dataVideoMongo.data
+      // allowDomain = !!dataVideoMongo?.data?.video
+
       console.log({ allowDomain })
       const clientConnectData = {
         id_sessao: globalState?.newSessionUserId,
@@ -483,9 +491,9 @@ try {
       await appendScriptOnHead('https://code.jquery.com/jquery-3.2.1.min.js')
       document.head.insertAdjacentHTML("beforeend", styles);
 
-      console.log({ dataVideo })
+      console.log({ videoInfo })
       //===========================================INTEFACE ADDS================================================
-      await createVideo(dataVideo?.response)
+      await createVideo(videoInfo)
 
     }
   });
@@ -620,8 +628,8 @@ try {
 
   //=========================API STRUCTURE============================================================
 
-  async function getVideoFromMongo(videoId) {
-    const api = await fetch(`${api_utl}videos/mongo/${videoId}`, {
+  async function getVideo(videoId) {
+    const api = await fetch(`${api_utl}videos/get-by-id/${videoId}`, {
       headers: {
         "Content-Type": "application/json",
         "x-client-ip-address": domainData ? domainData.ip : "",
@@ -631,9 +639,22 @@ try {
     const json = await api.json();
     return json;
   }
+  async function getVideoFromMongo(videoId) {
 
-  async function getVideo(videoId) {
-    const api = await fetch(`${api_utl}videos/get-by-id/${videoId}`, {
+    if (videoId.indexOf("/")) {
+      console.log("Buscando videos para test ab")
+      const [_, id_AB] = videoId.split("/");
+      const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/allvideos`, {
+        headers: {
+          "Content-Type": "application/json",
+          "x-client-host-origin": window.location.origin,
+        },
+      });
+      const json = await api.json();
+      return json;
+    }
+
+    const api = await fetch(`${api_utl}videos/mongo/${videoId}`, {
       headers: {
         "Content-Type": "application/json",
         "x-client-ip-address": domainData ? domainData.ip : "",
@@ -5169,7 +5190,7 @@ try {
 
     if (haveTestAB) {
       const [ref_AB, id_AB] = videoId.split("/");
-      const api = await fetch(`${api_utl}test-ab/${id_AB}/allvideos`);
+      const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/allvideos`);
 
       console.log({ api })
 
@@ -5189,7 +5210,7 @@ try {
       const turboJSON = await turboRes.json();
       const turboIdVideo = turboJSON?.data.id_video;
 
-      const videoInfo = await getVideo(turboIdVideo);
+      const videoInfo = await getVideoFromMongo(turboIdVideo);
       return videoInfo;
     }
 
@@ -5203,7 +5224,7 @@ try {
       const autoPlayJSON = await autoPlayRes.json();
       const autoPlayIdVideo = autoPlayJSON?.data.id_video;
 
-      const videoInfo = await getVideo(autoPlayIdVideo);
+      const videoInfo = await getVideoFromMongo(autoPlayIdVideo);
       return videoInfo;
     }
 
@@ -5219,7 +5240,7 @@ try {
       const leadTestVideoIntroId = leadTesdData?.data.intro.id_video;
       leadTestMainContentVideo = leadTesdData?.data.mainContent;
 
-      const videoInfo = await getVideo(leadTestVideoIntroId);
+      const videoInfo = await getVideoFromMongo(leadTestVideoIntroId);
       return videoInfo;
     }
 
@@ -5234,11 +5255,11 @@ try {
       const headlineJSON = await headlineRes.json();
       const headlineIdVideo = headlineJSON?.data.id_video;
 
-      const videoInfo = await getVideo(headlineIdVideo);
+      const videoInfo = await getVideoFromMongo(headlineIdVideo);
       return videoInfo;
     }
 
-    const videoInfo = await getVideo(videoId);
+    const videoInfo = await getVideoFromMongo(videoId);
     return videoInfo;
   };
   //--------------------------------------------------------------------------
