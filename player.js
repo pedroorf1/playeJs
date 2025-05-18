@@ -325,7 +325,7 @@ try {
   let globalState = {};
   let videoUrl = "";
   let videoId = "";
-  let videoInfo = {}
+  videoInfo = {}
   globalState.api = api_utl;
   globalState.clientHostOrigin = window.location.origin;
   const HlS = "https://cdn.jsdelivr.net/npm/hls.js@latest";
@@ -390,19 +390,21 @@ try {
     videoId = params.get("idvideo");
     console.log({ videoUrl })
     videoElement.controls = false
-    videoUrl ? videoUrl : videoUrl = 'https://testvsl1.b-cdn.net/24b5b278-9505-4cb6-acb0-5ec5aa5987e3/ssssss/segment.m3u8';
+    // videoUrl ? videoUrl : videoUrl = 'https://testvsl1.b-cdn.net/24b5b278-9505-4cb6-acb0-5ec5aa5987e3/ssssss/segment.m3u8';
     if (window.hls) {
-      window.hls.loadSource(videoUrl);
-      window.hls.attachMedia(videoElement);
-      window.hls.on(window.Hls.Events.MANIFEST_PARSED, function () {        // Adicionar um ouvinte para o evento canplay
-        videoElement.addEventListener('canplay', function () {
-          videoElement.play().catch(function (error) {
-            console.error('Erro ao tentar reproduzir:', error);
-          }).then(() => {
-            videoElement.pause
+      if (videoUrl) {
+        window.hls.loadSource(videoUrl);
+        window.hls.attachMedia(videoElement);
+        window.hls.on(window.Hls.Events.MANIFEST_PARSED, function () {        // Adicionar um ouvinte para o evento canplay
+          videoElement.addEventListener('canplay', function () {
+            videoElement.play().catch(function (error) {
+              console.error('Erro ao tentar reproduzir:', error);
+            }).then(() => {
+              videoElement.pause
+            });
           });
         });
-      });
+      }
     } else if (videoElement.canPlayType('application/vnd.apple.mpegurl')) {
       videoElement.src = videoUrl;
       videoElement.addEventListener('loadedmetadata', function () {
@@ -437,29 +439,21 @@ try {
 
     //===================================domain data========================================================
     window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
-    console.log("Domain Data: ", domainData)
     // videoId = "b3f4389c-ca69-49f6-a2a8-9e00958e15ed"
     videoId = "test-ab/4efbe613-dd64-485f-aa27-c020b4d3ad94"
     globalState.videoId = videoId
 
     //===================================create metrics at the video========================================
     if (videoId) {
-      const isTestAB = videoId.indexOf("/");
-      console.log({ isTestAB })
-      if (isTestAB) {
-        console.log("aqui")
-        videoInfo = await HaveTests()
+      if (videoId?.indexOf("/")) {
+        await HaveTests(videoId)
       } else {
         videoInfo = await getVideoFromMongo(videoId);
       }
-      videoInfo = videoInfo.data
-      console.log({ videoInfo })
+      window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
       allowDomain = !!videoInfo?.video
-
-      // videoInfo = dataVideoMongo.data
-      // allowDomain = !!dataVideoMongo?.data?.video
-
       console.log({ allowDomain })
+      console.log({ videoInfo })
       const clientConnectData = {
         id_sessao: globalState?.newSessionUserId,
         id_video: globalState.videoId,
@@ -491,7 +485,6 @@ try {
       await appendScriptOnHead('https://code.jquery.com/jquery-3.2.1.min.js')
       document.head.insertAdjacentHTML("beforeend", styles);
 
-      console.log({ videoInfo })
       //===========================================INTEFACE ADDS================================================
       await createVideo(videoInfo)
 
@@ -641,10 +634,10 @@ try {
   }
   async function getVideoFromMongo(videoId) {
 
-    if (videoId.indexOf("/")) {
+    if (videoId?.includes("test-ab")) {
       console.log("Buscando videos para test ab")
       const [_, id_AB] = videoId.split("/");
-      const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/allvideos`, {
+      const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/videos`, {
         headers: {
           "Content-Type": "application/json",
           "x-client-host-origin": window.location.origin,
@@ -653,7 +646,7 @@ try {
       const json = await api.json();
       return json;
     }
-
+    console.log("aqui", { videoId })
     const api = await fetch(`${api_utl}videos/mongo/${videoId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -908,7 +901,7 @@ try {
             : Math.ceil(videoElement.currentTime);
 
         if (
-          videoInfo?.mapedVideoTimes.includes(parsedCurrentTime) &&
+          videoInfo?.mapedVideoTimes?.includes(parsedCurrentTime) &&
           lastProcessedTime !== parsedCurrentTime
         ) {
           lastProcessedTime = parsedCurrentTime;
@@ -930,7 +923,7 @@ try {
       }
     };
 
-    videoElement.poster = videoInfo?.frame;
+    videoElement.poster = videoInfo?.frame ? videoInfo?.frame : "";
     videoElement.id = "my-video";
     videoElement.controls = false;
     videoElement.preload = "metadata";
@@ -5181,7 +5174,7 @@ try {
     videoContainer.appendChild(logoMark);
   };
 
-  const HaveTests = async () => {
+  const HaveTests = async (videoId) => {
     const haveTestAB = videoId.includes("test-ab");
     const haveTurboAutomatic = videoId.includes("turbo");
     const haveAutoPlayTest = videoId.includes("autoplay");
@@ -5189,17 +5182,17 @@ try {
     const haveHeadlineTest = videoId.includes("headline");
 
     if (haveTestAB) {
+      console.log("Aqui teste ab")
       const [ref_AB, id_AB] = videoId.split("/");
-      const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/allvideos`);
-
-      console.log({ api })
-
+      console.log("Aqui teste ab videoId", id_AB)
+      const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/videos`);
       const response = await api.json();
       console.log({ response })
-      // const id_Video_AB = response?.data?.id_video;
-
-      // const videoInfo = await getVideo(id_Video_AB);
-      // return videoInfo;
+      videoId = response.data.id_video
+      videoInfo = response.data.video
+      console.log("Aqui video infor", videoInfo)
+      console.log("videoInfo.video", videoInfo.video)
+      PlayNewVideo(videoInfo.video)
     }
 
     if (haveTurboAutomatic) {
@@ -5210,7 +5203,8 @@ try {
       const turboJSON = await turboRes.json();
       const turboIdVideo = turboJSON?.data.id_video;
 
-      const videoInfo = await getVideoFromMongo(turboIdVideo);
+      videoInfo = await getVideoFromMongo(turboIdVideo);
+      PlayNewVideo(videoInfo.data.video)
       return videoInfo;
     }
 
@@ -5224,7 +5218,8 @@ try {
       const autoPlayJSON = await autoPlayRes.json();
       const autoPlayIdVideo = autoPlayJSON?.data.id_video;
 
-      const videoInfo = await getVideoFromMongo(autoPlayIdVideo);
+      videoInfo = await getVideoFromMongo(autoPlayIdVideo);
+      PlayNewVideo(videoInfo.data.video)
       return videoInfo;
     }
 
@@ -5240,7 +5235,8 @@ try {
       const leadTestVideoIntroId = leadTesdData?.data.intro.id_video;
       leadTestMainContentVideo = leadTesdData?.data.mainContent;
 
-      const videoInfo = await getVideoFromMongo(leadTestVideoIntroId);
+      videoInfo = await getVideoFromMongo(leadTestVideoIntroId);
+      PlayNewVideo(videoInfo.data.video)
       return videoInfo;
     }
 
@@ -5255,13 +5251,32 @@ try {
       const headlineJSON = await headlineRes.json();
       const headlineIdVideo = headlineJSON?.data.id_video;
 
-      const videoInfo = await getVideoFromMongo(headlineIdVideo);
+      videoInfo = await getVideoFromMongo(headlineIdVideo);
+      PlayNewVideo(videoInfo.data.video)
       return videoInfo;
     }
 
-    const videoInfo = await getVideoFromMongo(videoId);
+    videoInfo = await getVideoFromMongo(videoId);
+    console.log("videoInfo", videoInfo)
+    PlayNewVideo(videoInfo.data.video)
     return videoInfo;
   };
+
+
+  const PlayNewVideo = (videoSource) => {
+    window.hls.loadSource(videoSource);
+    window.hls.attachMedia(videoElement);
+    window.hls.on(window.Hls.Events.MANIFEST_PARSED, function () {        // Adicionar um ouvinte para o evento canplay
+      videoElement.addEventListener('canplay', function () {
+        videoElement.play().catch(function (error) {
+          console.error('Erro ao tentar reproduzir:', error);
+        }).then(() => {
+          videoElement.pause
+        });
+      });
+    });
+  }
+
   //--------------------------------------------------------------------------
 
   //========================================================================================================================
