@@ -423,11 +423,16 @@ try {
   //=========================================================================================================
   //---------------------------------MAIN DATA AND STATS AFTER LOADED VIDEO----------------------------------
   //=========================================================================================================
+
+  //aplicando configurações do novo video
   window.addEventListener("load", async function () {
+    videoElement.addEventListener('loadstart', function () {
+      console.log('O source do vídeo foi alterado. Aplicando configurações...');
+      newVideoConfigApply()
+    });
+
+    //======================================================================================================
     window.clicked = false;
-    // playButton.addEventListener('click', function () {
-    //   playPauseVideo();
-    // });
     //===================================start/load session==================================================
     globalState.newSessionUserId = uuId()
     if (localStorage.getItem("lastSession")) {
@@ -450,10 +455,12 @@ try {
       } else {
         videoInfo = await getVideoFromMongo(videoId);
       }
+
+      await createVideo(videoInfo)
+      console.log({ videoInfo })
+
       window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
       allowDomain = !!videoInfo?.video
-      console.log({ allowDomain })
-      console.log({ videoInfo })
       const clientConnectData = {
         id_sessao: globalState?.newSessionUserId,
         id_video: globalState.videoId,
@@ -464,7 +471,6 @@ try {
         connectionData: window.domainData,
       };
 
-      console.log({ clientConnectData })
       await handleCreateMetric(clientConnectData).catch(e => {
         console.log(e)
       })
@@ -486,7 +492,7 @@ try {
       document.head.insertAdjacentHTML("beforeend", styles);
 
       //===========================================INTEFACE ADDS================================================
-      await createVideo(videoInfo)
+
 
     }
   });
@@ -635,7 +641,6 @@ try {
   async function getVideoFromMongo(videoId) {
 
     if (videoId?.includes("test-ab")) {
-      console.log("Buscando videos para test ab")
       const [_, id_AB] = videoId.split("/");
       const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/videos`, {
         headers: {
@@ -646,7 +651,6 @@ try {
       const json = await api.json();
       return json;
     }
-    console.log("aqui", { videoId })
     const api = await fetch(`${api_utl}videos/mongo/${videoId}`, {
       headers: {
         "Content-Type": "application/json",
@@ -761,25 +765,26 @@ try {
 
   //---------------------------------------------------------------------------------------------------------------------------
   //CREATE ELEMENTS============================================================================================================
-  const createThumb = () => {
+  const createThumb = (dataThumb) => {
+    console.log({ dataThumb })
     const thumbPause = document.createElement("img");
     thumbPause.style.position = "absolute";
     thumbPause.style.zIndex = 1;
     thumbPause.id = "thumbPause";
     thumbPause.style.display = "none";
     thumbPause.style.top = 0;
-    if (videoInfo?.haveBorder) {
-      thumbPause.style.border = `4px solid ${videoInfo?.borderColor}`;
+    if (dataThumb?.haveBorder) {
+      thumbPause.style.border = `4px solid ${dataThumb?.borderColor}`;
     }
-    if (videoInfo?.haveBorderRadius) {
+    if (dataThumb?.haveBorderRadius) {
       thumbPause.style.borderRadius = "12px";
     }
-    if (videoInfo?.haveButtonThumb) {
+    if (dataThumb?.haveButtonThumb) {
       createThumbButton();
     }
     thumbPause.style.width = "100%";
     thumbPause.style.height = "100%";
-    thumbPause.src = videoInfo?.thumb;
+    thumbPause.src = dataThumb?.thumb;
     thumbPause.style.cursor = "pointer";
     thumbPause.style.zIndex = 0;
     thumbPause.addEventListener("click", handlePlayPause);
@@ -882,7 +887,7 @@ try {
 
   //--------------------------------------------------------------------------------
 
-  const createVideo = async (videoInfo) => {
+  const createVideo = async (dataVideo) => {
     createCantRunVideoImage(false, controlsContainer);// imagem informando que o video não pode ser exibido
     // const videoElement = document.createElement("video");
     videoElement.style.width = "100%";
@@ -901,7 +906,7 @@ try {
             : Math.ceil(videoElement.currentTime);
 
         if (
-          videoInfo?.mapedVideoTimes?.includes(parsedCurrentTime) &&
+          dataVideo?.mapedVideoTimes?.includes(parsedCurrentTime) &&
           lastProcessedTime !== parsedCurrentTime
         ) {
           lastProcessedTime = parsedCurrentTime;
@@ -912,10 +917,10 @@ try {
               : Math.floor(videoElement.currentTime);
 
           const lastData = {
-            id_video: videoInfo?.id_video,
+            id_video: dataVideo?.id_video,
             id_sessao: globalState?.newSessionUserId,
             currentTime: parsedTime,
-            videoDuration: videoInfo?.duration,
+            videoDuration: dataVideo?.duration,
           };
 
           handleLasteUpdateMetric(lastData);
@@ -923,7 +928,7 @@ try {
       }
     };
 
-    videoElement.poster = videoInfo?.frame ? videoInfo?.frame : "";
+    videoElement.poster = dataVideo?.frame ? dataVideo?.frame : "";
     videoElement.id = "my-video";
     videoElement.controls = false;
     videoElement.preload = "metadata";
@@ -933,34 +938,34 @@ try {
     if (
       !state.continueWLeftOff &&
       !state.notCountingAutoPlay &&
-      videoInfo?.haveAutoPlay
+      dataVideo?.haveAutoPlay
     ) {
       videoElement.setAttribute("autoplay", "");
       videoElement.setAttribute("muted", "");
       videoElement.setAttribute("loop", "");
     }
 
-    if (videoInfo?.noneControlsMoreAutoplay) {
+    if (dataVideo?.noneControlsMoreAutoplay) {
       videoElement.setAttribute("autoplay", "");
       videoElement.setAttribute("muted", "");
       videoElement.setAttribute("loop", "");
     }
 
     if (
-      videoInfo?.haveAutoPlay &&
-      !videoInfo?.customImage &&
+      dataVideo?.haveAutoPlay &&
+      !dataVideo?.customImage &&
       !state.continueWLeftOff &&
       !state.notCountingAutoPlay
     ) {
-      if (!videoInfo?.typesAutoplay) {
-        if (!videoInfo?.haveSmallTemplate) {
+      if (!dataVideo?.typesAutoplay) {
+        if (!dataVideo?.haveSmallTemplate) {
           console.log("Autoplay")
           createAutoPlay();
-        } else if (videoInfo?.haveSmallTemplate) {
+        } else if (dataVideo?.haveSmallTemplate) {
           createSmallAutoPlay();
         }
       } else {
-        switch (videoInfo?.typesAutoplay) {
+        switch (dataVideo?.typesAutoplay) {
           case "autoPlay":
             createAutoPlay();
             break;
@@ -987,41 +992,41 @@ try {
     }
 
     if (
-      videoInfo?.haveAutoPlay &&
-      videoInfo?.customImage &&
-      !videoInfo?.haveContinue
+      dataVideo?.haveAutoPlay &&
+      dataVideo?.customImage &&
+      !dataVideo?.haveContinue
     ) {
       createCustomAutoPlay();
     }
 
-    if (videoInfo?.haveAoVivo) {
+    if (dataVideo?.haveAoVivo) {
       createAoVivo();
     }
 
-    if (videoInfo?.haveHeadline) {
+    if (dataVideo?.haveHeadline) {
       createHeadline();
     }
 
-    if (videoInfo?.haveAffiliateLink) {
+    if (dataVideo?.haveAffiliateLink) {
       createAffiliateLogo();
     }
 
-    if (videoInfo?.haveBorder) {
-      videoElement.style.border = `4px solid ${videoInfo?.borderColor}`;
+    if (dataVideo?.haveBorder) {
+      videoElement.style.border = `4px solid ${dataVideo?.borderColor}`;
     }
-    if (videoInfo?.haveBorderRadius) {
+    if (dataVideo?.haveBorderRadius) {
       videoContainer.style.borderRadius = "12px";
       videoElement.style.borderRadius = "12px";
     }
 
     if (!isIOS) {
-      if (!videoInfo?.noneControlsMoreAutoplay) {
+      if (!dataVideo?.noneControlsMoreAutoplay) {
         videoElement.addEventListener("click", handlePlayPause);
       }
       videoElement.addEventListener("timeupdate", handleOnProgress);
       videoElement.addEventListener("timeupdate", progress);
 
-      if (videoInfo?.thumbFinal) {
+      if (dataVideo?.thumbFinal) {
         videoElement.addEventListener("ended", createFinalThumb);
       }
 
@@ -1039,14 +1044,14 @@ try {
     }
 
     videoElement.addEventListener("loadedmetadata", () => {
-      videoElement.playbackRate = videoInfo?.haveTurbo
-        ? videoInfo?.turboVelocity
+      videoElement.playbackRate = dataVideo?.haveTurbo
+        ? dataVideo?.turboVelocity
         : 1;
     });
 
     const source = document.createElement("source");
 
-    source.src = videoInfo?.video;
+    source.src = dataVideo?.video;
     source.type = "application/x-mpegURL";
     videoElement.appendChild(source);
 
@@ -1063,45 +1068,45 @@ try {
         console.log('O vídeo terminou!');
         videoElement.dispose();
         videoInfo = leadTestMainContentVideo;
-        createVideo();
+        createVideo(videoInfo);
       });
     }
 
     videoContainer.appendChild(videoElement);
     // containerElements.appendChild(videoContainer);
 
-    if (videoInfo?.logoImg) {
+    if (dataVideo?.logoImg) {
       createLogoMark();
     }
 
-    if (videoInfo?.thumb) {
-      createThumb();
+    if (dataVideo?.thumb) {
+      createThumb(dataVideo);
     }
     if (
-      videoInfo?.thumbInicio &&
+      dataVideo?.thumbInicio &&
       !state.continueWLeftOff &&
-      !videoInfo?.noneControlsMoreAutoplay
+      !dataVideo?.noneControlsMoreAutoplay
     ) {
       videoElement.pause;
       videoElement.currentTime = 0;
-      createInitialThumb();
+      createInitialThumb(dataVideo);
     }
 
     if (
-      videoInfo?.haveControls &&
-      !videoInfo?.haveAutoPlay &&
-      !videoInfo?.noneControlsMoreAutoplay
+      dataVideo?.haveControls &&
+      !dataVideo?.haveAutoPlay &&
+      !dataVideo?.noneControlsMoreAutoplay
     ) {
       createControls();
     }
 
-    if (!videoInfo?.haveAutoPlay && !videoInfo?.haveControls) {
+    if (!dataVideo?.haveAutoPlay && !dataVideo?.haveControls) {
       createCirclePlay();
     }
 
-    if (videoInfo?.haveContinue) {
+    if (dataVideo?.haveContinue) {
       if (state.continueWLeftOff) {
-        switch (videoInfo?.typesContinue) {
+        switch (dataVideo?.typesContinue) {
           case "":
             createContinueDefault();
             break;
@@ -1113,40 +1118,40 @@ try {
 
       window.addEventListener("beforeunload", () => {
         if (videoElement.currentTime > 0) {
-          if (videoInfo?.haveAutoPlay && state.notCountingAutoPlay) {
+          if (dataVideo?.haveAutoPlay && state.notCountingAutoPlay) {
             localStorage.setItem("time", videoElement.currentTime);
           }
 
-          if (!videoInfo?.haveAutoPlay) {
+          if (!dataVideo?.haveAutoPlay) {
             localStorage.setItem("time", videoElement.currentTime);
           }
         }
       });
     }
 
-    if (!videoInfo?.haveContinue) {
+    if (!dataVideo?.haveContinue) {
       localStorage.removeItem("time");
     }
 
-    if (videoInfo?.haveDelayButton) {
-      if (videoInfo?.showAllTimeDelay) {
+    if (dataVideo?.haveDelayButton) {
+      if (dataVideo?.showAllTimeDelay) {
         createDelayButton();
       }
-      if (!videoInfo?.showAllTimeDelay) {
-        sessionStorage.setItem("haveDelayButton", videoInfo?.haveDelayButton);
-        sessionStorage.setItem("initialDelay", videoInfo?.initialDelay);
-        sessionStorage.setItem("endDelay", videoInfo?.endDelay);
+      if (!dataVideo?.showAllTimeDelay) {
+        sessionStorage.setItem("haveDelayButton", dataVideo?.haveDelayButton);
+        sessionStorage.setItem("initialDelay", dataVideo?.initialDelay);
+        sessionStorage.setItem("endDelay", dataVideo?.endDelay);
       }
     }
 
-    if (videoInfo?.haveForm) {
-      if (videoInfo?.typeForm === "capture-password") {
+    if (dataVideo?.haveForm) {
+      if (dataVideo?.typeForm === "capture-password") {
         createFormPassword();
       }
-      if (videoInfo?.typeForm === "data-capture") {
+      if (dataVideo?.typeForm === "data-capture") {
         createForm();
       }
-      if (!videoInfo?.checkedCaptureTimer) {
+      if (!dataVideo?.checkedCaptureTimer) {
         localStorage.setItem("formOnScreen", true);
         const circle = document.getElementById("circle");
         const formOnScreen = localStorage.getItem("formOnScreen");
@@ -2502,30 +2507,30 @@ try {
     videoContainer.appendChild(aoVivoContainer);
   };
   //--------------------------------------------------------------------------
-  const createInitialThumb = () => {
+  const createInitialThumb = (dataThumbInitial) => {
     const thumbInitial = document.createElement("img");
     thumbInitial.style.position = "absolute";
     thumbInitial.style.top = 0;
 
-    if (videoInfo?.haveBorder) {
-      thumbInitial.style.border = `4px solid ${videoInfo?.borderColor}`;
+    if (dataThumbInitial?.haveBorder) {
+      thumbInitial.style.border = `4px solid ${dataThumbInitial?.borderColor}`;
     }
-    if (videoInfo?.haveBorderRadius) {
+    if (dataThumbInitial?.haveBorderRadius) {
       thumbInitial.style.borderRadius = "12px";
     }
 
     thumbInitial.style.zIndex = 2;
     thumbInitial.id = "thumbInitial";
-    if (videoInfo?.haveAutoPlay) {
+    if (dataThumbInitial?.haveAutoPlay) {
       thumbInitial.style.display = "none";
     }
-    if (!videoInfo?.haveAutoPlay) {
+    if (!dataThumbInitial?.haveAutoPlay) {
       thumbInitial.style.display = "block";
     }
     thumbInitial.style.width = "100%";
     thumbInitial.style.height = "100%";
     thumbInitial.style.zIndex = 0;
-    thumbInitial.src = videoInfo?.thumbInicio;
+    thumbInitial.src = dataThumbInitial?.thumbInicio;
     thumbInitial.style.cursor = "pointer";
 
     thumbInitial.addEventListener("click", () => {
@@ -5182,16 +5187,12 @@ try {
     const haveHeadlineTest = videoId.includes("headline");
 
     if (haveTestAB) {
-      console.log("Aqui teste ab")
       const [ref_AB, id_AB] = videoId.split("/");
-      console.log("Aqui teste ab videoId", id_AB)
       const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/videos`);
       const response = await api.json();
       console.log({ response })
       videoId = response.data.id_video
       videoInfo = response.data.video
-      console.log("Aqui video infor", videoInfo)
-      console.log("videoInfo.video", videoInfo.video)
       PlayNewVideo(videoInfo.video)
     }
 
@@ -5270,13 +5271,20 @@ try {
       videoElement.addEventListener('canplay', function () {
         videoElement.play().catch(function (error) {
           console.error('Erro ao tentar reproduzir:', error);
-        }).then(() => {
-          videoElement.pause
-        });
+        })
       });
     });
+
+    // // Ouvinte para o evento de carregamento do vídeo
+    // videoElement.addEventListener('loadeddata', function () {
+    //   console.log('Novo vídeo carregado. Aplicando configurações...');
+    //   aplicarConfiguracoesEspecificas();
+    // });
   }
 
+  function newVideoConfigApply() {
+    createVideo(videoInfo.data)
+  }
   //--------------------------------------------------------------------------
 
   //========================================================================================================================
