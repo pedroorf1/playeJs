@@ -457,19 +457,21 @@ try {
       }
 
       await createVideo(videoInfo)
-      console.log({ videoInfo })
+      console.log("sssssssss:::::::", { videoInfo })
 
       window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
       allowDomain = !!videoInfo?.video
       const clientConnectData = {
         id_sessao: globalState?.newSessionUserId,
-        id_video: globalState.videoId,
+        id_video: videoInfo?.data.id_video,
         browser: getBrowserName(),
         plataforma: isMobile ? "Celular" : "Desktop",
         view: true,
         lastSession: globalState?.loadedSessionUserFromStorage,
         connectionData: window.domainData,
       };
+
+      console.log({ clientConnectData })
 
       await handleCreateMetric(clientConnectData).catch(e => {
         console.log(e)
@@ -780,7 +782,7 @@ try {
       thumbPause.style.borderRadius = "12px";
     }
     if (dataThumb?.haveButtonThumb) {
-      createThumbButton();
+      createThumbButton(dataThumb);
     }
     thumbPause.style.width = "100%";
     thumbPause.style.height = "100%";
@@ -1000,7 +1002,7 @@ try {
     }
 
     if (dataVideo?.haveAoVivo) {
-      createAoVivo();
+      createAoVivo(dataVideo);
     }
 
     if (dataVideo?.haveHeadline) {
@@ -1027,7 +1029,7 @@ try {
       videoElement.addEventListener("timeupdate", progress);
 
       if (dataVideo?.thumbFinal) {
-        videoElement.addEventListener("ended", createFinalThumb);
+        videoElement.addEventListener("ended", createFinalThumb(dataVideo));
       }
 
       videoElement.addEventListener("loadedmetadata", () => {
@@ -1076,7 +1078,7 @@ try {
     // containerElements.appendChild(videoContainer);
 
     if (dataVideo?.logoImg) {
-      createLogoMark();
+      createLogoMark(dataVideo);
     }
 
     if (dataVideo?.thumb) {
@@ -1220,9 +1222,9 @@ try {
       }
 
       if (videoElement?.paused) {
+        console.log("Video info::::::::", videoInfo)
         // videoElement.play();
         playPauseVideo();
-
         if (pauseElement) pauseElement.style.display = "none";
         if (circlePause) circlePause.style.display = "none";
         if (circlePlay) circlePlay.style.display = "block";
@@ -1230,7 +1232,7 @@ try {
 
         if (thumbInitial) thumbInitial.style.display = "none";
 
-        if (videoInfo?.thumb) {
+        if (videoInfo?.data.thumb) {
           if (thumbPause) thumbPause.style.display = "none";
           if (thumbButton) {
             thumbButton.style.display = "none";
@@ -1249,7 +1251,7 @@ try {
         if (circlePlay) circlePlay.style.display = "block";
         if (playElement) playElement.style.display = "block";
 
-        if (videoInfo?.thumb) {
+        if (videoInfo?.data.thumb) {
           if (thumbPause) thumbPause.style.display = "block";
           if (thumbButton) {
             thumbButton.style.display = "block";
@@ -1257,7 +1259,7 @@ try {
           }
         }
 
-        if (videoInfo?.thumbInicio) {
+        if (videoInfo?.data.thumbInicio) {
           if (thumbInitial) thumbInitial.style.display = "none";
         }
       }
@@ -2397,33 +2399,33 @@ try {
   };
 
   //----------------------------------------------------------------------------
-  const createAoVivo = () => {
+  const createAoVivo = (dataCreateAoVivo) => {
     const aoVivoContainer = document.createElement("div");
     const aoVivoText = document.createElement("small");
 
     aoVivoContainer.style.position = "absolute";
-    if (!videoInfo?.checkedCaptureTimer) {
-      aoVivoContainer.style.display = videoInfo?.haveForm ? "none" : "flex";
+    if (!dataCreateAoVivo?.checkedCaptureTimer) {
+      aoVivoContainer.style.display = dataCreateAoVivo?.haveForm ? "none" : "flex";
     }
 
-    if (videoInfo?.checkedCaptureTimer) {
+    if (dataCreateAoVivo?.checkedCaptureTimer) {
       aoVivoContainer.style.display = "flex";
     }
 
     aoVivoContainer.style.alignItems = "center";
     aoVivoContainer.id = "aoVivo";
     aoVivoContainer.style.backgroundColor =
-      videoInfo?.backgroundAoVivo ?? "#444";
-    aoVivoContainer.style.color = videoInfo?.fontColorAoVivo ?? "#fff";
+      dataCreateAoVivo?.backgroundAoVivo ?? "#444";
+    aoVivoContainer.style.color = dataCreateAoVivo?.fontColorAoVivo ?? "#fff";
     aoVivoContainer.style.borderRadius = "20px";
     aoVivoContainer.style.padding = " 5px 10px ";
     aoVivoContainer.style.top = "5%";
     aoVivoContainer.style.left = "2.5%";
     aoVivoContainer.style.zIndex = 3;
-    aoVivoText.textContent = videoInfo?.textAoVivo
-      ? `${videoInfo?.textAoVivo} - ${videoInfo?.simulationAoVivo}`
-      : `Ao Vivo - ${videoInfo?.simulationAoVivo}`;
-    sessionStorage.setItem("views", videoInfo?.simulationAoVivo);
+    aoVivoText.textContent = dataCreateAoVivo?.textAoVivo
+      ? `${dataCreateAoVivo?.textAoVivo} - ${dataCreateAoVivo?.simulationAoVivo}`
+      : `Ao Vivo - ${dataCreateAoVivo?.simulationAoVivo}`;
+    sessionStorage.setItem("views", dataCreateAoVivo?.simulationAoVivo);
     aoVivoText.id = "aoVivoText";
     const LiveIcon = document.createElement("span");
     LiveIcon.style.marginLeft = "0";
@@ -2482,18 +2484,18 @@ try {
       let pessoas = Math.floor(Math.random() * 10) - 1;
       const min =
         Number(
-          videoInfo?.simulationAoVivo ? videoInfo?.simulationAoVivo : 440
+          dataCreateAoVivo?.simulationAoVivo ? dataCreateAoVivo?.simulationAoVivo : 440
         ) - 20;
       const max =
         Number(
-          videoInfo?.simulationAoVivo ? videoInfo?.simulationAoVivo : 340
+          dataCreateAoVivo?.simulationAoVivo ? dataCreateAoVivo?.simulationAoVivo : 340
         ) + 200;
       const views = Number(sessionStorage.getItem("views"));
       let novoNumero = views + pessoas;
 
       novoNumero = Math.max(min, Math.min(novoNumero, max));
-      aoVivoText.textContent = videoInfo?.textAoVivo
-        ? `${videoInfo?.textAoVivo} - ${novoNumero}`
+      aoVivoText.textContent = dataCreateAoVivo?.textAoVivo
+        ? `${dataCreateAoVivo?.textAoVivo} - ${novoNumero}`
         : `Ao Vivo - ${novoNumero}`;
       sessionStorage.setItem("views", novoNumero);
     };
@@ -2541,30 +2543,35 @@ try {
     videoContainer.appendChild(thumbInitial);
   };
   //====
-  const createFinalThumb = () => {
+  const createFinalThumb = (dataFinalThumb) => {
+
+    console.log({ dataFinalThumb })
+
     const thumbFinal = document.createElement("img");
     thumbFinal.style.position = "absolute";
     thumbFinal.style.top = 0;
 
-    if (videoInfo?.haveBorder) {
-      thumbFinal.style.border = `4px solid ${videoInfo?.borderColor}`;
+    if (dataFinalThumb?.haveBorder) {
+      thumbFinal.style.border = `4px solid ${dataFinalThumb?.borderColor}`;
     }
-    if (videoInfo?.haveBorderRadius) {
+    if (dataFinalThumb?.haveBorderRadius) {
       thumbFinal.style.borderRadius = "12px";
     }
 
     thumbFinal.style.zIndex = 4;
     thumbFinal.id = "thumbFinal";
-    if (videoInfo?.haveAutoPlay) {
+    if (dataFinalThumb?.haveAutoPlay) {
       thumbFinal.style.display = "none";
     }
-    if (!videoInfo?.haveAutoPlay) {
+    if (!dataFinalThumb?.haveAutoPlay) {
       thumbFinal.style.display = "block";
     }
+
+    console.log({ dataFinalThumb })
     thumbFinal.style.width = "100%";
     thumbFinal.style.height = "100%";
     thumbFinal.style.zIndex = 0;
-    thumbFinal.src = videoInfo?.thumbFinal;
+    thumbFinal.src = dataFinalThumb?.thumbFinal;
     thumbFinal.style.cursor = "pointer";
 
     thumbFinal.addEventListener("click", () => {
@@ -2575,11 +2582,11 @@ try {
     videoContainer.appendChild(thumbFinal);
   };
   //----------------------------------------------------------------------------
-  const createThumbButton = () => {
+  const createThumbButton = (dataThumbButton) => {
     const buttonThumb = document.createElement("a");
     const buttonThumbText = document.createElement("p");
 
-    buttonThumbText.textContent = videoInfo?.textButton;
+    buttonThumbText.textContent = dataThumbButton?.textButton;
 
     buttonThumb.style.position = "absolute";
     buttonThumb.style.zIndex = "999";
@@ -2589,13 +2596,13 @@ try {
     buttonThumb.style.display = "none";
     buttonThumb.style.textAlign = "center";
     buttonThumb.style.textDecoration = "none";
-    buttonThumb.style.backgroundColor = videoInfo?.backgroundButton;
+    buttonThumb.style.backgroundColor = dataThumbButton?.backgroundButton;
     buttonThumb.style.borderRadius = "5px";
     const styleSheet = document.styleSheets[0];
 
     styleSheet.insertRule(
       `#idThumb:hover {
-        background-color: ${videoInfo?.backgroundButtonHover}
+        background-color: ${dataThumbButton?.backgroundButtonHover}
         }`,
       styleSheet.cssRules.length
     );
@@ -2603,84 +2610,84 @@ try {
     buttonThumbText.id = "buttonThumbText";
     buttonThumbText.style.margin = 0;
     buttonThumbText.style.color =
-      videoInfo?.textButtonColor !== "0"
-        ? videoInfo?.textButtonColor
+      dataThumbButton?.textButtonColor !== "0"
+        ? dataThumbButton?.textButtonColor
         : "#f9f9f9";
 
     styleSheet.insertRule(
       `#buttonThumbText:hover {
-          color: ${videoInfo?.textButtonColorHover !== "0"
-        ? videoInfo?.textButtonColorHover
+          color: ${dataThumbButton?.textButtonColorHover !== "0"
+        ? dataThumbButton?.textButtonColorHover
         : "#f9f9f9"
       }
         }`,
       styleSheet.cssRules.length
     );
 
-    if (videoInfo?.selectedSize === "grande") {
+    if (dataThumbButton?.selectedSize === "grande") {
       buttonThumb.style.width = "30%";
     }
 
-    if (videoInfo?.selectedSize === "medio") {
+    if (dataThumbButton?.selectedSize === "medio") {
       buttonThumb.style.width = "25%";
     }
 
-    if (videoInfo?.selectedSize === "pequeno") {
+    if (dataThumbButton?.selectedSize === "pequeno") {
       buttonThumb.style.width = "20%";
     }
 
     if (
-      videoInfo?.selectedPosition === "I_Esquerda" ||
-      videoInfo?.selectedPosition === "I_Meio" ||
-      videoInfo?.selectedPosition === "I_Direita"
+      dataThumbButton?.selectedPosition === "I_Esquerda" ||
+      dataThumbButton?.selectedPosition === "I_Meio" ||
+      dataThumbButton?.selectedPosition === "I_Direita"
     ) {
       buttonThumb.style.bottom = "5%";
     }
 
     if (
-      videoInfo?.selectedPosition === "S_Esquerda" ||
-      videoInfo?.selectedPosition === "S_Meio" ||
-      videoInfo?.selectedPosition === "S_Direita"
+      dataThumbButton?.selectedPosition === "S_Esquerda" ||
+      dataThumbButton?.selectedPosition === "S_Meio" ||
+      dataThumbButton?.selectedPosition === "S_Direita"
     ) {
       buttonThumb.style.top = "5%";
     }
 
     if (
-      videoInfo?.selectedPosition === "M_Esquerda" ||
-      videoInfo?.selectedPosition === "M_Direita"
+      dataThumbButton?.selectedPosition === "M_Esquerda" ||
+      dataThumbButton?.selectedPosition === "M_Direita"
     ) {
       buttonThumb.style.top = "38%";
     }
 
     if (
-      videoInfo?.selectedPosition === "S_Esquerda" ||
-      videoInfo?.selectedPosition === "M_Esquerda" ||
-      videoInfo?.selectedPosition === "I_Esquerda"
+      dataThumbButton?.selectedPosition === "S_Esquerda" ||
+      dataThumbButton?.selectedPosition === "M_Esquerda" ||
+      dataThumbButton?.selectedPosition === "I_Esquerda"
     ) {
       buttonThumb.style.left = "20px";
     }
     if (
-      videoInfo?.selectedPosition === "S_Direita" ||
-      videoInfo?.selectedPosition === "M_Direita" ||
-      videoInfo?.selectedPosition === "I_Direita"
+      dataThumbButton?.selectedPosition === "S_Direita" ||
+      dataThumbButton?.selectedPosition === "M_Direita" ||
+      dataThumbButton?.selectedPosition === "I_Direita"
     ) {
       buttonThumb.style.right = "20px";
     }
 
     if (
-      videoInfo?.selectedPosition === "S_Meio" ||
-      videoInfo?.selectedPosition === "I_Meio" ||
-      videoInfo?.selectedPosition === ""
+      dataThumbButton?.selectedPosition === "S_Meio" ||
+      dataThumbButton?.selectedPosition === "I_Meio" ||
+      dataThumbButton?.selectedPosition === ""
     ) {
-      if (videoInfo?.selectedSize === "grande") {
+      if (dataThumbButton?.selectedSize === "grande") {
         buttonThumb.style.left = "35%";
       }
 
-      if (videoInfo?.selectedSize === "medio") {
+      if (dataThumbButton?.selectedSize === "medio") {
         buttonThumb.style.left = "37%";
       }
 
-      if (videoInfo?.selectedSize === "pequeno") {
+      if (dataThumbButton?.selectedSize === "pequeno") {
         buttonThumb.style.left = "39%";
       }
     }
@@ -2688,11 +2695,11 @@ try {
     buttonThumb.addEventListener("click", async (event) => {
       if (
         !(
-          videoInfo?.textLink.startsWith("https://") ||
-          videoInfo?.textLink.startsWith("http://")
+          dataThumbButton?.textLink.startsWith("https://") ||
+          dataThumbButton?.textLink.startsWith("http://")
         )
       ) {
-        window.open(`https://${videoInfo?.textLink}`, "_blank");
+        window.open(`https://${dataThumbButton?.textLink}`, "_blank");
       }
       return thumbClick();
     });
@@ -5119,9 +5126,9 @@ try {
   };
 
   //--------------------------------------------------------------------------
-  const createLogoMark = () => {
+  const createLogoMark = (datateLogoMark) => {
     const logoMark = document.createElement("img");
-    logoMark.src = videoInfo?.logoImg;
+    logoMark.src = datateLogoMark?.logoImg;
     logoMark.style.position = "absolute";
     logoMark.style.width = "10%";
     logoMark.style.height = "auto";
@@ -5131,7 +5138,7 @@ try {
     logoMark.style.overflow = "hidden";
     logoMark.style.zIndex = "25";
     logoMark.style.cursor = "pointer";
-    switch (videoInfo?.selectedLogoPosition) {
+    switch (datateLogoMark?.selectedLogoPosition) {
       case "I_Meio":
         logoMark.style.left = "50%";
         logoMark.style.bottom = "12px";
@@ -5174,7 +5181,7 @@ try {
         break;
     }
     logoMark.addEventListener("click", () => {
-      window.open(videoInfo?.urlLogo, "_blank");
+      window.open(datateLogoMark?.urlLogo, "_blank");
     });
     videoContainer.appendChild(logoMark);
   };
