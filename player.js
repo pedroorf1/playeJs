@@ -648,7 +648,11 @@ try {
       videoElement.loop = true;
       videoElement.currentTime = 0;
     }
-    if (videoElement.paused) {
+    if (!videoElement.paused && videoElement.muted) {
+      videoElement.muted = false
+      videoElement.currentTime = 0;
+      videoElement.play();
+    } else if (videoElement.paused && !videoElement.muted) {
       videoElement.play();
     } else {
       videoElement.pause();
@@ -795,6 +799,7 @@ try {
 
   //---------------------------------------------------------------------------------------------------------------------------
   //CREATE ELEMENTS============================================================================================================
+
   const createThumb = (dataThumb) => {
     console.log({ dataThumb })
     const thumbPause = document.createElement("img");
@@ -1195,17 +1200,15 @@ try {
     const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const formOnScreen = localStorage.getItem("formOnScreen");
     const thumbPause = document.getElementById("thumbPause");
+    const circleContainer = document.getElementById("circle-container");
     const thumbInitial = document.getElementById("thumbInitial");
     const thumbButton = document.getElementById("idThumb");
     const playElement = document.getElementById("icon_play");
     const pauseElement = document.getElementById("icon_pause");
-    const circleElement = document.getElementById("circle");
     const circlePlay = document.getElementById("icon_play_control");
     const circlePause = document.getElementById("icon_pause_control");
     if (!formOnScreen) {
       if (isAuto) {
-        //handleUnmuteRestart();
-        // return;
       } else {
         await Promise.resolve(localStorage.getItem("clickPlay")).then(
           (resp) => {
@@ -1251,16 +1254,10 @@ try {
       }
 
       if (videoElement?.paused) {
-        console.log("Video info::::::::", videoInfo)
-        // videoElement.play();
         playPauseVideo();
-        if (pauseElement) pauseElement.style.display = "none";
-        if (circlePause) circlePause.style.display = "none";
-        if (circlePlay) circlePlay.style.display = "block";
-        if (playElement) playElement.style.display = "block";
+
 
         if (thumbInitial) thumbInitial.style.display = "none";
-
         if (videoInfo?.data.thumb) {
           if (thumbPause) thumbPause.style.display = "none";
           if (thumbButton) {
@@ -1268,20 +1265,56 @@ try {
             thumbButton.style.cursor = "pointer";
           }
         }
+        const circleElement = document.getElementById("circle");
+        circleContainer.style.cursor = 'pointer'
 
-        if (circleElement) circleElement.style.visibility = "hidden";
+        circleContainer.addEventListener('click', () => {
+          circleElement.style.visibility = "show !important";
+          console.log("click")
+          console.log(circleContainer)
+          if (videoElement.paused) {
+            if (circlePlay) circlePlay.style.display = "block";
+            if (playElement) playElement.style.display = "block";
+            if (pauseElement) pauseElement.style.display = "none";
+            if (circlePause) circlePause.style.display = "none";
+          } else {
+            if (circlePlay) circlePlay.style.display = "none";
+            if (playElement) playElement.style.display = "none";
+            if (pauseElement) pauseElement.style.display = "block";
+            if (circlePause) circlePause.style.display = "block";
+          }
+        })
+        circleContainer.addEventListener('mousemove', () => {
+          circleElement.style.visibility = "visible"
+          if (videoElement.paused) {
+            if (circlePlay) circlePlay.style.display = "block";
+            if (playElement) playElement.style.display = "block";
+            if (pauseElement) pauseElement.style.display = "none";
+            if (circlePause) circlePause.style.display = "none";
+            if (circleElement) circleElement.style.visibility = "visible";
+          } else {
+            if (circlePlay) circlePlay.style.display = "none";
+            if (playElement) playElement.style.display = "none";
+            if (pauseElement) pauseElement.style.display = "block";
+            if (circlePause) circlePause.style.display = "block";
+          }
+          circleElement.style.visibility = "visible";
+        })
+        circleContainer.addEventListener('mouseout', () => {
+          circleElement.style.visibility = "hidden";
+        })
 
-        console.log("Play:::", circlePlay, circlePause, pauseElement, playElement)
+        videoElement.addEventListener('play', () => {
+          console.log('O vídeo começou a tocar.');
+          analysisInterval = setInterval(() => {
+            if (!videoElement.paused) {
+              console.log('\nNova.');
+              if (circleElement) circleElement.style.visibility = "hidden";
+            }
+          }, 5000);
+        });
       } else {
         videoElement.pause();
-        console.log("ZZZZZZZZZZZZZZZ")
-        if (pauseElement) pauseElement.style.display = "none";
-        if (circlePause) circlePause.style.display = "none";
-        if (circlePlay) circlePlay.style.display = "block";
-        if (playElement) playElement.style.display = "block";
-
-        console.log("Pause:::", circlePlay, circlePause, pauseElement, playElement)
-
         if (videoInfo?.data.thumb) {
           if (thumbPause) thumbPause.style.display = "block";
           if (thumbButton) {
@@ -1447,7 +1480,7 @@ try {
           if (!res) {
             if (!state.circlePlay) {
               localStorage.setItem("circlePlay", true);
-              createCirclePlay();
+              // createCirclePlay();
             }
           }
         }
@@ -2567,7 +2600,7 @@ try {
     thumbInitial.style.cursor = "pointer";
 
     thumbInitial.addEventListener("click", () => {
-      handleUnmuteRestart();
+      // handleUnmuteRestart();
       thumbInitial.style.display = "none";
     });
 
@@ -3123,7 +3156,7 @@ try {
     if (controlsContainer) controlsContainer.style.visibility = "visible";
 
     if (videoInfo?.haveAutoPlay && !videoInfo?.haveControls) {
-      createCirclePlay();
+      // createCirclePlay();
     }
 
     await Promise.resolve(localStorage.getItem("clickPlay")).then((resp) => {
@@ -4895,6 +4928,8 @@ try {
 
   //--------------------------------------------------------------------------
   const createCirclePlay = async () => {
+    const haveCicleContainer = document.getElementById("circle-container");
+    if (haveCicleContainer) return
     const circleContainer = document.createElement("div");
     // const videoElement = document.getElementById("my-video_html5_api");
 
