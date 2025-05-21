@@ -354,8 +354,10 @@ try {
   if (document.querySelector("#video")) {
     videoElement = document.querySelector("#video")
   } else {
-    videoElement = document.createElement("div")
+    videoElement = document.createElement("video")
     videoElement.id = "video"
+    videoElement.constrols = false
+    videoElement.autoplay = false
   }
   videoElement.style.display = "flex";
   videoElement.style.flexDirection = "column";
@@ -383,14 +385,43 @@ try {
   //=======================================================================================================================
   //-------------------------------------LOAD AND PLAY VIDEO BEFORE ANOTHER CONFIGS----------------------------------------
   //=======================================================================================================================
-  (() => {
-    const url = new URL(window.location.href);
-    const params = new URLSearchParams(url.search);
-    videoUrl = params.get("video");
-    videoId = params.get("idvideo");
+  async function getScriptParams() {
+    const scripts = document.getElementsByTagName('script');
+    for (let script of scripts) {
+      if (script.src.includes('player.js')) {
+        const url = new URL(script.src);
+        const params = new URLSearchParams(url.search);
+
+        const idVideo = params.get('idVideo');
+        const video = params.get('video');
+
+        console.log('VideoInfo:', videoInfo);
+        console.log('ID do Vídeo:', idVideo);
+        console.log('URL do Vídeo:', video);
+        videoId = idVideo
+        videoUrl = video
+        if (video) {
+          // PlayNewVideo(video)
+        }
+      }
+    }
+    return null; // Retorna null se o script não for encontrado
+  }
+  (async () => {
+
+    await appendScriptOnHead('https://kit.fontawesome.com/839085c966.js')
+    await appendScriptOnHead('https://code.jquery.com/jquery-3.2.1.min.js')
+    await appendScriptOnHead('https://cdn.jsdelivr.net/npm/hls.js@latest')
+    await getScriptParams()
+
+    if (Hls.isSupported()) {
+      window.hls = new Hls();
+    }
     console.log({ videoUrl })
     videoElement.controls = false
     // videoUrl ? videoUrl : videoUrl = 'https://testvsl1.b-cdn.net/24b5b278-9505-4cb6-acb0-5ec5aa5987e3/ssssss/segment.m3u8';
+    // videoId = "b3f4389c-ca69-49f6-a2a8-9e00958e15ed"
+    // videoId = "test-ab/4efbe613-dd64-485f-aa27-c020b4d3ad94"
     if (window.hls) {
       if (videoUrl) {
         window.hls.loadSource(videoUrl);
@@ -444,10 +475,7 @@ try {
 
     //===================================domain data========================================================
     window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
-    // videoId = "b3f4389c-ca69-49f6-a2a8-9e00958e15ed"
-    videoId = "test-ab/4efbe613-dd64-485f-aa27-c020b4d3ad94"
     globalState.videoId = videoId
-
     //===================================create metrics at the video========================================
     if (videoId) {
       if (videoId?.indexOf("/")) {
@@ -489,8 +517,7 @@ try {
       };
 
       //===========================================INTERFACE TOOLS===============================================
-      await appendScriptOnHead('https://kit.fontawesome.com/839085c966.js')
-      await appendScriptOnHead('https://code.jquery.com/jquery-3.2.1.min.js')
+
       document.head.insertAdjacentHTML("beforeend", styles);
 
       //===========================================INTEFACE ADDS================================================
@@ -520,7 +547,8 @@ try {
         console.error("Erro ao carregar script")
         onRejected(new Error("Erro ao carregar script"));
       };
-      document.getElementsByTagName("head")[0].appendChild(script);
+      document.head.appendChild(script);
+      // document.getElementsByTagName("head")[0].appendChild(script);
       return script
     });
   }
@@ -1184,7 +1212,7 @@ try {
             if (!resp) {
               if (!state.circlePlay) {
                 const sendData = {
-                  id_video: videoInfo?.id_video,
+                  id_video: videoInfo?.data?.id_video,
                   id_sessao: globalState?.newSessionUserId,
                   lastSession: globalState?.loadedSessionUserFromStorage,
                   play: true,
@@ -1192,7 +1220,8 @@ try {
                 sendData.clickButton = true;
                 handleUpdateMetric(sendData);
                 localStorage.setItem("clickPlay", true);
-                setClicks(videoInfo?.id_user);
+                console.log("click", { videoInfo })
+                setClicks(videoInfo?.data?.id_user);
               }
             }
           }
@@ -1241,15 +1270,17 @@ try {
         }
 
         if (circleElement) circleElement.style.visibility = "hidden";
+
+        console.log("Play:::", circlePlay, circlePause, pauseElement, playElement)
       } else {
         videoElement.pause();
-
-        if (circleElement) circleElement.style.visibility = "visible";
-
+        console.log("ZZZZZZZZZZZZZZZ")
         if (pauseElement) pauseElement.style.display = "none";
         if (circlePause) circlePause.style.display = "none";
         if (circlePlay) circlePlay.style.display = "block";
         if (playElement) playElement.style.display = "block";
+
+        console.log("Pause:::", circlePlay, circlePause, pauseElement, playElement)
 
         if (videoInfo?.data.thumb) {
           if (thumbPause) thumbPause.style.display = "block";
@@ -5272,6 +5303,7 @@ try {
 
 
   const PlayNewVideo = (videoSource) => {
+    if (!videoElement.paused) return
     window.hls.loadSource(videoSource);
     window.hls.attachMedia(videoElement);
     window.hls.on(window.Hls.Events.MANIFEST_PARSED, function () {        // Adicionar um ouvinte para o evento canplay
