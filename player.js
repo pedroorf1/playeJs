@@ -391,18 +391,10 @@ try {
       if (script.src.includes('player.js')) {
         const url = new URL(script.src);
         const params = new URLSearchParams(url.search);
-
         const idVideo = params.get('idVideo');
         const video = params.get('video');
-
-        console.log('VideoInfo:', videoInfo);
-        console.log('ID do Vídeo:', idVideo);
-        console.log('URL do Vídeo:', video);
         videoId = idVideo
         videoUrl = video
-        if (video) {
-          // PlayNewVideo(video)
-        }
       }
     }
     return null; // Retorna null se o script não for encontrado
@@ -417,7 +409,6 @@ try {
     if (Hls.isSupported()) {
       window.hls = new Hls();
     }
-    console.log({ videoUrl })
     videoElement.controls = false
     // videoUrl ? videoUrl : videoUrl = 'https://testvsl1.b-cdn.net/24b5b278-9505-4cb6-acb0-5ec5aa5987e3/ssssss/segment.m3u8';
     // videoId = "b3f4389c-ca69-49f6-a2a8-9e00958e15ed"
@@ -485,8 +476,6 @@ try {
       }
 
       await createVideo(videoInfo)
-      console.log("sssssssss:::::::", { videoInfo })
-
       window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
       allowDomain = !!videoInfo?.video
       const clientConnectData = {
@@ -498,9 +487,6 @@ try {
         lastSession: globalState?.loadedSessionUserFromStorage,
         connectionData: window.domainData,
       };
-
-      console.log({ clientConnectData })
-
       await handleCreateMetric(clientConnectData).catch(e => {
         console.log(e)
       })
@@ -801,7 +787,6 @@ try {
   //CREATE ELEMENTS============================================================================================================
 
   const createThumb = (dataThumb) => {
-    console.log({ dataThumb })
     const thumbPause = document.createElement("img");
     thumbPause.style.position = "absolute";
     thumbPause.style.zIndex = 1;
@@ -994,7 +979,6 @@ try {
     ) {
       if (!dataVideo?.typesAutoplay) {
         if (!dataVideo?.haveSmallTemplate) {
-          console.log("Autoplay")
           createAutoPlay();
         } else if (dataVideo?.haveSmallTemplate) {
           createSmallAutoPlay();
@@ -1223,7 +1207,6 @@ try {
                 sendData.clickButton = true;
                 handleUpdateMetric(sendData);
                 localStorage.setItem("clickPlay", true);
-                console.log("click", { videoInfo })
                 setClicks(videoInfo?.data?.id_user);
               }
             }
@@ -1270,8 +1253,6 @@ try {
 
         circleContainer.addEventListener('click', () => {
           circleElement.style.visibility = "show !important";
-          console.log("click")
-          console.log(circleContainer)
           if (videoElement.paused) {
             if (circlePlay) circlePlay.style.display = "block";
             if (playElement) playElement.style.display = "block";
@@ -1308,7 +1289,6 @@ try {
           console.log('O vídeo começou a tocar.');
           analysisInterval = setInterval(() => {
             if (!videoElement.paused) {
-              console.log('\nNova.');
               if (circleElement) circleElement.style.visibility = "hidden";
             }
           }, 5000);
@@ -2608,9 +2588,6 @@ try {
   };
   //====
   const createFinalThumb = (dataFinalThumb) => {
-
-    console.log({ dataFinalThumb })
-
     const thumbFinal = document.createElement("img");
     thumbFinal.style.position = "absolute";
     thumbFinal.style.top = 0;
@@ -2630,8 +2607,6 @@ try {
     if (!dataFinalThumb?.haveAutoPlay) {
       thumbFinal.style.display = "block";
     }
-
-    console.log({ dataFinalThumb })
     thumbFinal.style.width = "100%";
     thumbFinal.style.height = "100%";
     thumbFinal.style.zIndex = 0;
@@ -5263,7 +5238,6 @@ try {
       const [ref_AB, id_AB] = videoId.split("/");
       const api = await fetch(`${api_utl}test-ab-mongo/${id_AB}/videos`);
       const response = await api.json();
-      console.log({ response })
       videoId = response.data.id_video
       videoInfo = response.data.video
       PlayNewVideo(videoInfo.video)
@@ -5331,7 +5305,6 @@ try {
     }
 
     videoInfo = await getVideoFromMongo(videoId);
-    console.log("videoInfo", videoInfo)
     PlayNewVideo(videoInfo.data.video)
     return videoInfo;
   };
@@ -5348,12 +5321,6 @@ try {
         })
       });
     });
-
-    // // Ouvinte para o evento de carregamento do vídeo
-    // videoElement.addEventListener('loadeddata', function () {
-    //   console.log('Novo vídeo carregado. Aplicando configurações...');
-    //   aplicarConfiguracoesEspecificas();
-    // });
   }
 
   function newVideoConfigApply() {
