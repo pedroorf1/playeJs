@@ -10,7 +10,7 @@
 </head>
 
 <body>
-    <h1>Reprodução de Vídeo HLS</h1>
+    <h1>HostVsl Vídeo Player.js (HLS)</h1>
 
     <video id="video" controls width="100%" muted autoplay="false"></video>
     <!-- <button id="playButton">Play</button> -->
@@ -33,7 +33,7 @@
             console.error('HLS não é suportado neste navegador.');
         }
     </script> -->
-    <script>
+    <!-- <script>
         if (Hls.isSupported()) {
             window.hls = new Hls();
         }
@@ -43,7 +43,7 @@
         script.src = "player.js?" + ver;
         script.async = true;
         document.getElementsByTagName("head")[0].appendChild(script);
-    </script>
+    </script> -->
 </body>
 
 </html>

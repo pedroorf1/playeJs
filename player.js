@@ -908,8 +908,7 @@ try {
   //--------------------------------------------------------------------------------
 
   const createVideo = async (dataVideo) => {
-    createCantRunVideoImage(false, controlsContainer);// imagem informando que o video não pode ser exibido
-    // const videoElement = document.createElement("video");
+    createCantRunVideoImage(false, controlsContainer);
     videoElement.style.width = "100%";
     videoElement.style.height = "100%";
     videoElement.setAttribute("crossorigin", "anonymous");
@@ -1078,11 +1077,6 @@ try {
 
     if (isLeadTest) {
       videoElement.loop = false;
-      // videoElement.on("ended", function () {
-      //   videoElement.dispose();
-      //   videoInfo = leadTestMainContentVideo;
-      //   createVideo();
-      // });
       videoElement.addEventListener('ended', () => {
         console.log('O vídeo terminou!');
         videoElement.dispose();
@@ -1180,6 +1174,7 @@ try {
   };
 
   //---------------------------------------------------------------------------
+  console.log({ videoInfo })
   const handlePlayPause = async () => {
     const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const formOnScreen = localStorage.getItem("formOnScreen");
@@ -1214,7 +1209,9 @@ try {
         );
       }
 
+
       if (!videoInfo?.haveControls && videoInfo?.haveFakeBar) {
+
         await Promise.resolve(sessionStorage.getItem("fakeBar")).then(
           (res) => {
             if (!res) {
@@ -1238,8 +1235,6 @@ try {
 
       if (videoElement?.paused) {
         playPauseVideo();
-
-
         if (thumbInitial) thumbInitial.style.display = "none";
         if (videoInfo?.data.thumb) {
           if (thumbPause) thumbPause.style.display = "none";
@@ -1252,7 +1247,7 @@ try {
         circleContainer.style.cursor = 'pointer'
 
         circleContainer.addEventListener('click', () => {
-          circleElement.style.visibility = "show !important";
+          circleElement.style.visibility = "visible !important";
           if (videoElement.paused) {
             if (circlePlay) circlePlay.style.display = "block";
             if (playElement) playElement.style.display = "block";
@@ -1272,7 +1267,6 @@ try {
             if (playElement) playElement.style.display = "block";
             if (pauseElement) pauseElement.style.display = "none";
             if (circlePause) circlePause.style.display = "none";
-            if (circleElement) circleElement.style.visibility = "visible";
           } else {
             if (circlePlay) circlePlay.style.display = "none";
             if (playElement) playElement.style.display = "none";
@@ -4906,7 +4900,6 @@ try {
     const haveCicleContainer = document.getElementById("circle-container");
     if (haveCicleContainer) return
     const circleContainer = document.createElement("div");
-    // const videoElement = document.getElementById("my-video_html5_api");
 
     circleContainer.id = "circle-container";
     circleContainer.style.display = "flex";
@@ -4917,7 +4910,7 @@ try {
 
     const circle = document.createElement("div");
     circle.id = "circle";
-    circle.style.backgroundColor = videoInfo?.cor;
+    circle.style.backgroundColor = videoInfo?.data?.cor;
     circle.style.display = "flex";
     circle.style.position = "absolute";
     circle.style.width = "65px";
@@ -4935,8 +4928,10 @@ try {
     circle.style.color = "#fff";
 
     if (!videoInfo?.haveControls && !videoInfo?.haveAutoPlay) {
+      console.log("11111111")
       circle.style.visibility = "visible";
     } else {
+      console.log("22222222")
       circle.style.visibility = "hidden";
     }
 
