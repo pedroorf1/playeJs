@@ -474,8 +474,8 @@ try {
       } else {
         videoInfo = await getVideoFromMongo(videoId);
       }
-
-      await createVideo(videoInfo)
+      console.log("GGGG", videoInfo)
+      await createVideo(videoInfo?.data)
       window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
       allowDomain = !!videoInfo?.video
       const clientConnectData = {
@@ -754,7 +754,7 @@ try {
       },
       body: JSON.stringify(data),
     });
-    console.log("metrica Criada: ", res)
+    console.log("metrica Criada: ")
   }
 
   //--------------------------------------------------------------------------------------------
@@ -787,6 +787,9 @@ try {
   //CREATE ELEMENTS============================================================================================================
 
   const createThumb = (dataThumb) => {
+
+    console.log("KKKKKK", dataThumb)
+
     const thumbPause = document.createElement("img");
     thumbPause.style.position = "absolute";
     thumbPause.style.zIndex = 1;
@@ -807,11 +810,11 @@ try {
     thumbPause.src = dataThumb?.thumb;
     thumbPause.style.cursor = "pointer";
     thumbPause.style.zIndex = 0;
-    thumbPause.addEventListener("click", handlePlayPause);
+    thumbPause.addEventListener("click", () => handlePlayPause(dataThumb));
     videoContainer.appendChild(thumbPause);
   };
   //----------------------------------------------------------------------------
-  const createAutoPlay = () => {
+  const createAutoPlay = (createAutoPlayDataVideo) => {
     const autoPlayFullContainerVideo = document.createElement("div");
     const autoPlayContainer = document.createElement("div");
     const formOnScreen = localStorage.getItem("formOnScreen");
@@ -828,10 +831,10 @@ try {
     autoPlayFullContainerVideo.style.height = "100%";
     autoPlayFullContainerVideo.style.position = "absolute";
     autoPlayFullContainerVideo.style.zIndex = 4;
-
+    console.log("DDDDDDD", createAutoPlayDataVideo)
     autoPlayContainer.id = "unmute";
     imgSound.style.mask = `url(${sound}) no-repeat center`;
-    imgSound.style.backgroundColor = videoInfo?.autoplayIconColor ?? "#fff";
+    imgSound.style.backgroundColor = createAutoPlayDataVideo?.autoplayIconColor ?? "#fff";
     imgSound.style.maskSize = "contain";
     imgSound.style.width = "120px";
     imgSound.style.height = "120px";
@@ -839,26 +842,26 @@ try {
     imgSound.style.marginTop = 3;
     imgSound.style.marginBottom = 3;
     superiorText.textContent =
-      videoInfo?.textSuperior !== ""
-        ? videoInfo?.textSuperior
+      createAutoPlayDataVideo?.textSuperior !== ""
+        ? createAutoPlayDataVideo?.textSuperior
         : "Ative o som";
     inferiorText.textContent =
-      videoInfo?.textInferior !== ""
-        ? videoInfo?.textInferior
+      createAutoPlayDataVideo?.textInferior !== ""
+        ? createAutoPlayDataVideo?.textInferior
         : "Seu vídeo já começou";
 
     superiorText.className = "text-button ActiveSound";
     inferiorText.className = "text-button videoStarted";
 
     autoPlayContainer.style.border = `1px solid transparent`;
-    if (videoInfo?.haveBorderWhite) {
+    if (createAutoPlayDataVideo?.haveBorderWhite) {
       autoPlayContainer.style.border = `1px solid #fff`;
     }
 
-    autoPlayContainer.style.display = videoInfo?.haveForm ? "none" : "flex";
+    autoPlayContainer.style.display = createAutoPlayDataVideo?.haveForm ? "none" : "flex";
     if (
-      videoInfo?.checkedCaptureTimer &&
-      videoInfo?.typeForm === "data-capture"
+      createAutoPlayDataVideo?.checkedCaptureTimer &&
+      createAutoPlayDataVideo?.typeForm === "data-capture"
     ) {
       autoPlayContainer.style.display = "flex";
     }
@@ -870,8 +873,8 @@ try {
     autoPlayContainer.style.left = "50%";
     autoPlayContainer.style.top = "50%";
     autoPlayContainer.style.transform = "translate(-50%, -50%)";
-    autoPlayContainer.style.backgroundColor = videoInfo?.cor;
-    autoPlayContainer.style.color = videoInfo?.corText;
+    autoPlayContainer.style.backgroundColor = createAutoPlayDataVideo?.cor;
+    autoPlayContainer.style.color = createAutoPlayDataVideo?.corText;
     autoPlayContainer.style.padding = "5px 20px";
     autoPlayContainer.style.borderRadius = "5px";
     autoPlayContainer.style.cursor = "pointer";
@@ -879,16 +882,16 @@ try {
     autoPlayContainer.style.height = "41%"; // Set the height to 40% of the screen
     autoPlayContainer.style.gap = "10%"; // Set the height to 40% of the screen
     autoPlayContainer.style.border = `1px solid transparent`;
-    if (videoInfo?.haveBorderWhite) {
+    if (createAutoPlayDataVideo?.haveBorderWhite) {
       autoPlayContainer.style.border = `1px solid #fff`;
     }
-    if (videoInfo?.havePulse) {
+    if (createAutoPlayDataVideo?.havePulse) {
       autoPlayContainer.style.animation = "autoPlayPulseVSL 1350ms infinite";
     }
 
-    superiorText.style.color = videoInfo?.corText;
+    superiorText.style.color = createAutoPlayDataVideo?.corText;
     superiorText.style.fontWeight = 600;
-    inferiorText.style.color = videoInfo?.corText;
+    inferiorText.style.color = createAutoPlayDataVideo?.corText;
     inferiorText.style.fontWeight = 600;
 
     autoPlayContainer.appendChild(superiorText);
@@ -908,6 +911,8 @@ try {
   //--------------------------------------------------------------------------------
 
   const createVideo = async (dataVideo) => {
+    console.log("VVVVVVV", dataVideo)
+
     createCantRunVideoImage(false, controlsContainer);
     videoElement.style.width = "100%";
     videoElement.style.height = "100%";
@@ -969,7 +974,7 @@ try {
       videoElement.setAttribute("muted", "");
       videoElement.setAttribute("loop", "");
     }
-
+    console.log("RRRRRR", dataVideo)
     if (
       dataVideo?.haveAutoPlay &&
       !dataVideo?.customImage &&
@@ -978,32 +983,32 @@ try {
     ) {
       if (!dataVideo?.typesAutoplay) {
         if (!dataVideo?.haveSmallTemplate) {
-          createAutoPlay();
+          createAutoPlay(dataVideo);
         } else if (dataVideo?.haveSmallTemplate) {
-          createSmallAutoPlay();
+          createSmallAutoPlay(dataVideo);
         }
       } else {
         switch (dataVideo?.typesAutoplay) {
           case "autoPlay":
-            createAutoPlay();
+            createAutoPlay(dataVideo);
             break;
           case "small":
-            createSmallAutoPlay();
+            createSmallAutoPlay(dataVideo);
             break;
           case "large":
-            createLargeAutoPlay();
+            createLargeAutoPlay(dataVideo);
             break;
           case "transparent":
-            createTransparentAutoPlay();
+            createTransparentAutoPlay(dataVideo);
             break;
           case "blur":
-            createEyeBlurAutoPlay();
+            createEyeBlurAutoPlay(dataVideo);
             break;
           case "fullScreen":
-            createFullScreenAutoPlay();
+            createFullScreenAutoPlay(dataVideo);
             break;
           case "animation":
-            createAnimatedAutoPlay();
+            createAnimatedAutoPlay(dataVideo);
             break;
         }
       }
@@ -1039,13 +1044,13 @@ try {
 
     if (!isIOS) {
       if (!dataVideo?.noneControlsMoreAutoplay) {
-        videoElement.addEventListener("click", handlePlayPause);
+        videoElement.addEventListener("click", () => handlePlayPause(dataVideo));
       }
       videoElement.addEventListener("timeupdate", handleOnProgress);
       videoElement.addEventListener("timeupdate", progress);
 
       if (dataVideo?.thumbFinal) {
-        videoElement.addEventListener("ended", createFinalThumb(dataVideo));
+        videoElement.addEventListener("ended", () => createFinalThumb(dataVideo));
       }
 
       videoElement.addEventListener("loadedmetadata", () => {
@@ -1093,6 +1098,7 @@ try {
     }
 
     if (dataVideo?.thumb) {
+      console.log("UUUUU", dataVideo)
       createThumb(dataVideo);
     }
     if (
@@ -1110,11 +1116,12 @@ try {
       !dataVideo?.haveAutoPlay &&
       !dataVideo?.noneControlsMoreAutoplay
     ) {
-      createControls();
+      createControls(dataVideo);
     }
 
     if (!dataVideo?.haveAutoPlay && !dataVideo?.haveControls) {
-      createCirclePlay();
+      console.log("WWWWWW", dataVideo)
+      createCirclePlay(dataVideo);
     }
 
     if (dataVideo?.haveContinue) {
@@ -1174,8 +1181,9 @@ try {
   };
 
   //---------------------------------------------------------------------------
-  console.log({ videoInfo })
-  const handlePlayPause = async () => {
+  const handlePlayPause = async (dataPlayPause) => {
+
+    console.log("HHHHHHH", dataPlayPause)
     const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const formOnScreen = localStorage.getItem("formOnScreen");
     const thumbPause = document.getElementById("thumbPause");
@@ -1186,6 +1194,10 @@ try {
     const pauseElement = document.getElementById("icon_pause");
     const circlePlay = document.getElementById("icon_play_control");
     const circlePause = document.getElementById("icon_pause_control");
+
+    // if (thumbInitial) thumbInitial.remove()
+    if (thumbInitial) thumbInitial.style.display = "none";
+
     if (!formOnScreen) {
       if (isAuto) {
       } else {
@@ -1194,7 +1206,7 @@ try {
             if (!resp) {
               if (!state.circlePlay) {
                 const sendData = {
-                  id_video: videoInfo?.data?.id_video,
+                  id_video: dataPlayPause?.id_video,
                   id_sessao: globalState?.newSessionUserId,
                   lastSession: globalState?.loadedSessionUserFromStorage,
                   play: true,
@@ -1202,7 +1214,7 @@ try {
                 sendData.clickButton = true;
                 handleUpdateMetric(sendData);
                 localStorage.setItem("clickPlay", true);
-                setClicks(videoInfo?.data?.id_user);
+                setClicks(dataPlayPause?.id_user);
               }
             }
           }
@@ -1210,7 +1222,7 @@ try {
       }
 
 
-      if (!videoInfo?.haveControls && videoInfo?.haveFakeBar) {
+      if (!dataPlayPause?.haveControls && dataPlayPause?.haveFakeBar) {
 
         await Promise.resolve(sessionStorage.getItem("fakeBar")).then(
           (res) => {
@@ -1235,8 +1247,10 @@ try {
 
       if (videoElement?.paused) {
         playPauseVideo();
-        if (thumbInitial) thumbInitial.style.display = "none";
-        if (videoInfo?.data.thumb) {
+        // if (thumbInitial) thumbInitial.style.display = "none";
+        console.log("thumbInitial", thumbInitial)
+        console.log("LLLLLLLL", dataPlayPause)
+        if (dataPlayPause?.thumb) {
           if (thumbPause) thumbPause.style.display = "none";
           if (thumbButton) {
             thumbButton.style.display = "none";
@@ -1282,6 +1296,7 @@ try {
         videoElement.addEventListener('play', () => {
           console.log('O vídeo começou a tocar.');
           analysisInterval = setInterval(() => {
+
             if (!videoElement.paused) {
               if (circleElement) circleElement.style.visibility = "hidden";
             }
@@ -1289,7 +1304,7 @@ try {
         });
       } else {
         videoElement.pause();
-        if (videoInfo?.data.thumb) {
+        if (dataPlayPause?.thumb) {
           if (thumbPause) thumbPause.style.display = "block";
           if (thumbButton) {
             thumbButton.style.display = "block";
@@ -1297,7 +1312,7 @@ try {
           }
         }
 
-        if (videoInfo?.data.thumbInicio) {
+        if (dataPlayPause.thumbInicio) {
           if (thumbInitial) thumbInitial.style.display = "none";
         }
       }
@@ -1305,7 +1320,7 @@ try {
   };
 
   //-------------------------------------------------------------------------------
-  const handlePlayPauseControl = async () => {
+  const handlePlayPauseControl = async (dataPlayPauseControl) => {
     const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
 
     const thumbPause = document.getElementById("thumbPause");
@@ -1334,7 +1349,7 @@ try {
           if (!resp) {
             if (!state.clickPlay) {
               const sendData = {
-                id_video: videoInfo?.id_video,
+                id_video: dataPlayPauseControl?.id_video,
                 id_sessao: globalState?.newSessionUserId,
                 lastSession: globalState?.loadedSessionUserFromStorage,
                 play: true,
@@ -1342,7 +1357,7 @@ try {
               sendData.clickButton = true;
               handleUpdateMetric(sendData);
               localStorage.setItem("clickPlay", true);
-              setClicks(videoInfo?.id_user);
+              setClicks(dataPlayPauseControl?.id_user);
             }
           }
         }
@@ -1359,7 +1374,7 @@ try {
       // videoElement.play();
       playPauseVideo();
 
-      if (videoInfo?.thumb) {
+      if (dataPlayPauseControl?.thumb) {
         thumbPause.style.display = "none";
 
         if (thumbButton) {
@@ -1367,7 +1382,7 @@ try {
         }
       }
 
-      if (videoInfo?.haveAutoPlay) {
+      if (dataPlayPauseControl?.haveAutoPlay) {
         if (circleControl) circleControl.style.display = "none";
       }
 
@@ -1380,7 +1395,7 @@ try {
     } else {
       videoElement.pause();
 
-      if (videoInfo?.thumb) {
+      if (dataPlayPauseControl?.thumb) {
         thumbPause.style.display = "block";
 
         if (thumbButton) {
@@ -1388,7 +1403,7 @@ try {
         }
       }
 
-      if (videoInfo?.haveAutoPlay) {
+      if (dataPlayPauseControl?.haveAutoPlay) {
         if (circleControl) circleControl.style.display = "flex";
       }
 
@@ -1713,7 +1728,7 @@ try {
   };
 
   //--------------------------------------------------------------------------
-  const createSmallAutoPlay = () => {
+  const createSmallAutoPlay = (dataSmallAutoPlay) => {
     const autoPlayFullContainerVideo = document.createElement("div");
     const autoPlayContainer = document.createElement("div");
     const imgSound = document.createElement("div");
@@ -1733,19 +1748,19 @@ try {
     imgSound.style.maskSize = "contain";
     imgSound.style.width = "30px";
     imgSound.style.height = "30px";
-    imgSound.style.backgroundColor = videoInfo?.autoplayIconColor ?? "#fff";
+    imgSound.style.backgroundColor = dataSmallAutoPlay?.autoplayIconColor ?? "#fff";
     imgSound.id = "iconSound";
     imgSound.style.marginTop = 3;
     imgSound.style.marginBottom = 3;
 
-    if (videoInfo?.havePulse) {
+    if (dataSmallAutoPlay?.havePulse) {
       autoPlayContainer.style.animation =
         "miniAutoPlayPulseVSL 1350ms infinite";
     }
 
     superiorText.textContent =
-      videoInfo?.textSuperior !== ""
-        ? videoInfo?.textSuperior
+      dataSmallAutoPlay?.textSuperior !== ""
+        ? dataSmallAutoPlay?.textSuperior
         : "Clique para ouvir";
 
     superiorText.className = "text-button";
@@ -1753,20 +1768,20 @@ try {
     autoPlayContainer.style.alignItems = "center";
     autoPlayContainer.style.position = "absolute";
 
-    if (!videoInfo?.haveAoVivo) {
+    if (!dataSmallAutoPlay?.haveAoVivo) {
       autoPlayContainer.style.left = "3%";
     }
-    if (videoInfo?.haveAoVivo) {
+    if (dataSmallAutoPlay?.haveAoVivo) {
       autoPlayContainer.style.left = "auto";
       autoPlayContainer.style.right = "3%";
     }
 
-    autoPlayContainer.style.display = videoInfo?.haveForm ? "none" : "flex";
-    if (videoInfo?.checkedCaptureTimer)
+    autoPlayContainer.style.display = dataSmallAutoPlay?.haveForm ? "none" : "flex";
+    if (dataSmallAutoPlay?.checkedCaptureTimer)
       autoPlayContainer.style.display = "flex";
     autoPlayContainer.style.top = "5%";
-    autoPlayContainer.style.backgroundColor = videoInfo?.cor;
-    autoPlayContainer.style.color = videoInfo?.corText;
+    autoPlayContainer.style.backgroundColor = dataSmallAutoPlay?.cor;
+    autoPlayContainer.style.color = dataSmallAutoPlay?.corText;
     autoPlayContainer.style.alignItems = "center";
     autoPlayContainer.style.padding = "0 10px";
     autoPlayContainer.style.borderRadius = "5px";
@@ -1779,11 +1794,11 @@ try {
       autoPlayContainer.style.display = "none";
     }
 
-    if (videoInfo?.haveBorderWhite) {
+    if (dataSmallAutoPlay?.haveBorderWhite) {
       autoPlayContainer.style.border = `1px solid #fff`;
     }
 
-    superiorText.style.color = videoInfo?.corText;
+    superiorText.style.color = dataSmallAutoPlay?.corText;
     superiorText.style.fontWeight = 500;
     superiorText.style.fontSize = "0.85rem";
     superiorText.style.minWidth = "105px";
@@ -1803,7 +1818,7 @@ try {
   };
 
   //----------------------------------------------------------------------------
-  const createLargeAutoPlay = () => {
+  const createLargeAutoPlay = (dataLargeAutoPlay) => {
     const formOnScreen = localStorage.getItem("formOnScreen");
 
     const autoPlayFullContainerVideo = document.createElement("div");
@@ -1820,9 +1835,9 @@ try {
 
     largeAutoPlay.id = "unmute-large";
     largeAutoPlay.style.backgroundColor =
-      videoInfo?.videoInfo?.cor ?? "rgba(0, 170, 255, 0.46)";
+      dataLargeAutoPlay?.cor ?? "rgba(0, 170, 255, 0.46)";
     largeAutoPlay.style.color = "#fff";
-    largeAutoPlay.style.border = videoInfo?.haveBorderWhite
+    largeAutoPlay.style.border = dataLargeAutoPlay?.haveBorderWhite
       ? "1px solid #fff"
       : "none";
     largeAutoPlay.style.borderRadius = "5px";
@@ -1837,7 +1852,7 @@ try {
     largeAutoPlay.style.top = "50%";
     largeAutoPlay.style.left = "50%";
     largeAutoPlay.style.transform = "translate(-50%, -50%)";
-    largeAutoPlay.style.animation = videoInfo?.havePulse
+    largeAutoPlay.style.animation = dataLargeAutoPlay?.havePulse
       ? "autoPlayPulseVSL 1350ms infinite"
       : "none";
 
@@ -1848,18 +1863,18 @@ try {
     playIcon.classList.add("fa-regular");
     playIcon.classList.add("fa-circle-play");
     playIcon.style.fontSize = "6.25rem";
-    playIcon.style.color = videoInfo?.autoplayIconColor ?? "#fff";
+    playIcon.style.color = dataLargeAutoPlay?.autoplayIconColor ?? "#fff";
 
     const textSpan = document.createElement("span");
 
     textSpan.id = "text_span_large";
     textSpan.style.fontSize = "1.125rem";
     textSpan.style.fontWeight = 600;
-    textSpan.style.color = videoInfo?.corText;
+    textSpan.style.color = dataLargeAutoPlay?.corText;
     textSpan.style.marginTop = "1.125rem";
     textSpan.textContent =
-      videoInfo?.textInferior !== ""
-        ? videoInfo?.textInferior
+      dataLargeAutoPlay?.textInferior !== ""
+        ? dataLargeAutoPlay?.textInferior
         : "Clique para ouvir";
 
     const largeAutoPlayStyle = document.createElement("style");
@@ -1947,7 +1962,7 @@ try {
   };
 
   //------------------------------------------------------------------------
-  const createTransparentAutoPlay = () => {
+  const createTransparentAutoPlay = (dataTransparentAutoPlay) => {
     const formOnScreen = localStorage.getItem("formOnScreen");
 
     const autoPlayFullContainerVideo = document.createElement("div");
@@ -1978,7 +1993,7 @@ try {
     transparentAutoPlay.style.top = "50%";
     transparentAutoPlay.style.left = "50%";
     transparentAutoPlay.style.transform = "translate(-50%, -50%)";
-    transparentAutoPlay.style.animation = videoInfo?.havePulse
+    transparentAutoPlay.style.animation = dataTransparentAutoPlay?.havePulse
       ? "autoPlayPulseVSL 1350ms infinite"
       : "none";
 
@@ -1988,7 +2003,7 @@ try {
     playIcon.classList.add("fa-solid");
     playIcon.classList.add("fa-play");
     playIcon.style.fontSize = "3.5rem";
-    playIcon.style.color = videoInfo?.autoplayIconColor ?? "#fff";
+    playIcon.style.color = dataTransparentAutoPlay?.autoplayIconColor ?? "#fff";
     playIcon.style.textShadow = "rgba(0, 0, 0, 0.7) 1px 1px 2px";
 
     const textSpan = document.createElement("span");
@@ -1996,11 +2011,11 @@ try {
     textSpan.id = "text_span_transparent";
     textSpan.style.fontSize = "1.125rem";
     textSpan.style.fontWeight = 600;
-    textSpan.style.color = videoInfo?.corText;
+    textSpan.style.color = dataTransparentAutoPlay?.corText;
     textSpan.style.marginTop = "1.25rem";
     textSpan.textContent =
       videoInfo?.textInferior !== ""
-        ? videoInfo?.textInferior
+        ? dataTransparentAutoPlay?.textInferior
         : "Seu vídeo já começou";
     textSpan.style.textShadow = "rgba(0, 0, 0, 0.7) 1px 1px 2px";
 
@@ -2035,7 +2050,7 @@ try {
   };
 
   //-------------------------------------------------------------------------
-  const createEyeBlurAutoPlay = () => {
+  const createEyeBlurAutoPlay = (dataEyeBlurAutoPlay) => {
     const formOnScreen = localStorage.getItem("formOnScreen");
 
     const autoPlayFullContainerVideo = document.createElement("div");
@@ -2070,7 +2085,7 @@ try {
     playIcon.classList.add("fa-regular");
     playIcon.classList.add("fa-eye-slash");
     playIcon.style.fontSize = "3rem";
-    playIcon.style.color = videoInfo?.autoplayIconColor ?? "#fff";
+    playIcon.style.color = dataEyeBlurAutoPlay?.autoplayIconColor ?? "#fff";
 
     const titleSpan = document.createElement("span");
 
@@ -2078,14 +2093,14 @@ try {
     titleSpan.style.fontSize = "1.25rem";
     titleSpan.style.maxWidth = "70%";
     titleSpan.style.fontWeight = 500;
-    titleSpan.style.color = videoInfo?.corText;
+    titleSpan.style.color = dataEyeBlurAutoPlay?.corText;
     titleSpan.style.marginTop = "1rem";
-    titleSpan.style.animation = videoInfo?.havePulse
+    titleSpan.style.animation = dataEyeBlurAutoPlay?.havePulse
       ? "3500ms ease 0s infinite normal none running pulseTextVSL"
       : "none";
     titleSpan.textContent =
-      videoInfo?.textSuperior !== ""
-        ? videoInfo?.textSuperior
+      dataEyeBlurAutoPlay?.textSuperior !== ""
+        ? dataEyeBlurAutoPlay?.textSuperior
         : "Conteúdo Sensível";
 
     const textSpan = document.createElement("span");
@@ -2093,14 +2108,14 @@ try {
     textSpan.id = "text_span_eyeBlur";
     textSpan.style.fontSize = "1.025rem";
     textSpan.style.maxWidth = "70%";
-    textSpan.style.color = videoInfo?.corText;
+    textSpan.style.color = dataEyeBlurAutoPlay?.corText;
     textSpan.style.marginTop = "0.5rem";
-    textSpan.style.animation = videoInfo?.havePulse
+    textSpan.style.animation = dataEyeBlurAutoPlay?.havePulse
       ? "3500ms ease 0s infinite normal none running pulseTextVSL"
       : "none";
     textSpan.textContent =
-      videoInfo?.textInferior !== ""
-        ? videoInfo?.textInferior
+      dataEyeBlurAutoPlay?.textInferior !== ""
+        ? dataEyeBlurAutoPlay?.textInferior
         : "Este vídeo apresenta conteúdo que os grandes produtores não querem que você assista!";
 
     const eyeBlurAutoPlayStyle = document.createElement("style");
@@ -2182,7 +2197,7 @@ try {
   };
 
   //-----------------------------------------------------------------------
-  const createFullScreenAutoPlay = () => {
+  const createFullScreenAutoPlay = (dataFullScreenAutoPlay) => {
     const formOnScreen = localStorage.getItem("formOnScreen");
 
     const autoPlayFullContainerVideo = document.createElement("div");
@@ -2198,7 +2213,7 @@ try {
     const fullScreenAutoPlay = document.createElement("button");
 
     fullScreenAutoPlay.id = "unmute-fullscreen";
-    fullScreenAutoPlay.style.backgroundColor = videoInfo?.cor;
+    fullScreenAutoPlay.style.backgroundColor = dataFullScreenAutoPlay?.cor;
     fullScreenAutoPlay.style.backdropFilter = "blur(10px)";
     fullScreenAutoPlay.style.color = "#fff";
     fullScreenAutoPlay.style.border = "none";
@@ -2217,7 +2232,7 @@ try {
     playIcon.style.width = "10%";
     playIcon.id = "iconSound";
     playIcon.style.margin = "1rem 0";
-    playIcon.style.animation = videoInfo?.havePulse
+    playIcon.style.animation = dataFullScreenAutoPlay?.havePulse
       ? "3500ms ease 0s infinite normal none running pulseTextVSL"
       : "none";
 
@@ -2227,14 +2242,14 @@ try {
     titleSpan.style.fontSize = "1.5rem";
     titleSpan.style.maxWidth = "70%";
     titleSpan.style.fontWeight = 500;
-    titleSpan.style.color = videoInfo?.corText;
+    titleSpan.style.color = dataFullScreenAutoPlay?.corText;
     titleSpan.style.marginTop = "1rem";
-    titleSpan.style.animation = videoInfo?.havePulse
+    titleSpan.style.animation = dataFullScreenAutoPlay?.havePulse
       ? "3500ms ease 0s infinite normal none running pulseTextVSL"
       : "none";
     titleSpan.textContent =
-      videoInfo?.textSuperior !== ""
-        ? videoInfo?.textSuperior
+      dataFullScreenAutoPlay?.textSuperior !== ""
+        ? dataFullScreenAutoPlay?.textSuperior
         : "Seu vídeo já começou";
 
     const textSpan = document.createElement("span");
@@ -2242,14 +2257,14 @@ try {
     textSpan.id = "text_span_fs";
     textSpan.style.fontSize = "1.25rem";
     textSpan.style.maxWidth = "70%";
-    textSpan.style.color = videoInfo?.corText;
+    textSpan.style.color = dataFullScreenAutoPlay?.corText;
     textSpan.style.marginTop = "0.5rem";
-    textSpan.style.animation = videoInfo?.havePulse
+    textSpan.style.animation = dataFullScreenAutoPlay?.havePulse
       ? "3500ms ease 0s infinite normal none running pulseTextVSL"
       : "none";
     textSpan.textContent =
-      videoInfo?.textInferior !== ""
-        ? videoInfo?.textInferior
+      dataFullScreenAutoPlay?.textInferior !== ""
+        ? dataFullScreenAutoPlay?.textInferior
         : "Ative o som";
 
     const fullScreenAutoPlayStyle = document.createElement("style");
@@ -2296,7 +2311,7 @@ try {
   };
 
   //-----------------------------------------------------------------------
-  const createAnimatedAutoPlay = () => {
+  const createAnimatedAutoPlay = (dataAnimatedAutoPlay) => {
     const formOnScreen = localStorage.getItem("formOnScreen");
 
     const autoPlayFullContainerVideo = document.createElement("div");
@@ -2312,7 +2327,7 @@ try {
     const fullScreenAutoPlay = document.createElement("button");
 
     fullScreenAutoPlay.id = "unmute-animated";
-    fullScreenAutoPlay.style.backgroundColor = videoInfo?.cor;
+    fullScreenAutoPlay.style.backgroundColor = dataAnimatedAutoPlay?.cor;
     fullScreenAutoPlay.style.backdropFilter = "blur(10px)";
     fullScreenAutoPlay.style.color = "#fff";
     fullScreenAutoPlay.style.border = "none";
@@ -2351,7 +2366,7 @@ try {
     playIcon.classList.add("fa-play");
     playIcon.style.fontSize = "2rem";
     playIcon.style.marginLeft = "7%";
-    playIcon.style.color = videoInfo?.autoplayIconColor ?? "#fff";
+    playIcon.style.color = dataAnimatedAutoPlay?.autoplayIconColor ?? "#fff";
     playIcon.style.textShadow = "rgba(0, 0, 0, 0.7) 1px 1px 2px";
 
     const textSpan = document.createElement("span");
@@ -2359,13 +2374,13 @@ try {
     textSpan.id = "text_span_animated";
     textSpan.style.fontSize = "1.25rem";
     textSpan.style.maxWidth = "70%";
-    textSpan.style.color = videoInfo?.corText;
+    textSpan.style.color = dataAnimatedAutoPlay?.corText;
     textSpan.textContent =
-      videoInfo?.textSuperior !== ""
-        ? videoInfo?.textSuperior
+      dataAnimatedAutoPlay?.textSuperior !== ""
+        ? dataAnimatedAutoPlay?.textSuperior
         : "Seu vídeo já começou";
     textSpan.style.textShadow = "rgba(0, 0, 0, 0.7) 1px 1px 2px";
-    textSpan.style.animation = videoInfo?.havePulse
+    textSpan.style.animation = dataAnimatedAutoPlay?.havePulse
       ? "3500ms ease 0s infinite normal none running pulseTextVSL"
       : "none";
 
@@ -2380,7 +2395,7 @@ try {
           width: 85%;
           height: 85%;
           border: 6px solid rgba(255, 255, 255, 0.3);
-          border-top: 6px solid ${videoInfo?.autoplayIconColor ?? "#fff"};
+          border-top: 6px solid ${dataAnimatedAutoPlay?.autoplayIconColor ?? "#fff"};
           border-radius: 50%;
           animation: spin 3.5s linear infinite;
           z-index: 0;
@@ -2548,6 +2563,8 @@ try {
   };
   //--------------------------------------------------------------------------
   const createInitialThumb = (dataThumbInitial) => {
+    const existsThumbInitial = document.getElementById("thumbInitial");
+    if (existsThumbInitial) return
     const thumbInitial = document.createElement("img");
     thumbInitial.style.position = "absolute";
     thumbInitial.style.top = 0;
@@ -2784,7 +2801,7 @@ try {
   };
 
   //--------------------------------------------------------------------------
-  const createControls = async () => {
+  const createControls = async (dataControls) => {
     // const videoElement = document.getElementById("my-video_html5_api");
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -2799,7 +2816,7 @@ try {
 
     const control__timer = {
       display: "flex",
-      color: `${videoInfo?.controlColorIcon}`,
+      color: `${dataControls?.controlColorIcon}`,
       marginLeft: "10px",
       width: "25%",
     };
@@ -2816,11 +2833,11 @@ try {
     containerControl.style.left = 0;
     containerControl.style.right = 0;
 
-    if (!videoInfo?.checkedCaptureTimer) {
-      containerControl.style.display = videoInfo?.haveForm ? "none" : "flex";
+    if (!dataControls?.checkedCaptureTimer) {
+      containerControl.style.display = dataControls?.haveForm ? "none" : "flex";
     }
 
-    if (videoInfo?.checkedCaptureTimer) {
+    if (dataControls?.checkedCaptureTimer) {
       containerControl.style.display = "flex";
     }
 
@@ -2859,10 +2876,10 @@ try {
     progressControl.style.overflow = "hidden";
     progressControl.style.setProperty(
       "--webkit-progress-value-bg-color",
-      videoInfo?.controlColor
+      dataControls?.controlColor
     );
 
-    const color = videoInfo?.controlColor.split(",");
+    const color = dataControls.controlColor.split(",");
     const newColor = color.slice(0, 3).join(",") + ", 0.5)";
     progressControl.style.setProperty("--webkit-progress-bg-color", newColor);
 
@@ -2870,7 +2887,7 @@ try {
     progressTracker.id = "progress_tracker";
     progressTracker.style.width = "0%";
     progressTracker.style.height = "100%";
-    progressTracker.style.backgroundColor = videoInfo?.controlColor;
+    progressTracker.style.backgroundColor = dataControls?.controlColor;
     progressTracker.style.position = "absolute";
     progressTracker.style.top = "0";
     progressTracker.style.left = "5px";
@@ -2881,7 +2898,7 @@ try {
     progressThumb.id = "progress_thumb";
     progressThumb.style.width = "10px";
     progressThumb.style.height = "10px";
-    progressThumb.style.backgroundColor = videoInfo?.controlColor;
+    progressThumb.style.backgroundColor = dataControls?.controlColor;
     progressThumb.style.borderRadius = "50%";
     progressThumb.style.position = "absolute";
     progressThumb.style.top = "50%";
@@ -2907,7 +2924,7 @@ try {
 
     const sliderContainer = document.createElement("div");
 
-    sliderContainer.style.display = videoInfo?.haveProgresso ? "flex" : "none";
+    sliderContainer.style.display = dataControls?.haveProgresso ? "flex" : "none";
     sliderContainer.style.position = "relative";
     sliderContainer.style.justifyContent = "center";
 
@@ -2916,20 +2933,22 @@ try {
 
     bottomContainer.appendChild(sliderContainer);
 
-    if (videoInfo?.haveBigPlay) {
+    console.log("TTTTTTT", dataControls)
+
+    if (dataControls?.haveBigPlay) {
       const circle = document.createElement("div");
       circle.id = "circle_control";
-      circle.style.backgroundColor = videoInfo?.controlColor;
+      circle.style.backgroundColor = dataControls?.ontrolColor;
       circle.style.display = "block";
       circle.style.position = "absolute";
       circle.style.zIndex = 5;
-      if (!videoInfo?.haveBigPlay) {
+      if (!dataControls?.haveBigPlay) {
         circle.style.width = "65px";
         circle.style.height = "65px";
         circle.style.fontSize = "40px";
       }
 
-      if (videoInfo?.haveBigPlay) {
+      if (dataControls?.haveBigPlay) {
         circle.style.width = "80px";
         circle.style.height = "80px";
         circle.style.fontSize = "50px";
@@ -2945,7 +2964,7 @@ try {
       circle.style.alignItems = "center";
       circle.style.border = "none";
       circle.style.transform = "translate(-50%, -50%)";
-      circle.style.color = videoInfo?.controlColorIcon;
+      circle.style.color = dataControls?.controlColorIcon;
 
       const play = document.createElement("i");
       play.id = "icon_play_control";
@@ -2954,7 +2973,7 @@ try {
       play.style.marginLeft = "7%";
       play.style.fontSize = "2rem";
 
-      if (videoInfo?.haveAutoPlay) {
+      if (dataControls?.haveAutoPlay) {
         play.style.display = "none";
       }
 
@@ -2964,18 +2983,18 @@ try {
       pause.classList.add("fa-pause");
       pause.style.fontSize = "2rem";
 
-      if (!videoInfo?.haveAutoPlay) {
+      if (!dataControls?.haveAutoPlay) {
         pause.style.display = "none";
       }
 
       circle.appendChild(play);
       circle.appendChild(pause);
-      circle.addEventListener("click", handlePlayPauseControl);
+      circle.addEventListener("click", () => handlePlayPauseControl(dataControls));
 
       middleContainer.appendChild(circle);
     }
 
-    if (videoInfo?.haveSmallPlay) {
+    if (dataControls?.haveSmallPlay) {
       const playBottomControl = document.createElement("i");
       playBottomControl.id = "icon_play_bottom_control";
       playBottomControl.classList.add("fa-solid");
@@ -2990,19 +3009,19 @@ try {
     pauseBottomControl.classList.add("fa-pause");
     pauseBottomControl.style.display = "none";
 
-    playPauseContainer.style.color = videoInfo?.controlColorIcon;
+    playPauseContainer.style.color = dataControls?.controlColorIcon;
     playPauseContainer.style.fontSize = "16px";
     playPauseContainer.style.cursor = "pointer";
 
     const rewindContainer = document.createElement("div");
-    rewindContainer.style.display = !videoInfo?.haveRewind && "none";
+    rewindContainer.style.display = !dataControls?.haveRewind && "none";
     const rewindBottomControl = document.createElement("i");
     rewindBottomControl.classList.add("fa-solid");
     rewindBottomControl.classList.add("fa-backward");
     rewindContainer.appendChild(rewindBottomControl);
 
     const forwardContainer = document.createElement("div");
-    forwardContainer.style.display = !videoInfo?.haveSkip && "none";
+    forwardContainer.style.display = !dataControls?.haveSkip && "none";
     const forwardBottomControl = document.createElement("i");
     forwardBottomControl.classList.add("fa-solid");
     forwardBottomControl.classList.add("fa-forward");
@@ -3010,7 +3029,7 @@ try {
     const mutedContainer = document.createElement("div");
     mutedContainer.id = "muted_container";
 
-    mutedContainer.style.display = !videoInfo?.haveVolume && "none";
+    mutedContainer.style.display = !dataControls?.haveVolume && "none";
 
     const mutedBottomControl = document.createElement("i");
     mutedBottomControl.id = "icon_muted_bottom_control";
@@ -3025,13 +3044,13 @@ try {
     unmutedBottomControl.classList.add("fa-volume-high");
     mutedContainer.appendChild(unmutedBottomControl);
 
-    rewindContainer.style.color = videoInfo?.controlColorIcon;
+    rewindContainer.style.color = dataControls?.controlColorIcon;
     rewindContainer.style.fontSize = "16px";
     rewindContainer.style.cursor = "pointer";
-    forwardContainer.style.color = videoInfo?.controlColorIcon;
+    forwardContainer.style.color = dataControls?.controlColorIcon;
     forwardContainer.style.fontSize = "16px";
     forwardContainer.style.cursor = "pointer";
-    mutedContainer.style.color = videoInfo?.controlColorIcon;
+    mutedContainer.style.color = dataControls?.controlColorIcon;
     mutedContainer.style.fontSize = "16px";
     mutedContainer.style.cursor = "pointer";
     mutedContainer.addEventListener("click", handleMute);
@@ -3040,8 +3059,8 @@ try {
 
     const timerContainer = document.createElement("div");
     timerContainer.classList.add("control__timer");
-    timerContainer.style.display = !videoInfo?.haveTempoAtual && "none";
-    timerContainer.style.color = videoInfo?.controlColorIcon;
+    timerContainer.style.display = !dataControls?.haveTempoAtual && "none";
+    timerContainer.style.color = dataControls?.controlColorIcon;
     timerContainer.style.fontSize = "14px";
 
     const timer = document.createElement("span");
@@ -3060,7 +3079,7 @@ try {
 
     duration.margin = "0";
 
-    if (videoInfo?.haveAutoPlay) {
+    if (dataControls?.haveAutoPlay) {
       bottomContainer.style.display = "none";
     }
 
@@ -3092,12 +3111,13 @@ try {
     if (isMobile) {
       controlsFullContainerVideo.addEventListener("click", handleMouseMove);
     }
-    playPauseContainer.addEventListener("click", handlePlayPauseControl);
+    playPauseContainer.addEventListener("click", () => handlePlayPauseControl(dataControls));
     progressControl.addEventListener("click", seek);
 
     videoContainer.appendChild(controlsFullContainerVideo);
   };
 
+  console.log("PPPPP", videoInfo)
   //-----------------------------------------------------------------------------
   const handleContinue = async (container) => {
     // const videoElement = document.getElementById("my-video_html5_api");
@@ -3114,7 +3134,6 @@ try {
 
     const time = localStorage.getItem("time");
     videoElement.currentTime = time;
-    // videoElement.play();
     playPauseVideo();
 
     if (circle) circle.style.visibility = "hidden";
@@ -3124,7 +3143,7 @@ try {
     if (circlePauseBottom) circlePauseBottom.style.display = "block";
     if (controlsContainer) controlsContainer.style.visibility = "visible";
 
-    if (videoInfo?.haveAutoPlay && !videoInfo?.haveControls) {
+    if (videoInfo?.data?.haveAutoPlay && !videoInfo?.data?.haveControls) {
       // createCirclePlay();
     }
 
@@ -3187,7 +3206,6 @@ try {
     continueContainer.style.flexDirection = "column";
 
     continueContainer.style.gap = "1rem";
-
     if (videoInfo?.haveBorder) {
       continueContainer.style.border = `2px solid ${videoInfo?.borderColor}`;
     }
@@ -3281,6 +3299,7 @@ try {
     continueButton.appendChild(continueTextButton);
 
     //create a event when the user click in the continueButton the video will play the saved value
+    console.log("JJJJJJJJJJ", videoInfo)
     continueButton.addEventListener("click", () =>
       handleContinue(continueContainer)
     );
@@ -4896,7 +4915,7 @@ try {
   };
 
   //--------------------------------------------------------------------------
-  const createCirclePlay = async () => {
+  const createCirclePlay = async (dataCirclePlay) => {
     const haveCicleContainer = document.getElementById("circle-container");
     if (haveCicleContainer) return
     const circleContainer = document.createElement("div");
@@ -4908,9 +4927,11 @@ try {
     circleContainer.style.position = "absolute";
     circleContainer.style.zIndex = 5;
 
+    console.log("SSSSS", dataCirclePlay)
+
     const circle = document.createElement("div");
     circle.id = "circle";
-    circle.style.backgroundColor = videoInfo?.data?.cor;
+    circle.style.backgroundColor = dataCirclePlay?.cor;
     circle.style.display = "flex";
     circle.style.position = "absolute";
     circle.style.width = "65px";
@@ -4927,11 +4948,9 @@ try {
     circle.style.fontSize = "80px";
     circle.style.color = "#fff";
 
-    if (!videoInfo?.haveControls && !videoInfo?.haveAutoPlay) {
-      console.log("11111111")
+    if (!dataCirclePlay?.haveControls && !dataCirclePlay?.haveAutoPlay) {
       circle.style.visibility = "visible";
     } else {
-      console.log("22222222")
       circle.style.visibility = "hidden";
     }
 
@@ -4947,8 +4966,7 @@ try {
     pause.classList.add("fa-solid");
     pause.classList.add("fa-pause");
     pause.style.fontSize = "2rem";
-
-    if (!videoInfo?.haveControls && !videoInfo?.haveAutoPlay) {
+    if (!dataCirclePlay?.haveControls && !dataCirclePlay?.haveAutoPlay) {
       pause.style.display = "none";
     }
 
@@ -4959,7 +4977,7 @@ try {
 
     videoContainer.appendChild(circleContainer);
 
-    circleContainer.addEventListener("click", handlePlayPause);
+    circleContainer.addEventListener("click", () => handlePlayPause(dataCirclePlay));
   };
 
   //--------------------------------------------------------------------------
@@ -5235,6 +5253,7 @@ try {
       const response = await api.json();
       videoId = response.data.id_video
       videoInfo = response.data.video
+      console.log({ videoInfo })
       PlayNewVideo(videoInfo.video)
     }
 
@@ -5247,6 +5266,7 @@ try {
       const turboIdVideo = turboJSON?.data.id_video;
 
       videoInfo = await getVideoFromMongo(turboIdVideo);
+      console.log({ videoInfo })
       PlayNewVideo(videoInfo.data.video)
       return videoInfo;
     }
@@ -5319,7 +5339,13 @@ try {
   }
 
   function newVideoConfigApply() {
-    createVideo(videoInfo.data)
+    console.log("FFFFF", videoInfo)
+    if (videoInfo?.data) {
+      createVideo(videoInfo?.data)
+
+    } else {
+      createVideo(videoInfo)
+    }
   }
   //--------------------------------------------------------------------------
 
