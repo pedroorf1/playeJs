@@ -811,6 +811,8 @@ try {
   };
   //----------------------------------------------------------------------------
   const createAutoPlay = (createAutoPlayDataVideo) => {
+    const exists = document.getElementById('unmute-container')
+    if (exists) return
     const autoPlayFullContainerVideo = document.createElement("div");
     const autoPlayContainer = document.createElement("div");
     const formOnScreen = localStorage.getItem("formOnScreen");
@@ -910,6 +912,8 @@ try {
     videoElement.style.width = "100%";
     videoElement.style.height = "100%";
     videoElement.setAttribute("crossorigin", "anonymous");
+    videoElement.muted = true
+    videoElement.play()
     const isIOS = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
@@ -1183,11 +1187,22 @@ try {
     const circlePlay = document.getElementById("icon_play_control");
     const circlePause = document.getElementById("icon_pause_control");
 
+    const unMuteButton = document.getElementById("unmute-container");
+    const unMuteButtonSmall = document.getElementById("unSmall-container");
+    const unMuteButtonCustom = document.getElementById("unmute-custom");
+
     // if (thumbInitial) thumbInitial.remove()
     if (thumbInitial) thumbInitial.style.display = "none";
+    if (unMuteButton) unMuteButton.remove();
+    if (unMuteButtonSmall) unMuteButtonSmall.remove();
+    if (unMuteButtonCustom) unMuteButtonCustom.remove();
+
+    const autoPlayContainer = document.getElementById("unmute-container");
+    if (autoPlayContainer) autoPlayContainer.remove();
 
     if (!formOnScreen) {
       if (isAuto) {
+
       } else {
         await Promise.resolve(localStorage.getItem("clickPlay")).then(
           (resp) => {
@@ -1325,6 +1340,12 @@ try {
     const circleControl = document.getElementById("circle_control");
     const durationElement = document.getElementById("duration");
 
+
+    const autoPlayContainer = document.getElementById("unmute-container");
+    if (autoPlayContainer) autoPlayContainer.remove();
+
+
+
     if (isAuto) {
       handleUnmuteRestart();
       return;
@@ -1368,6 +1389,7 @@ try {
       }
 
       if (dataPlayPauseControl?.haveAutoPlay) {
+        console.log("dataPlayPauseControl", dataPlayPauseControl)
         if (circleControl) circleControl.style.display = "none";
       }
 
@@ -1418,6 +1440,13 @@ try {
       "icon_pause_bottom_control"
     );
 
+    const autoPlayContainer = document.getElementById("unmute-container");
+    if (autoPlayContainer) {
+      autoPlayContainer.remove()
+      const dataTocicle = { ...videoInfo.data, haveAutoPlay: false }
+      createCirclePlay(dataTocicle)
+    };
+
     await Promise.resolve(localStorage.getItem("clickPlay")).then((resp) => {
       if (!resp) {
         if (!state.clickPlay) {
@@ -1446,15 +1475,12 @@ try {
     state.notCountingAutoPlay = true;
 
     if (videoInfo?.haveAutoPlay) {
-      if (unMuteButton) unMuteButton.remove();
-      if (unMuteButtonSmall) unMuteButtonSmall.remove();
-      if (unMuteButtonCustom) unMuteButtonCustom.remove();
       await Promise.resolve(localStorage.getItem("circlePlay")).then(
         (res) => {
           if (!res) {
             if (!state.circlePlay) {
               localStorage.setItem("circlePlay", true);
-              // createCirclePlay();
+              createCirclePlay(videoInfo);
             }
           }
         }
@@ -1462,7 +1488,7 @@ try {
     }
 
     if (videoInfo?.haveControls) {
-      // createControls();
+      createControls();
       if (circlePlay) circlePlay.style.display = "none";
       if (circlePause) circlePause.style.display = "block";
 
@@ -1667,6 +1693,8 @@ try {
     const imgSound = document.createElement("img");
     isAuto = true;
     autoPlayContainer.addEventListener("click", handleUnmuteRestart);
+
+    console.log("AutoplayContainer", videoInfo)
 
     autoPlayContainer.id = "unmute";
     autoPlayContainer.src = videoInfo?.customImage;
@@ -2036,6 +2064,9 @@ try {
 
   //-------------------------------------------------------------------------
   const createEyeBlurAutoPlay = (dataEyeBlurAutoPlay) => {
+    const exists = document.getElementById('unmute-container')
+    if (exists) return
+
     const formOnScreen = localStorage.getItem("formOnScreen");
 
     const autoPlayFullContainerVideo = document.createElement("div");
@@ -2183,6 +2214,8 @@ try {
 
   //-----------------------------------------------------------------------
   const createFullScreenAutoPlay = (dataFullScreenAutoPlay) => {
+    const exists = document.getElementById('unmute-container')
+    if (exists) return
     const formOnScreen = localStorage.getItem("formOnScreen");
 
     const autoPlayFullContainerVideo = document.createElement("div");
@@ -2297,6 +2330,8 @@ try {
 
   //-----------------------------------------------------------------------
   const createAnimatedAutoPlay = (dataAnimatedAutoPlay) => {
+    const exists = document.getElementById('unmute-container')
+    if (exists) return
     const formOnScreen = localStorage.getItem("formOnScreen");
 
     const autoPlayFullContainerVideo = document.createElement("div");
@@ -2787,7 +2822,8 @@ try {
 
   //--------------------------------------------------------------------------
   const createControls = async (dataControls) => {
-    // const videoElement = document.getElementById("my-video_html5_api");
+    const exists = document.getElementById("controls-container");
+    if (exists) return
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
 
     const controlsFullContainerVideo = document.createElement("div");
@@ -2969,11 +3005,9 @@ try {
       if (!dataControls?.haveAutoPlay) {
         pause.style.display = "none";
       }
-
       circle.appendChild(play);
       circle.appendChild(pause);
       circle.addEventListener("click", () => handlePlayPauseControl(dataControls));
-
       middleContainer.appendChild(circle);
     }
 
@@ -3125,7 +3159,7 @@ try {
     if (controlsContainer) controlsContainer.style.visibility = "visible";
 
     if (videoInfo?.data?.haveAutoPlay && !videoInfo?.data?.haveControls) {
-      // createCirclePlay();
+      createCirclePlay(videoInfo?.data);
     }
 
     await Promise.resolve(localStorage.getItem("clickPlay")).then((resp) => {
@@ -4896,6 +4930,7 @@ try {
 
   //--------------------------------------------------------------------------
   const createCirclePlay = async (dataCirclePlay) => {
+    console.log({ dataCirclePlay })
     const haveCicleContainer = document.getElementById("circle-container");
     if (haveCicleContainer) return
     const circleContainer = document.createElement("div");
@@ -5321,6 +5356,7 @@ try {
     } else {
       createVideo(videoInfo)
     }
+    console.log({ videoInfo })
   }
   //--------------------------------------------------------------------------
 
