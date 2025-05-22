@@ -474,7 +474,6 @@ try {
       } else {
         videoInfo = await getVideoFromMongo(videoId);
       }
-      console.log("GGGG", videoInfo)
       await createVideo(videoInfo?.data)
       window.domainData = await (await fetch("https://ipinfo.io?token=571af8f75fa0e9")).json();
       allowDomain = !!videoInfo?.video
@@ -787,9 +786,6 @@ try {
   //CREATE ELEMENTS============================================================================================================
 
   const createThumb = (dataThumb) => {
-
-    console.log("KKKKKK", dataThumb)
-
     const thumbPause = document.createElement("img");
     thumbPause.style.position = "absolute";
     thumbPause.style.zIndex = 1;
@@ -831,7 +827,6 @@ try {
     autoPlayFullContainerVideo.style.height = "100%";
     autoPlayFullContainerVideo.style.position = "absolute";
     autoPlayFullContainerVideo.style.zIndex = 4;
-    console.log("DDDDDDD", createAutoPlayDataVideo)
     autoPlayContainer.id = "unmute";
     imgSound.style.mask = `url(${sound}) no-repeat center`;
     imgSound.style.backgroundColor = createAutoPlayDataVideo?.autoplayIconColor ?? "#fff";
@@ -911,8 +906,6 @@ try {
   //--------------------------------------------------------------------------------
 
   const createVideo = async (dataVideo) => {
-    console.log("VVVVVVV", dataVideo)
-
     createCantRunVideoImage(false, controlsContainer);
     videoElement.style.width = "100%";
     videoElement.style.height = "100%";
@@ -974,7 +967,6 @@ try {
       videoElement.setAttribute("muted", "");
       videoElement.setAttribute("loop", "");
     }
-    console.log("RRRRRR", dataVideo)
     if (
       dataVideo?.haveAutoPlay &&
       !dataVideo?.customImage &&
@@ -1098,7 +1090,6 @@ try {
     }
 
     if (dataVideo?.thumb) {
-      console.log("UUUUU", dataVideo)
       createThumb(dataVideo);
     }
     if (
@@ -1120,7 +1111,6 @@ try {
     }
 
     if (!dataVideo?.haveAutoPlay && !dataVideo?.haveControls) {
-      console.log("WWWWWW", dataVideo)
       createCirclePlay(dataVideo);
     }
 
@@ -1182,8 +1172,6 @@ try {
 
   //---------------------------------------------------------------------------
   const handlePlayPause = async (dataPlayPause) => {
-
-    console.log("HHHHHHH", dataPlayPause)
     const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const formOnScreen = localStorage.getItem("formOnScreen");
     const thumbPause = document.getElementById("thumbPause");
@@ -1247,9 +1235,6 @@ try {
 
       if (videoElement?.paused) {
         playPauseVideo();
-        // if (thumbInitial) thumbInitial.style.display = "none";
-        console.log("thumbInitial", thumbInitial)
-        console.log("LLLLLLLL", dataPlayPause)
         if (dataPlayPause?.thumb) {
           if (thumbPause) thumbPause.style.display = "none";
           if (thumbButton) {
@@ -2933,8 +2918,6 @@ try {
 
     bottomContainer.appendChild(sliderContainer);
 
-    console.log("TTTTTTT", dataControls)
-
     if (dataControls?.haveBigPlay) {
       const circle = document.createElement("div");
       circle.id = "circle_control";
@@ -3116,8 +3099,6 @@ try {
 
     videoContainer.appendChild(controlsFullContainerVideo);
   };
-
-  console.log("PPPPP", videoInfo)
   //-----------------------------------------------------------------------------
   const handleContinue = async (container) => {
     // const videoElement = document.getElementById("my-video_html5_api");
@@ -3299,7 +3280,6 @@ try {
     continueButton.appendChild(continueTextButton);
 
     //create a event when the user click in the continueButton the video will play the saved value
-    console.log("JJJJJJJJJJ", videoInfo)
     continueButton.addEventListener("click", () =>
       handleContinue(continueContainer)
     );
@@ -4927,8 +4907,6 @@ try {
     circleContainer.style.position = "absolute";
     circleContainer.style.zIndex = 5;
 
-    console.log("SSSSS", dataCirclePlay)
-
     const circle = document.createElement("div");
     circle.id = "circle";
     circle.style.backgroundColor = dataCirclePlay?.cor;
@@ -5253,7 +5231,6 @@ try {
       const response = await api.json();
       videoId = response.data.id_video
       videoInfo = response.data.video
-      console.log({ videoInfo })
       PlayNewVideo(videoInfo.video)
     }
 
@@ -5266,7 +5243,6 @@ try {
       const turboIdVideo = turboJSON?.data.id_video;
 
       videoInfo = await getVideoFromMongo(turboIdVideo);
-      console.log({ videoInfo })
       PlayNewVideo(videoInfo.data.video)
       return videoInfo;
     }
@@ -5339,7 +5315,6 @@ try {
   }
 
   function newVideoConfigApply() {
-    console.log("FFFFF", videoInfo)
     if (videoInfo?.data) {
       createVideo(videoInfo?.data)
 
