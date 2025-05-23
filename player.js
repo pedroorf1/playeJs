@@ -1042,11 +1042,16 @@ try {
       if (!dataVideo?.noneControlsMoreAutoplay) {
         videoElement.addEventListener("click", () => handlePlayPause(dataVideo));
       }
-      videoElement.addEventListener("timeupdate", handleOnProgress);
+      videoElement.addEventListener("timeupdate", () => handleOnProgress(dataVideo));
       videoElement.addEventListener("timeupdate", progress);
 
       if (dataVideo?.thumbFinal) {
-        videoElement.addEventListener("ended", () => createFinalThumb(dataVideo));
+        console.log("FFFFFF", dataVideo)
+        videoElement.addEventListener("ended", () => {
+          console.log("VIDEO TERMINOU");
+          createFinalThumb(dataVideo)
+
+        });
       }
 
       videoElement.addEventListener("loadedmetadata", () => {
@@ -1224,21 +1229,22 @@ try {
         );
       }
 
+      console.log("TTTTT", dataPlayPause)
 
       if (!dataPlayPause?.haveControls && dataPlayPause?.haveFakeBar) {
-
+        console.log("SSSS")
         await Promise.resolve(sessionStorage.getItem("fakeBar")).then(
           (res) => {
+            console.log("MMMM")
+            createFakeBar(dataPlayPause);
             if (!res) {
               if (!state.fakeBar) {
                 sessionStorage.setItem("fakeBar", true);
-                createFakeBar();
-
-                // alert(videoElement.duration);
+                createFakeBar(dataPlayPause);
                 if (isMobile) {
                   videoElement.addEventListener(
                     "timeupdate",
-                    handleOnProgress
+                    () => handleOnProgress(dataPlayPause)
                   );
                   videoElement.addEventListener("mousemove", handleMouseMove);
                 }
@@ -1372,7 +1378,7 @@ try {
 
     if (isMobile) {
       durationElement.textContent = formatTime(videoElement.duration);
-      videoElement.addEventListener("timeupdate", handleOnProgress);
+      videoElement.addEventListener("timeupdate", () => handleOnProgress(dataPlayPauseControl));
       videoElement.addEventListener("mousemove", handleMouseMove);
     }
 
@@ -1510,10 +1516,10 @@ try {
         if (!res) {
           if (!state.fakeBar) {
             sessionStorage.setItem("fakeBar", true);
-            createFakeBar();
+            createFakeBar(videoInfo);
 
             if (isMobile) {
-              videoElement.addEventListener("timeupdate", handleOnProgress);
+              videoElement.addEventListener("timeupdate", () => handleOnProgress(videoInfo));
               videoElement.addEventListener("mousemove", handleMouseMove);
             }
           }
@@ -1536,7 +1542,7 @@ try {
   };
 
   //---------------------------------------------------------------------------
-  const handleOnProgress = async () => {
+  const handleOnProgress = async (dataOnProgress) => {
     const videoElement = document.querySelector("video");
     const progressElement = document.getElementById("progress");
     const progressTracker = document.getElementById("progress_tracker");
@@ -1549,7 +1555,7 @@ try {
     const aoVivo = document.getElementById("aoVivo");
     const thumbFinal = document.getElementById("thumbFinal");
 
-    if (videoInfo?.haveAutoPlay && isAuto) {
+    if (dataOnProgress?.haveAutoPlay && isAuto) {
       const bigThan10SecsVideo = videoElement.duration >= 10;
       const minorThanDuration = videoElement.duration - 1;
 
@@ -1570,7 +1576,7 @@ try {
       }
     }
 
-    if (videoInfo?.haveRestart) {
+    if (dataOnProgress?.haveRestart) {
       videoElement.addEventListener("ended", () => {
         // videoElement.play();
         playPauseVideo();
@@ -1594,10 +1600,10 @@ try {
 
     if (
       !formSent &&
-      videoInfo?.haveForm &&
-      videoInfo?.typeForm === "data-capture" &&
-      videoInfo?.checkedCaptureTimer &&
-      videoElement?.currentTime >= videoInfo?.haveTime
+      dataOnProgress?.haveForm &&
+      dataOnProgress?.typeForm === "data-capture" &&
+      dataOnProgress?.checkedCaptureTimer &&
+      videoElement?.currentTime >= dataOnProgress?.haveTime
     ) {
       localStorage.setItem("formOnScreen", true);
       if (unmute && unmute.style.display === "flex") return null;
@@ -2619,6 +2625,10 @@ try {
   };
   //====
   const createFinalThumb = (dataFinalThumb) => {
+    const exists = document.getElementById("thumbFinal")
+    if (exists) return
+
+    console.log({ dataFinalThumb })
     const thumbFinal = document.createElement("img");
     thumbFinal.style.position = "absolute";
     thumbFinal.style.top = 0;
@@ -2632,12 +2642,12 @@ try {
 
     thumbFinal.style.zIndex = 4;
     thumbFinal.id = "thumbFinal";
-    if (dataFinalThumb?.haveAutoPlay) {
-      thumbFinal.style.display = "none";
-    }
-    if (!dataFinalThumb?.haveAutoPlay) {
-      thumbFinal.style.display = "block";
-    }
+    // if (dataFinalThumb?.haveAutoPlay) {
+    //   thumbFinal.style.display = "none";
+    // }
+    // if (!dataFinalThumb?.haveAutoPlay) {
+    thumbFinal.style.display = "block";
+    // }
     thumbFinal.style.width = "100%";
     thumbFinal.style.height = "100%";
     thumbFinal.style.zIndex = 0;
@@ -4994,9 +5004,11 @@ try {
   };
 
   //--------------------------------------------------------------------------
-  const createFakeBar = () => {
+  const createFakeBar = (dataFakeBar) => {
     // const videoElement = document.getElementById("my-video_html5_api");
     const progressBar = document.createElement("progress");
+
+    console.log("fakeBar", dataFakeBar)
 
     progressBar.id = "progress";
     progressBar.className = "progress";
@@ -5011,10 +5023,10 @@ try {
     progressBar.style.bottom = "0";
     progressBar.style.setProperty(
       "--webkit-progress-value-bg-color",
-      videoInfo?.corBar
+      dataFakeBar?.corBar
     );
 
-    if (videoInfo?.haveBorderRadius) {
+    if (dataFakeBar?.haveBorderRadius) {
       progressBar.style.borderRadius = "0 0 12px 12px";
     }
 
