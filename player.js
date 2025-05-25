@@ -322,25 +322,26 @@ try {
     "data:image/svg+xml;base64,ICAgIDxzdmcgdmVyc2lvbj0iMS4xIiBmaWxsPSIjRkZGRkZGIiB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHhtbG5zOnhsaW5rPSJodHRwOi8vd3d3LnczLm9yZy8xOTk5L3hsaW5rIg0KICAgICAgICB4PSIwcHgiIHk9IjBweCIgd2lkdGg9IjQ2Ljc1cHgiIGhlaWdodD0iMzIuNTYzcHgiIHZpZXdCb3g9IjcuOTk5IDkuMDYyIDQ2Ljc1IDMyLjU2MyINCiAgICAgICAgZW5hYmxlLWJhY2tncm91bmQ9Im5ldyA3Ljk5OSA5LjA2MiA0Ni43NSAzMi41NjMiIHhtbDpzcGFjZT0icHJlc2VydmUiDQogICAgPg0KICAgICAgPHN0eWxlPg0KICAgICAgICBALXdlYmtpdC1rZXlmcmFtZXMgQkxJTksgew0KICAgICAgICAgIDAlIHsgb3BhY2l0eTogMDsgfQ0KICAgICAgICAgIDMzJSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgICAgICA2NiUgeyBvcGFjaXR5OiAxOyB9DQogICAgICAgICAgMTAwJSB7IG9wYWNpdHk6IDA7IH0NCiAgICAgICAgfQ0KDQogICAgICAgIEBrZXlmcmFtZXMgQkxJTksgew0KICAgICAgICAgIDAlIHsgb3BhY2l0eTogMDsgfQ0KICAgICAgICAgIDMzJSB7IG9wYWNpdHk6IDE7IH0NCiAgICAgICAgICA2NiUgeyBvcGFjaXR5OiAxOyB9DQogICAgICAgICAgMTAwJSB7IG9wYWNpdHk6IDA7IH0NCiAgICAgICAgfQ0KDQogICAgICAgIC5hbmltYXRpb24gLmJsaW5rXzEgew0KICAgICAgICAgIC13ZWJraXQtYW5pbWF0aW9uOiBCTElOSyAycyBpbmZpbml0ZTsNCiAgICAgICAgICBhbmltYXRpb246IEJMSU5LIDJzIGluZmluaXRlOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5ibGlua18yIHsNCiAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjNzOw0KICAgICAgICAgIGFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjNzOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5ibGlua18zIHsNCiAgICAgICAgICAtd2Via2l0LWFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjZzOw0KICAgICAgICAgIGFuaW1hdGlvbjogQkxJTksgMnMgaW5maW5pdGUgLjZzOw0KICAgICAgICAgIG9wYWNpdHk6IDA7DQogICAgICAgIH0NCg0KICAgICAgICAuYW5pbWF0aW9uIC5zbWFydHBsYXktc3ZnLWNvbG9yIHsNCiAgICAgICAgICBmaWxsOiAnI0ZGRkZGRicgIWltcG9ydGFudDsNCiAgICAgICAgfQ0KDQogICAgICAgIC5hbmltYXRpb24uYWRqdXN0YWJsZSB7DQogICAgICAgICAgYm9yZGVyOiA0cHggc29saWQgJyNGRkZGRkYnOw0KICAgICAgICB9DQogICAgICA8L3N0eWxlPg0KDQogICAgICA8ZyBjbGFzcz0iYWRqdXN0YWJsZSBmZyBhbmltYXRpb24iPg0KICAgICAgICA8cGF0aCBjbGFzcz0ic21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTUzLjI0OSwzOS42MTZjLTAuMTg2LDAtMC4zNzEtMC4wNTEtMC41MzctMC4xNTdsLTQzLjUtMjcuNzVjLTAuNDY2LTAuMjk3LTAuNjAzLTAuOTE2LTAuMzA2LTEuMzgxYzAuMjk4LTAuNDY2LDAuOTE3LTAuNjAxLDEuMzgxLTAuMzA2bDQzLjUsMjcuNzVjMC40NjcsMC4yOTcsMC42MDQsMC45MTYsMC4zMDcsMS4zODFDNTMuOTAxLDM5LjQ1Myw1My41NzksMzkuNjE2LDUzLjI0OSwzOS42MTZ6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18zIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik00OC44OTYsMzMuNDY3bDEuNjk5LDEuMDg1YzMuNDk3LTcuNzkxLDIuMDczLTE3LjI3MS00LjMxMy0yMy42NTljLTAuMzkxLTAuMzkxLTEuMDIzLTAuMzkxLTEuNDE0LDBzLTAuMzkxLDEuMDIzLDAsMS40MTRDNTAuNTgxLDE4LjAxOSw1MS45MTMsMjYuNDYzLDQ4Ljg5NiwzMy40Njd6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18zIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik00Ni45MjYsMzYuOTU2Yy0wLjYxMiwwLjg2My0xLjI4NiwxLjY5NS0yLjA1OSwyLjQ2OWMtMC4zOTIsMC4zOTEtMC4zOTIsMS4wMjMsMCwxLjQxNGMwLjE5NCwwLjE5NSwwLjQ1LDAuMjkzLDAuNzA3LDAuMjkzYzAuMjU2LDAsMC41MTItMC4wOTgsMC43MDYtMC4yOTNjMC44NzgtMC44NzgsMS42NDItMS44MjQsMi4zMzMtMi44MDdMNDYuOTI2LDM2Ljk1NnoiPjwvcGF0aD4NCiAgICAgICAgPHBhdGggY2xhc3M9ImJsaW5rXzIgc21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTQyLjU0MywyOS40MTVsMS43NzcsMS4xMzVjMS41NDUtNS4zMTUsMC4yMjktMTEuMjkzLTMuOTUzLTE1LjQ3NmMtMC4zOTItMC4zOTEtMS4wMjMtMC4zOTEtMS40MTQsMGMtMC4zOTIsMC4zOTEtMC4zOTIsMS4wMjMsMCwxLjQxNEM0Mi40NTQsMTkuOTg3LDQzLjYzOSwyNC45MjUsNDIuNTQzLDI5LjQxNXoiPjwvcGF0aD4NCiAgICAgICAgPHBhdGggY2xhc3M9ImJsaW5rXzIgc21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTQxLDMzLjE3NGMtMC41NjMsMC45NC0xLjIzNSwxLjgzNy0yLjA0NywyLjY0NmMtMC4zOTEsMC4zOTItMC4zOTEsMS4wMjMsMCwxLjQxNGMwLjE5NSwwLjE5NSwwLjQ1MSwwLjI5MywwLjcwNywwLjI5M3MwLjUxMi0wLjA5OCwwLjcwNy0wLjI5M2MwLjkxNi0wLjkxNCwxLjY3Ni0xLjkyNCwyLjMxNy0yLjk4NEw0MSwzMy4xNzR6Ij48L3BhdGg+DQogICAgICAgIDxwYXRoIGNsYXNzPSJibGlua18xIHNtYXJ0cGxheS1zdmctY29sb3IiIGQ9Ik0zNS43NzEsMjUuMDk0bDIuMDAzLDEuMjc3YzAuMDEyLTAuMjAzLDAuMDI5LTAuNDA0LDAuMDI5LTAuNjA5YzAtMy4wNzktMS4yLTUuOTc0LTMuMzgxLTguMTUzYy0wLjM5MS0wLjM5MS0xLjAyMi0wLjM5MS0xLjQxNCwwYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0QzM0LjY1MiwyMC42NjYsMzUuNjEzLDIyLjgwMiwzNS43NzEsMjUuMDk0eiI+PC9wYXRoPg0KICAgICAgICA8cGF0aCBjbGFzcz0iYmxpbmtfMSBzbWFydHBsYXktc3ZnLWNvbG9yIiBkPSJNMzUuMDg0LDI5LjQwMWMtMC40NzQsMS4xNDUtMS4xNzIsMi4xOTctMi4wNzYsMy4xYy0wLjM5MSwwLjM5MS0wLjM5MSwxLjAyMywwLDEuNDE0YzAuMTk1LDAuMTk1LDAuNDUxLDAuMjkzLDAuNzA3LDAuMjkzYzAuMjU3LDAsMC41MTMtMC4wOTgsMC43MDctMC4yOTNjMS4wMDgtMS4wMDYsMS43OTUtMi4xNywyLjM2MS0zLjQzTDM1LjA4NCwyOS40MDF6Ij48L3BhdGg+DQogICAgICAgIDxwb2x5Z29uIGNsYXNzPSJzbWFydHBsYXktc3ZnLWNvbG9yIiBwb2ludHM9IjI4LjEyNCwyMC4yMTUgMjguMTI0LDE0Ljk5MSAyNC42MzUsMTcuOTkgICI+PC9wb2x5Z29uPg0KICAgICAgICA8cGF0aCBjbGFzcz0ic21hcnRwbGF5LXN2Zy1jb2xvciIgZD0iTTIwLjkyMSwyMC4zNjZoLTYuNDIzYy0wLjU1MywwLTEsMC41MDgtMSwxLjEzNXY4LjIyOWMwLDAuNjI3LDAuNDQ3LDEuMTM1LDEsMS4xMzVoNy4zNzVsNi4yNSw1Ljg3NVYyNC45NkwyMC45MjEsMjAuMzY2eiI+PC9wYXRoPg0KICAgICAgPC9nPg0KICAgIDwvc3ZnPg0KICA=";
 
   window.globalState = {};
+
   let globalState = {};
   let videoUrl = "";
   let videoId = "";
+
   videoInfo = {}
   globalState.api = api_utl;
   globalState.clientHostOrigin = window.location.origin;
-  const HlS = "https://cdn.jsdelivr.net/npm/hls.js@latest";
+
   let isLeadTest = false;
   let leadTestMainContentVideo = "";
-  let allowDomain = true;
 
   let state = {
     countControl: 0,
     notCountingAutoPlay: false,
-    clickPlay: "",
-    fakeBar: "",
-    continueWLeftOff: "",
-    circlePlay: "",
-    iPhoneAutoPlay: "",
+    clickPlay: localStorage.getItem("clickPlay"),
+    fakeBar: sessionStorage.getItem("fakeBar"),
+    continueWLeftOff: localStorage.getItem("time"),
+    circlePlay: localStorage.getItem("circlePlay"),
+    iPhoneAutoPlay: sessionStorage.getItem("iPhoneAutoPlay"),
   };
 
   let isMobile = false;
@@ -491,15 +492,6 @@ try {
       })
 
       //============================ADD VIDEO STATS ===========================================================
-      let state = {
-        countControl: 0,
-        notCountingAutoPlay: false,
-        clickPlay: localStorage.getItem("clickPlay"),
-        fakeBar: sessionStorage.getItem("fakeBar"),
-        continueWLeftOff: localStorage.getItem("time"),
-        circlePlay: localStorage.getItem("circlePlay"),
-        iPhoneAutoPlay: sessionStorage.getItem("iPhoneAutoPlay"),
-      };
 
       //===========================================INTERFACE TOOLS===============================================
 
@@ -1046,9 +1038,7 @@ try {
       videoElement.addEventListener("timeupdate", progress);
 
       if (dataVideo?.thumbFinal) {
-        console.log("FFFFFF", dataVideo)
         videoElement.addEventListener("ended", () => {
-          console.log("VIDEO TERMINOU");
           createFinalThumb(dataVideo)
 
         });
@@ -1124,13 +1114,20 @@ try {
     }
 
     if (dataVideo?.haveContinue) {
+
+
+
+
       if (state.continueWLeftOff) {
+        console.log("HaveContinue:::", dataVideo?.typesContinue)
         switch (dataVideo?.typesContinue) {
           case "":
-            createContinueDefault();
+            console.log("createContinueDefault")
+            createContinueDefault(dataVideo);
             break;
           case "continueSmall":
-            createContinueSmall();
+            console.log("createContinueSmall")
+            createContinueSmall(dataVideo);
             break;
         }
       }
@@ -1184,11 +1181,9 @@ try {
     const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const formOnScreen = localStorage.getItem("formOnScreen");
     const thumbPause = document.getElementById("thumbPause");
-    const circleContainer = document.getElementById("circle-container");
+    // const circleContainer = document.getElementById("circle-container");
     const thumbInitial = document.getElementById("thumbInitial");
     const thumbButton = document.getElementById("idThumb");
-    const playElement = document.getElementById("icon_play");
-    const pauseElement = document.getElementById("icon_pause");
     const circlePlay = document.getElementById("icon_play_control");
     const circlePause = document.getElementById("icon_pause_control");
 
@@ -1263,51 +1258,7 @@ try {
             thumbButton.style.cursor = "pointer";
           }
         }
-        const circleElement = document.getElementById("circle");
-        circleContainer.style.cursor = 'pointer'
 
-        circleContainer.addEventListener('click', () => {
-          circleElement.style.visibility = "visible !important";
-          if (videoElement.paused) {
-            if (circlePlay) circlePlay.style.display = "block";
-            if (playElement) playElement.style.display = "block";
-            if (pauseElement) pauseElement.style.display = "none";
-            if (circlePause) circlePause.style.display = "none";
-          } else {
-            if (circlePlay) circlePlay.style.display = "none";
-            if (playElement) playElement.style.display = "none";
-            if (pauseElement) pauseElement.style.display = "block";
-            if (circlePause) circlePause.style.display = "block";
-          }
-        })
-        circleContainer.addEventListener('mousemove', () => {
-          circleElement.style.visibility = "visible"
-          if (videoElement.paused) {
-            if (circlePlay) circlePlay.style.display = "block";
-            if (playElement) playElement.style.display = "block";
-            if (pauseElement) pauseElement.style.display = "none";
-            if (circlePause) circlePause.style.display = "none";
-          } else {
-            if (circlePlay) circlePlay.style.display = "none";
-            if (playElement) playElement.style.display = "none";
-            if (pauseElement) pauseElement.style.display = "block";
-            if (circlePause) circlePause.style.display = "block";
-          }
-          circleElement.style.visibility = "visible";
-        })
-        circleContainer.addEventListener('mouseout', () => {
-          circleElement.style.visibility = "hidden";
-        })
-
-        videoElement.addEventListener('play', () => {
-          console.log('O vídeo começou a tocar.');
-          analysisInterval = setInterval(() => {
-
-            if (!videoElement.paused) {
-              if (circleElement) circleElement.style.visibility = "hidden";
-            }
-          }, 5000);
-        });
       } else {
         videoElement.pause();
         if (dataPlayPause?.thumb) {
@@ -1431,10 +1382,6 @@ try {
   const handleUnmuteRestart = async () => {
     const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const containerControl = document.getElementById("container_controls");
-    const unMuteButton = document.getElementById("unmute-container");
-    const unMuteButtonSmall = document.getElementById("unSmall-container");
-    const unMuteButtonCustom = document.getElementById("unmute-custom");
-    // const videoElement = document.getElementById("my-video_html5_api");
     const circlePlay = document.getElementById("icon_play_control");
     const circlePause = document.getElementById("icon_pause_control");
     const progressBar = document.getElementById("progress");
@@ -1507,8 +1454,6 @@ try {
         containerControl.style.display = "flex";
       }
     }
-
-    // videoElement.play();
     playPauseVideo(true);
 
     if (!videoInfo?.haveControls && videoInfo?.haveFakeBar) {
@@ -2845,13 +2790,6 @@ try {
     controlsFullContainerVideo.style.position = "absolute";
     controlsFullContainerVideo.style.zIndex = 4;
 
-    const control__timer = {
-      display: "flex",
-      color: `${dataControls?.controlColorIcon}`,
-      marginLeft: "10px",
-      width: "25%",
-    };
-
     const containerControl = document.createElement("div");
     containerControl.id = "container_controls";
     containerControl.style.visibility = state.continueWLeftOff
@@ -2965,60 +2903,61 @@ try {
     bottomContainer.appendChild(sliderContainer);
 
     if (dataControls?.haveBigPlay) {
-      const circle = document.createElement("div");
-      circle.id = "circle_control";
-      circle.style.backgroundColor = dataControls?.ontrolColor;
-      circle.style.display = "block";
-      circle.style.position = "absolute";
-      circle.style.zIndex = 5;
-      if (!dataControls?.haveBigPlay) {
-        circle.style.width = "65px";
-        circle.style.height = "65px";
-        circle.style.fontSize = "40px";
-      }
+      // const circle = document.createElement("div");
+      // circle.id = "circle_control";
+      // circle.style.backgroundColor = dataControls?.ontrolColor;
+      // circle.style.display = "block";
+      // circle.style.position = "absolute";
+      // circle.style.zIndex = 5;
+      // if (!dataControls?.haveBigPlay) {
+      //   circle.style.width = "65px";
+      //   circle.style.height = "65px";
+      //   circle.style.fontSize = "40px";
+      // }
 
-      if (dataControls?.haveBigPlay) {
-        circle.style.width = "80px";
-        circle.style.height = "80px";
-        circle.style.fontSize = "50px";
-      }
+      // if (dataControls?.haveBigPlay) {
+      //   circle.style.width = "80px";
+      //   circle.style.height = "80px";
+      //   circle.style.fontSize = "50px";
+      // }
 
-      circle.style.top = "50%";
-      circle.style.left = "50%";
-      circle.style.cursor = "pointer";
-      circle.style.borderRadius = "50%";
-      circle.style.display = "flex";
-      circle.style.zIndex = 5;
-      circle.style.justifyContent = "center";
-      circle.style.alignItems = "center";
-      circle.style.border = "none";
-      circle.style.transform = "translate(-50%, -50%)";
-      circle.style.color = dataControls?.controlColorIcon;
+      // circle.style.top = "50%";
+      // circle.style.left = "50%";
+      // circle.style.cursor = "pointer";
+      // circle.style.borderRadius = "50%";
+      // circle.style.display = "flex";
+      // circle.style.zIndex = 5;
+      // circle.style.justifyContent = "center";
+      // circle.style.alignItems = "center";
+      // circle.style.border = "none";
+      // circle.style.transform = "translate(-50%, -50%)";
+      // circle.style.color = dataControls?.controlColorIcon;
 
-      const play = document.createElement("i");
-      play.id = "icon_play_control";
-      play.classList.add("fa-solid");
-      play.classList.add("fa-play");
-      play.style.marginLeft = "7%";
-      play.style.fontSize = "2rem";
+      // const play = document.createElement("i");
+      // play.id = "icon_play_control";
+      // play.classList.add("fa-solid");
+      // play.classList.add("fa-play");
+      // play.style.marginLeft = "7%";
+      // play.style.fontSize = "2rem";
 
-      if (dataControls?.haveAutoPlay) {
-        play.style.display = "none";
-      }
+      // if (dataControls?.haveAutoPlay) {
+      //   play.style.display = "none";
+      // }
 
-      const pause = document.createElement("i");
-      pause.id = "icon_pause_control";
-      pause.classList.add("fa-solid");
-      pause.classList.add("fa-pause");
-      pause.style.fontSize = "2rem";
+      // const pause = document.createElement("i");
+      // pause.id = "icon_pause_control";
+      // pause.classList.add("fa-solid");
+      // pause.classList.add("fa-pause");
+      // pause.style.fontSize = "2rem";
 
-      if (!dataControls?.haveAutoPlay) {
-        pause.style.display = "none";
-      }
-      circle.appendChild(play);
-      circle.appendChild(pause);
-      circle.addEventListener("click", () => handlePlayPauseControl(dataControls));
-      middleContainer.appendChild(circle);
+      // if (!dataControls?.haveAutoPlay) {
+      //   pause.style.display = "none";
+      // }
+      // circle.appendChild(play);
+      // circle.appendChild(pause);
+      // circle.addEventListener("click", () => handlePlayPauseControl(dataControls));
+      // middleContainer.appendChild(circle);
+      createCirclePlay(dataControls)
     }
 
     if (dataControls?.haveSmallPlay) {
@@ -3144,8 +3083,7 @@ try {
     videoContainer.appendChild(controlsFullContainerVideo);
   };
   //-----------------------------------------------------------------------------
-  const handleContinue = async (container) => {
-    // const videoElement = document.getElementById("my-video_html5_api");
+  const handleContinue = async () => {
     const controlsContainer = document.getElementById("container_controls");
     const circle = document.getElementById("circle");
     const circlePlay = document.getElementById("icon_play_control");
@@ -3158,6 +3096,7 @@ try {
     );
 
     const time = localStorage.getItem("time");
+    console.log("handleContinue", { time })
     videoElement.currentTime = time;
     playPauseVideo();
 
@@ -3188,12 +3127,10 @@ try {
         }
       }
     });
-
-    container.remove();
   };
 
   //-----------------------------------------------------------------------------
-  const handleRestart = (container) => {
+  const handleRestart = () => {
     const circle = document.getElementById("circle");
     const circlePlay = document.getElementById("icon_play_control");
     const circlePause = document.getElementById("icon_pause_control");
@@ -3210,12 +3147,13 @@ try {
     if (circlePlayBottom) circlePlayBottom.style.display = "none";
     if (circlePauseBottom) circlePauseBottom.style.display = "block";
     handleUnmuteRestart();
-
-    container.remove();
   };
 
   //--------------------------------------------------------------------------
-  const createContinueDefault = () => {
+  const createContinueDefault = (dataContinueDefault) => {
+    console.log({ dataContinueDefault })
+    const exists = document.getElementById("continue_container")
+    if (exists) return
     const continueContainer = document.createElement("div");
     continueContainer.id = "continue_container";
     continueContainer.style.position = "absolute";
@@ -3227,22 +3165,22 @@ try {
     continueContainer.style.height = "100%";
     continueContainer.style.top = 0;
     continueContainer.style.backgroundColor =
-      videoInfo?.backgroundContinue ?? "rbga(1,32,140,1)";
+      dataContinueDefault?.backgroundContinue ?? "rbga(1,32,140,1)";
     continueContainer.style.flexDirection = "column";
 
     continueContainer.style.gap = "1rem";
-    if (videoInfo?.haveBorder) {
-      continueContainer.style.border = `2px solid ${videoInfo?.borderColor}`;
+    if (dataContinueDefault?.haveBorder) {
+      continueContainer.style.border = `2px solid ${dataContinueDefault?.borderColor}`;
     }
-    if (videoInfo?.haveBorderRadius) {
+    if (dataContinueDefault?.haveBorderRadius) {
       continueContainer.style.borderRadius = "12px";
     }
     const continueText = document.createElement("h6");
 
-    continueText.textContent = videoInfo?.textMessage
-      ? videoInfo?.textMessage
+    continueText.textContent = dataContinueDefault?.textMessage
+      ? dataContinueDefault?.textMessage
       : "Você já começou a assistir esse vídeo";
-    continueText.style.color = videoInfo?.continueTextColor ?? "#fff";
+    continueText.style.color = dataContinueDefault?.continueTextColor ?? "#fff";
     continueText.style.fontSize = "24px";
     continueText.style.fontWeight = 600;
     continueText.style.margin = 0;
@@ -3256,7 +3194,7 @@ try {
     continueButton.style.alignItems = "center";
     continueButton.style.cursor = "pointer";
     continueButton.style.gap = "5px";
-    continueButton.style.color = videoInfo?.continueTextColor ?? "#fff";
+    continueButton.style.color = dataContinueDefault?.continueTextColor ?? "#fff";
 
     const continueIcon = document.createElement("i");
     continueIcon.classList.add("fa-solid");
@@ -3270,7 +3208,7 @@ try {
     continueIconDiv.style.height = "1.5rem";
     continueIconDiv.style.width = "1.5rem";
     continueIconDiv.style.borderRadius = "200px";
-    continueIconDiv.style.border = `2px solid ${videoInfo?.continueTextColor ?? "#fff"
+    continueIconDiv.style.border = `2px solid ${dataContinueDefault?.continueTextColor ?? "#fff"
       }`;
     continueIconDiv.style.display = "flex";
     continueIconDiv.style.alignItems = "center";
@@ -3304,8 +3242,8 @@ try {
     continueIconDiv.appendChild(continueIcon);
 
     const continueTextButton = document.createElement("p");
-    continueTextButton.textContent = videoInfo?.textContinue
-      ? videoInfo?.textContinue
+    continueTextButton.textContent = dataContinueDefault?.textContinue
+      ? dataContinueDefault?.textContinue
       : "Continuar";
 
     continueTextButton.style.fontSize = "0.9rem";
@@ -3323,18 +3261,13 @@ try {
     continueButton.appendChild(continueIconDiv);
     continueButton.appendChild(continueTextButton);
 
-    //create a event when the user click in the continueButton the video will play the saved value
-    continueButton.addEventListener("click", () =>
-      handleContinue(continueContainer)
-    );
-
     const restartButton = document.createElement("div");
     restartButton.style.display = "flex";
     restartButton.style.justifyContent = "center";
     restartButton.style.alignItems = "center";
     restartButton.style.cursor = "pointer";
     restartButton.style.gap = "5px";
-    restartButton.style.color = videoInfo?.continueTextColor ?? "#fff";
+    restartButton.style.color = dataContinueDefault?.continueTextColor ?? "#fff";
 
     const restartIcon = document.createElement("i");
     restartIcon.classList.add("fa-solid");
@@ -3347,7 +3280,7 @@ try {
     restartIconDiv.style.height = "1.5rem";
     restartIconDiv.style.width = "1.5rem";
     restartIconDiv.style.borderRadius = "200px";
-    restartIconDiv.style.border = `2px solid ${videoInfo?.continueTextColor ?? "#fff"
+    restartIconDiv.style.border = `2px solid ${dataContinueDefault?.continueTextColor ?? "#fff"
       }`;
     restartIconDiv.style.display = "flex";
     restartIconDiv.style.alignItems = "center";
@@ -3356,8 +3289,8 @@ try {
     restartIconDiv.appendChild(restartIcon);
 
     const restartTextButton = document.createElement("p");
-    restartTextButton.textContent = videoInfo?.textRestart
-      ? videoInfo?.textRestart
+    restartTextButton.textContent = dataContinueDefault?.textRestart
+      ? dataContinueDefault?.textRestart
       : "Recomeçar";
 
     restartTextButton.style.fontSize = "0.9rem";
@@ -3367,9 +3300,6 @@ try {
     restartButton.appendChild(restartIconDiv);
     restartButton.appendChild(restartTextButton);
 
-    restartButton.addEventListener("click", () =>
-      handleRestart(continueContainer)
-    );
 
     const buttonContainer = document.createElement("div");
     buttonContainer.style.display = "flex";
@@ -3382,10 +3312,27 @@ try {
     buttonContainer.appendChild(restartButton);
     continueContainer.appendChild(buttonContainer);
     videoContainer.appendChild(continueContainer);
+
+
+    //create a event when the user click in the continueButton the video will play the saved value
+    continueButton.addEventListener("click", () => {
+      createCirclePlay(dataContinueDefault)
+      handleContinue()
+      continueContainer.remove()
+    }
+    );
+
+    restartButton.addEventListener("click", () => {
+      createCirclePlay(dataContinueDefault)
+      handleRestart()
+      continueContainer.remove()
+
+    }
+    );
   };
 
   //--------------------------------------------------------------------------
-  const createContinueSmall = () => {
+  const createContinueSmall = (dataContinueSmall) => {
     // caixa do continuar de onde parou ajustada ao tamanho do video.
     const continueContainer = document.createElement("div");
     continueContainer.id = "continue_container_small";
@@ -3418,10 +3365,10 @@ try {
     // titulo do continuar de onde parou.
     const continueTitle = document.createElement("h6");
     continueTitle.id = "continue_title_small";
-    continueTitle.style.color = videoInfo?.continueTextColor;
+    continueTitle.style.color = dataContinueSmall?.continueTextColor;
     continueTitle.innerText =
-      videoInfo?.textContinue !== ""
-        ? videoInfo?.textContinue
+      dataContinueSmall?.textContinue !== ""
+        ? dataContinueSmall?.textContinue
         : "Você já começou a assistir esse vídeo";
 
     // caixa dos botões do continuar de onde parou.
@@ -3439,8 +3386,8 @@ try {
     const continueButtonContinue = document.createElement("button");
     continueButtonContinue.id = "continue_button";
     continueButtonContinue.innerText =
-      videoInfo?.textContinue !== ""
-        ? videoInfo?.textContinue
+      dataContinueSmall?.textContinue !== ""
+        ? dataContinueSmall?.textContinue
         : "Continuar assistindo?";
 
     // icone para o botão de continuar onde parou.
@@ -3455,8 +3402,8 @@ try {
     const continueButtonRestart = document.createElement("button");
     continueButtonRestart.id = "continue_button_restart";
     continueButtonRestart.innerText =
-      videoInfo?.textContinue !== ""
-        ? videoInfo?.textContinue
+      dataContinueSmall?.textContinue !== ""
+        ? dataContinueSmall?.textContinue
         : "Continuar assistindo?";
 
     const continueStyling = document.createElement("style");
@@ -4940,7 +4887,6 @@ try {
 
   //--------------------------------------------------------------------------
   const createCirclePlay = async (dataCirclePlay) => {
-    console.log({ dataCirclePlay })
     const haveCicleContainer = document.getElementById("circle-container");
     if (haveCicleContainer) return
     const circleContainer = document.createElement("div");
@@ -4951,6 +4897,8 @@ try {
     circleContainer.style.height = "100%";
     circleContainer.style.position = "absolute";
     circleContainer.style.zIndex = 5;
+    circleContainer.style.cursor = "pointer";
+    circleContainer.style.visibility = "visible"
 
     const circle = document.createElement("div");
     circle.id = "circle";
@@ -4970,6 +4918,7 @@ try {
     circle.style.transform = "translate(-50%, -50%)";
     circle.style.fontSize = "80px";
     circle.style.color = "#fff";
+    circle.style.transition = "0.5s";
 
     if (!dataCirclePlay?.haveControls && !dataCirclePlay?.haveAutoPlay) {
       circle.style.visibility = "visible";
@@ -4989,6 +4938,18 @@ try {
     pause.classList.add("fa-solid");
     pause.classList.add("fa-pause");
     pause.style.fontSize = "2rem";
+
+    //have big play
+    if (dataCirclePlay?.haveBigPlay) {
+      circle.style.width = "80px";
+      circle.style.height = "80px";
+      circle.style.fontSize = "50px";
+    } else {
+      circle.style.width = "65px";
+      circle.style.height = "65px";
+      circle.style.fontSize = "40px";
+    }
+
     if (!dataCirclePlay?.haveControls && !dataCirclePlay?.haveAutoPlay) {
       pause.style.display = "none";
     }
@@ -4998,9 +4959,42 @@ try {
 
     circleContainer.appendChild(circle);
 
-    videoContainer.appendChild(circleContainer);
+    circleContainer.addEventListener("click", () => {
+      if (videoElement.paused) {
+        if (play) play.style.display = "block";
+        if (pause) pause.style.display = "none";
+      } else {
+        if (play) play.style.display = "none";
+        if (pause) pause.style.display = "block";
+      }
+    })
+    circleContainer.addEventListener("mousemove", () => {
+      if (videoElement.paused) {
+        if (play) play.style.display = "block";
+        if (pause) pause.style.display = "none";
+      } else {
+        if (play) play.style.display = "none";
+        if (pause) pause.style.display = "block";
+      }
+      circle.style.visibility = "visible";
+    })
+
+    circleContainer.addEventListener('mouseout', () => {
+      circle.style.visibility = "hidden";
+    })
+
+    videoElement.addEventListener('play', () => {
+      console.log('O vídeo começou a tocar.');
+      analysisInterval = setInterval(() => {
+        if (!videoElement.paused) {
+          if (circle) circle.style.visibility = "hidden";
+        }
+      }, 5000);
+    });
 
     circleContainer.addEventListener("click", () => handlePlayPause(dataCirclePlay));
+    videoContainer.appendChild(circleContainer);
+
   };
 
   //--------------------------------------------------------------------------
@@ -5037,8 +5031,6 @@ try {
   const createCantRunVideoImage = (allowDomain, constrols) => {
     if (!!allowDomain) {
       const cantRunVideoImg = document.createElement("img");
-      // videoElement.pause()
-      // videoElement.muted = true
       videoUrl = null;
       videoElement.pause()
       videoElement.remove();
