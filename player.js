@@ -1165,7 +1165,7 @@ try {
         createFormPassword();
       }
       if (dataVideo?.typeForm === "data-capture") {
-        createForm();
+        createForm(dataVideo);
       }
       if (!dataVideo?.checkedCaptureTimer) {
         localStorage.setItem("formOnScreen", true);
@@ -4146,21 +4146,21 @@ try {
   };
 
   //--------------------------------------------------------------------------
-  const createForm = () => {
+  const createForm = (dataCreateForm) => {
     const createFormSection = document.createElement("section");
     createFormSection.id = "formCaptureSection";
     createFormSection.style.height = "100%";
-    createFormSection.style.width = videoInfo?.checkedCaptureVertical
+    createFormSection.style.width = dataCreateForm?.checkedCaptureVertical
       ? "45%"
       : "100%";
     createFormSection.style.position = "absolute";
     createFormSection.style.zIndex = 999;
     createFormSection.style.bottom = 0;
-    createFormSection.style.backgroundColor = videoInfo?.captureBackgroundColor
-      ? videoInfo?.captureBackgroundColor
+    createFormSection.style.backgroundColor = dataCreateForm?.captureBackgroundColor
+      ? dataCreateForm?.captureBackgroundColor
       : "rgba(0,0,0,0.3)";
     createFormSection.style.backdropFilter = "blur(4px)";
-    createFormSection.style.display = videoInfo?.checkedCaptureTimer
+    createFormSection.style.display = dataCreateForm?.checkedCaptureTimer
       ? "none"
       : "flex";
 
@@ -4168,20 +4168,20 @@ try {
     createFormSection.style.boxSizing = "border-box";
     createFormSection.style.alignItems = "center";
     createFormSection.style.justifyContent = "center";
-    if (videoInfo?.haveBorderRadius) {
-      createFormSection.style.borderRadius = videoInfo?.checkedCaptureVertical
+    if (dataCreateForm?.haveBorderRadius) {
+      createFormSection.style.borderRadius = dataCreateForm?.checkedCaptureVertical
         ? "12px 0 0 12px"
         : "12px";
     }
 
     const titleCapture = document.createElement("h6");
     titleCapture.id = "titleCaptureData";
-    titleCapture.textContent = videoInfo?.captureTitle
-      ? videoInfo?.captureTitle
+    titleCapture.textContent = dataCreateForm?.captureTitle
+      ? dataCreateForm?.captureTitle
       : "Insira o(s) dado(s) requiridos para acessar o vídeo.";
 
-    titleCapture.style.color = videoInfo?.captureTitleColor
-      ? videoInfo?.captureTitleColor
+    titleCapture.style.color = dataCreateForm?.captureTitleColor
+      ? dataCreateForm?.captureTitleColor
       : "#f9f9f9";
     titleCapture.style.textAlign = "center";
     titleCapture.style.margin = "0";
@@ -4332,7 +4332,7 @@ try {
       `;
     document.head.appendChild(mediaQuery1);
 
-    if (videoInfo?.haveCaptureBigTitle) {
+    if (dataCreateForm?.haveCaptureBigTitle) {
       titleCapture.style.fontSize = "1.5rem";
     } else {
       titleCapture.style.fontSize = "1.4rem";
@@ -4344,7 +4344,7 @@ try {
     formContainer.id = "formContainer";
     formContainer.style.display = "flex";
     formContainer.style.justifyContent = "center";
-    formContainer.style.width = videoInfo?.checkedCaptureVertical
+    formContainer.style.width = dataCreateForm?.checkedCaptureVertical
       ? "90%"
       : "75%";
 
@@ -4360,13 +4360,13 @@ try {
     createDisplayForm.classList.add("NameWhatsAppTitle");
 
     createDisplayForm.classList.add(
-      videoInfo?.checkedCaptureVertical && "inputVertical"
+      dataCreateForm?.checkedCaptureVertical && "inputVertical"
     );
 
     formContainer.appendChild(createDisplayForm);
 
     const createForm = document.createElement("form");
-    createForm.id = videoInfo?.checkedCaptureTimer
+    createForm.id = dataCreateForm?.checkedCaptureTimer
       ? "createCaptureForm2Vertical"
       : "createCaptureForm2";
     createForm.style.display = "flex";
@@ -4532,7 +4532,7 @@ try {
     document.head.appendChild(mediaQuery2);
 
     //creation of name input
-    if (videoInfo?.haveInputName) {
+    if (dataCreateForm?.haveInputName) {
       const inputCapture = document.createElement("input");
       inputCapture.id = "inputCapture2";
       const inputDiv = document.createElement("div");
@@ -4542,23 +4542,23 @@ try {
       inputDiv.style.flexWrap = "wrap";
       inputDiv.style.alignItems = "stretch";
       inputDiv.style.width =
-        videoInfo?.checkedCaptureVertical && "100% !important";
+        dataCreateForm?.checkedCaptureVertical && "100% !important";
       if (
-        !videoInfo?.checkedCaptureVertical &&
-        !videoInfo?.haveInputEmail &&
-        !videoInfo?.haveInputWhatsapp
+        !dataCreateForm?.checkedCaptureVertical &&
+        !dataCreateForm?.haveInputEmail &&
+        !dataCreateForm?.haveInputWhatsapp
       ) {
         inputDiv.style.width = "100%";
       }
 
       inputDiv.style.padding = "0.15rem";
       inputDiv.style.flexDirection =
-        videoInfo?.checkedCaptureVertical && "column";
+        dataCreateForm?.checkedCaptureVertical && "column";
       createForm.appendChild(inputDiv);
       inputDiv.appendChild(inputCapture);
 
-      inputCapture.style.backgroundColor = videoInfo?.captureInputColor
-        ? videoInfo?.captureInputColor
+      inputCapture.style.backgroundColor = dataCreateForm?.captureInputColor
+        ? dataCreateForm?.captureInputColor
         : "rgba(0,0,0,0.46)";
       inputCapture.style.position = "relative";
       inputCapture.style.color = "#b9b9b9";
@@ -4567,15 +4567,15 @@ try {
       inputCapture.style.minWidth = "0";
       inputCapture.style.border = "none";
       inputCapture.style.borderRadius = "0";
-      inputCapture.style.height = videoInfo?.checkedCaptureVertical && "30px";
-      inputCapture.style.width = videoInfo?.checkedCaptureVertical && "100%";
+      inputCapture.style.height = dataCreateForm?.checkedCaptureVertical && "30px";
+      inputCapture.style.width = dataCreateForm?.checkedCaptureVertical && "100%";
       inputCapture.style.padding =
-        videoInfo?.checkedCaptureVertical && "0 0 0 10px";
+        dataCreateForm?.checkedCaptureVertical && "0 0 0 10px";
       inputCapture.placeholder = "Digite seu nome";
       inputCapture.required = true;
       inputCapture.type = "text";
       inputCapture.style.height = "42px";
-      inputCapture.style.height = videoInfo?.checkedCaptureVertical && "25px";
+      inputCapture.style.height = dataCreateForm?.checkedCaptureVertical && "25px";
       inputCapture.style.paddingLeft = "10px";
       inputCapture.classList.add("inputCapture");
 
@@ -4583,40 +4583,40 @@ try {
       buttonCapture.id = "buttonCapture";
 
       buttonCapture.type = "submit";
-      buttonCapture.textContent = videoInfo?.captureButtonText
-        ? videoInfo?.captureButtonText
+      buttonCapture.textContent = dataCreateForm?.captureButtonText
+        ? dataCreateForm?.captureButtonText
         : "Play";
       buttonCapture.style.borderRadius = "0rem";
       buttonCapture.style.border = "none";
-      buttonCapture.style.color = videoInfo?.captureButtonTextColor
-        ? videoInfo?.captureButtonTextColor
+      buttonCapture.style.color = dataCreateForm?.captureButtonTextColor
+        ? dataCreateForm?.captureButtonTextColor
         : "#333";
-      buttonCapture.style.backgroundColor = videoInfo?.captureButtonColor
-        ? videoInfo?.captureButtonColor
+      buttonCapture.style.backgroundColor = dataCreateForm?.captureButtonColor
+        ? dataCreateForm?.captureButtonColor
         : "#f9f9f9";
 
-      buttonCapture.style.height = videoInfo?.checkedCaptureVertical && "25px";
+      buttonCapture.style.height = dataCreateForm?.checkedCaptureVertical && "25px";
       buttonCapture.style.marginTop =
-        videoInfo?.checkedCaptureVertical && "5px";
+        dataCreateForm?.checkedCaptureVertical && "5px";
 
-      if (!videoInfo?.haveInputEmail) {
+      if (!dataCreateForm?.haveInputEmail) {
         buttonCapture.style.display = "none";
-      } else if (!videoInfo?.haveInputWhatsapp) {
+      } else if (!dataCreateForm?.haveInputWhatsapp) {
         buttonCapture.style.display = "none";
       }
 
       if (
-        videoInfo?.haveInputName &&
-        videoInfo?.haveInputWhatsapp &&
-        videoInfo?.haveInputEmail
+        dataCreateForm?.haveInputName &&
+        dataCreateForm?.haveInputWhatsapp &&
+        dataCreateForm?.haveInputEmail
       ) {
         buttonCapture.style.display = "none";
       }
 
       if (
-        videoInfo?.haveInputName &&
-        !videoInfo?.haveInputWhatsapp &&
-        !videoInfo?.haveInputEmail
+        dataCreateForm?.haveInputName &&
+        !dataCreateForm?.haveInputWhatsapp &&
+        !dataCreateForm?.haveInputEmail
       ) {
         buttonCapture.style.display = "block";
       }
@@ -4628,7 +4628,7 @@ try {
       inputDiv.appendChild(buttonCapture);
     }
     //creation of number input
-    if (videoInfo?.haveInputWhatsapp) {
+    if (dataCreateForm?.haveInputWhatsapp) {
       const inputCaptureNumber = document.createElement("input");
       inputCaptureNumber.id = "inputCaptureNumber";
       const inputDivNumber = document.createElement("div");
@@ -4639,20 +4639,20 @@ try {
       inputDivNumber.style.alignItems = "stretch";
       inputDivNumber.style.padding = "0.15rem";
       inputDivNumber.style.flexDirection =
-        videoInfo?.checkedCaptureVertical && "column";
+        dataCreateForm?.checkedCaptureVertical && "column";
       createForm.appendChild(inputDivNumber);
       inputDivNumber.appendChild(inputCaptureNumber);
 
       if (
-        !videoInfo?.checkedCaptureVertical &&
-        !videoInfo?.haveInputEmail &&
-        !videoInfo?.haveInputName
+        !dataCreateForm?.checkedCaptureVertical &&
+        !dataCreateForm?.haveInputEmail &&
+        !dataCreateForm?.haveInputName
       ) {
         inputDivNumber.style.width = "100%";
       }
 
-      inputCaptureNumber.style.backgroundColor = videoInfo?.captureInputColor
-        ? videoInfo?.captureInputColor
+      inputCaptureNumber.style.backgroundColor = dataCreateForm?.captureInputColor
+        ? dataCreateForm?.captureInputColor
         : "rgba(0,0,0,0.46)";
       inputCaptureNumber.style.position = "relative";
       inputCaptureNumber.style.color = "#b9b9b9";
@@ -4663,41 +4663,41 @@ try {
       inputCaptureNumber.style.borderRadius = "0";
       inputCaptureNumber.style.height = "42px";
       inputCaptureNumber.style.height =
-        videoInfo?.checkedCaptureVertical && "25px";
+        dataCreateForm?.checkedCaptureVertical && "25px";
       inputCaptureNumber.style.paddingLeft = "10px";
       inputCaptureNumber.style.width =
-        videoInfo?.checkedCaptureVertical && "100%";
+        dataCreateForm?.checkedCaptureVertical && "100%";
       inputCaptureNumber.style.padding =
-        videoInfo?.checkedCaptureVertical && "0 0 0 10px";
+        dataCreateForm?.checkedCaptureVertical && "0 0 0 10px";
 
       inputCaptureNumber.placeholder = "Digite seu telefone";
       inputCaptureNumber.required = true;
       inputCaptureNumber.type = "text";
       inputCaptureNumber.className = "inputCapture";
 
-      if (!videoInfo?.haveInputEmail) {
+      if (!dataCreateForm?.haveInputEmail) {
         const buttonCaptureNumber = document.createElement("button");
         buttonCaptureNumber.id = "buttonCaptureNumber";
 
         buttonCaptureNumber.type = "submit";
-        buttonCaptureNumber.textContent = videoInfo?.captureButtonText
-          ? videoInfo?.captureButtonText
+        buttonCaptureNumber.textContent = dataCreateForm?.captureButtonText
+          ? dataCreateForm?.captureButtonText
           : "Play";
         buttonCaptureNumber.style.borderRadius = "0rem";
         buttonCaptureNumber.style.border = "none";
-        buttonCaptureNumber.style.color = videoInfo?.captureButtonTextColor
-          ? videoInfo?.captureButtonTextColor
+        buttonCaptureNumber.style.color = dataCreateForm?.captureButtonTextColor
+          ? dataCreateForm?.captureButtonTextColor
           : "#333";
         buttonCaptureNumber.style.backgroundColor =
-          videoInfo?.captureButtonColor
-            ? videoInfo?.captureButtonColor
+          dataCreateForm?.captureButtonColor
+            ? dataCreateForm?.captureButtonColor
             : "#f9f9f9";
 
         buttonCaptureNumber.style.height =
-          videoInfo?.checkedCaptureVertical && "30px";
+          dataCreateForm?.checkedCaptureVertical && "30px";
 
         buttonCaptureNumber.style.marginTop =
-          videoInfo?.checkedCaptureVertical && "5px";
+          dataCreateForm?.checkedCaptureVertical && "5px";
 
         buttonCaptureNumber.style.fontSize = "0.9rem";
         buttonCaptureNumber.style.fontWeight = 600;
@@ -4707,7 +4707,7 @@ try {
       }
     }
     //creation of number input
-    if (videoInfo?.haveInputEmail) {
+    if (dataCreateForm?.haveInputEmail) {
       const inputCaptureEmail = document.createElement("input");
       inputCaptureEmail.id = "inputCaptureEmail";
       const inputDivEmail = document.createElement("div");
@@ -4718,20 +4718,20 @@ try {
       inputDivEmail.style.alignItems = "stretch";
       inputDivEmail.style.padding = "0.15rem";
       inputDivEmail.style.flexDirection =
-        videoInfo?.checkedCaptureVertical && "column";
+        dataCreateForm?.checkedCaptureVertical && "column";
       createForm.appendChild(inputDivEmail);
       inputDivEmail.appendChild(inputCaptureEmail);
 
       if (
-        !videoInfo?.checkedCaptureVertical &&
-        !videoInfo?.haveInputName &&
-        !videoInfo?.haveInputWhatsapp
+        !dataCreateForm?.checkedCaptureVertical &&
+        !dataCreateForm?.haveInputName &&
+        !dataCreateForm?.haveInputWhatsapp
       ) {
         inputDivEmail.style.width = "100%";
       }
 
-      inputCaptureEmail.style.backgroundColor = videoInfo?.captureInputColor
-        ? videoInfo?.captureInputColor
+      inputCaptureEmail.style.backgroundColor = dataCreateForm?.captureInputColor
+        ? dataCreateForm?.captureInputColor
         : "rgba(0,0,0,0.46)";
       inputCaptureEmail.style.position = "relative";
       inputCaptureEmail.style.color = "#b9b9b9";
@@ -4744,12 +4744,12 @@ try {
       inputCaptureEmail.style.paddingLeft = "10px";
 
       inputCaptureEmail.style.height =
-        videoInfo?.checkedCaptureVertical && "25px";
+        dataCreateForm?.checkedCaptureVertical && "25px";
       inputCaptureEmail.style.width =
-        videoInfo?.checkedCaptureVertical && "100%";
+        dataCreateForm?.checkedCaptureVertical && "100%";
 
       inputCaptureEmail.style.padding =
-        videoInfo?.checkedCaptureVertical && "0 0 0 10px";
+        dataCreateForm?.checkedCaptureVertical && "0 0 0 10px";
 
       inputCaptureEmail.placeholder = "Digite seu email";
       inputCaptureEmail.required = true;
@@ -4757,28 +4757,28 @@ try {
       inputCaptureEmail.classList = "inputCapture";
 
       const buttonCaptureEmail = document.createElement("button");
-      buttonCaptureEmail.id = videoInfo?.checkedCaptureVertical
+      buttonCaptureEmail.id = dataCreateForm?.checkedCaptureVertical
         ? "buttonCaptureEmailVertical"
         : "buttonCaptureEmail";
 
       buttonCaptureEmail.type = "submit";
-      buttonCaptureEmail.textContent = videoInfo?.captureButtonText
-        ? videoInfo?.captureButtonText
+      buttonCaptureEmail.textContent = dataCreateForm?.captureButtonText
+        ? dataCreateForm?.captureButtonText
         : "Play";
       buttonCaptureEmail.style.borderRadius = "0rem";
       buttonCaptureEmail.style.border = "none";
-      buttonCaptureEmail.style.color = videoInfo?.captureButtonTextColor
-        ? videoInfo?.captureButtonTextColor
+      buttonCaptureEmail.style.color = dataCreateForm?.captureButtonTextColor
+        ? dataCreateForm?.captureButtonTextColor
         : "#333";
-      buttonCaptureEmail.style.backgroundColor = videoInfo?.captureButtonColor
-        ? videoInfo?.captureButtonColor
+      buttonCaptureEmail.style.backgroundColor = dataCreateForm?.captureButtonColor
+        ? dataCreateForm?.captureButtonColor
         : "#f9f9f9";
 
       buttonCaptureEmail.style.height =
-        videoInfo?.checkedCaptureVertical && "30px";
+        dataCreateForm?.checkedCaptureVertical && "30px";
 
       buttonCaptureEmail.style.marginTop =
-        videoInfo?.checkedCaptureVertical && "5px";
+        dataCreateForm?.checkedCaptureVertical && "5px";
 
       buttonCaptureEmail.style.fontSize = "0.9rem";
       buttonCaptureEmail.style.width = "60px";
@@ -4791,22 +4791,22 @@ try {
       inputDivEmail.appendChild(buttonCaptureEmail);
     }
 
-    if (videoInfo?.haveCaptureAuxText) {
+    if (dataCreateForm?.haveCaptureAuxText) {
       const createAuxText = document.createElement("h6");
-      createAuxText.id = videoInfo?.checkedCaptureVertical
+      createAuxText.id = dataCreateForm?.checkedCaptureVertical
         ? "createAuxText2Vertical"
         : "createAuxText2";
-      createAuxText.textContent = videoInfo?.captureAuxText
-        ? videoInfo?.captureAuxText
+      createAuxText.textContent = dataCreateForm?.captureAuxText
+        ? dataCreateForm?.captureAuxText
         : "Insira o(s) dado(s) requirido(s) e te enviaremos conteúdos exclusivos.";
       createAuxText.style.fontSize = "1rem";
-      createAuxText.style.color = videoInfo?.captureAuxTextColor
-        ? videoInfo?.captureAuxTextColor
+      createAuxText.style.color = dataCreateForm?.captureAuxTextColor
+        ? dataCreateForm?.captureAuxTextColor
         : "#f9f9f9";
       createAuxText.style.margin = "0";
       createAuxText.style.marginTop = "5px";
       createAuxText.style.textAlign = "center";
-      createAuxText.style.width = videoInfo?.checkedCaptureVertical
+      createAuxText.style.width = dataCreateForm?.checkedCaptureVertical
         ? "95%"
         : "70%";
       createAuxText.style.lineHeight = "150%";
@@ -4814,7 +4814,7 @@ try {
       createFormSection.appendChild(createAuxText);
     }
 
-    if (videoInfo?.skipLead) {
+    if (dataCreateForm?.skipLead) {
       const skipLeadButton = document.createElement("button");
       skipLeadButton.id = "skipLeadButton";
       skipLeadButton.style.backgroundColor = "rgba(0,0,0,0.5)";
@@ -4866,11 +4866,11 @@ try {
         sessionStorage.setItem("formSent", true);
         localStorage.removeItem("formOnScreen");
 
-        if (!videoInfo?.checkedCaptureTimer) {
+        if (!dataCreateForm?.checkedCaptureTimer) {
           handleUnmuteRestart();
         }
 
-        if (videoInfo?.checkedCaptureTimer) {
+        if (dataCreateForm?.checkedCaptureTimer) {
           // videoElement.play();
           playPauseVideo();
           if (aoVivo) aoVivo.style.display = "none";
