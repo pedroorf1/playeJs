@@ -423,7 +423,7 @@ try {
             videoElement.play().catch(function (error) {
               console.error('Erro ao tentar reproduzir:', error);
             }).then(() => {
-              videoElement.pause
+              videoElement.pause()
             });
           });
         });
@@ -434,7 +434,7 @@ try {
         videoElement.play().catch(function (error) {
           console.error('Erro ao tentar reproduzir:', error);
         }).then(() => {
-          videoElement.pause
+          videoElement.pause()
         });
       });
     } else {
@@ -890,11 +890,12 @@ try {
     autoPlayFullContainerVideo.appendChild(autoPlayContainer);
 
     videoContainer.appendChild(autoPlayFullContainerVideo);
-    if (!formOnScreen)
-      autoPlayFullContainerVideo.addEventListener("click", function () {
-        handleUnmuteRestart();
-        sessionStorage.setItem("autoPlaySent", true);
-      });
+    autoPlayFullContainerVideo.addEventListener("click", function () {
+      console.log("SSSSSSSS")
+      handleUnmuteRestart(createAutoPlayDataVideo);
+      sessionStorage.setItem("autoPlaySent", true);
+    });
+
   };
 
   //--------------------------------------------------------------------------------
@@ -1096,7 +1097,7 @@ try {
       !state.continueWLeftOff &&
       !dataVideo?.noneControlsMoreAutoplay
     ) {
-      videoElement.pause;
+      videoElement.pause();
       videoElement.currentTime = 0;
       createInitialThumb(dataVideo);
     }
@@ -1379,7 +1380,7 @@ try {
   };
 
   //----------------------------------------------------------------------------
-  const handleUnmuteRestart = async () => {
+  const handleUnmuteRestart = async (dataUnmuteRestart) => {
     const isMobile = /iPhone|iPad|iPod/i.test(navigator.userAgent);
     const containerControl = document.getElementById("container_controls");
     const circlePlay = document.getElementById("icon_play_control");
@@ -1396,7 +1397,7 @@ try {
     const autoPlayContainer = document.getElementById("unmute-container");
     if (autoPlayContainer) {
       autoPlayContainer.remove()
-      const dataTocicle = { ...videoInfo.data, haveAutoPlay: false }
+      const dataTocicle = { ...dataUnmuteRestart, haveAutoPlay: false }
       createCirclePlay(dataTocicle)
     };
 
@@ -1404,7 +1405,7 @@ try {
       if (!resp) {
         if (!state.clickPlay) {
           const sendData = {
-            id_video: videoInfo?.id_video,
+            id_video: dataUnmuteRestart?.id_video,
             id_sessao: globalState?.newSessionUserId,
             lastSession: globalState?.loadedSessionUserFromStorage,
             play: true,
@@ -1412,7 +1413,7 @@ try {
           sendData.clickButton = true;
           handleUpdateMetric(sendData);
           localStorage.setItem("clickPlay", true);
-          setClicks(videoInfo?.id_user);
+          setClicks(dataUnmuteRestart?.id_user);
         }
       }
     });
@@ -1427,21 +1428,21 @@ try {
     videoElement.removeAttribute("loop");
     state.notCountingAutoPlay = true;
 
-    if (videoInfo?.haveAutoPlay) {
+    if (dataUnmuteRestart?.haveAutoPlay) {
       await Promise.resolve(localStorage.getItem("circlePlay")).then(
         (res) => {
           if (!res) {
             if (!state.circlePlay) {
               localStorage.setItem("circlePlay", true);
-              createCirclePlay(videoInfo);
+              createCirclePlay(dataUnmuteRestart);
             }
           }
         }
       );
     }
-
-    if (videoInfo?.haveControls) {
-      createControls();
+    console.log({ dataUnmuteRestart })
+    if (dataUnmuteRestart?.haveControls) {
+      createControls(dataUnmuteRestart);
       if (circlePlay) circlePlay.style.display = "none";
       if (circlePause) circlePause.style.display = "block";
 
@@ -1449,22 +1450,22 @@ try {
       if (circlePauseBottom) circlePauseBottom.style.display = "block";
     }
 
-    if (videoInfo?.checkedCaptureTimer) {
-      if (videoElement.currentTime < videoInfo?.haveTim && containerControl) {
+    if (dataUnmuteRestart?.checkedCaptureTimer) {
+      if (videoElement.currentTime < dataUnmuteRestart?.haveTime && containerControl) {
         containerControl.style.display = "flex";
       }
     }
     playPauseVideo(true);
 
-    if (!videoInfo?.haveControls && videoInfo?.haveFakeBar) {
+    if (!dataUnmuteRestart?.haveControls && dataUnmuteRestart?.haveFakeBar) {
       await Promise.resolve(sessionStorage.getItem("fakeBar")).then((res) => {
         if (!res) {
           if (!state.fakeBar) {
             sessionStorage.setItem("fakeBar", true);
-            createFakeBar(videoInfo);
+            createFakeBar(dataUnmuteRestart);
 
             if (isMobile) {
-              videoElement.addEventListener("timeupdate", () => handleOnProgress(videoInfo));
+              videoElement.addEventListener("timeupdate", () => handleOnProgress(dataUnmuteRestart));
               videoElement.addEventListener("mousemove", handleMouseMove);
             }
           }
@@ -2780,7 +2781,7 @@ try {
     const exists = document.getElementById("controls-container");
     if (exists) return
     const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-
+    console.log({ dataControls })
     const controlsFullContainerVideo = document.createElement("div");
 
     controlsFullContainerVideo.id = "controls-container";
@@ -2848,8 +2849,11 @@ try {
       dataControls?.controlColor
     );
 
-    const color = dataControls.controlColor.split(",");
+    console.log(dataControls?.controlColor)
+    const color = dataControls?.controlColor.split(",");
+    console.log({ color })
     const newColor = color.slice(0, 3).join(",") + ", 0.5)";
+    console.log({ newColor })
     progressControl.style.setProperty("--webkit-progress-bg-color", newColor);
 
     const progressTracker = document.createElement("div");
@@ -2957,7 +2961,7 @@ try {
       // circle.appendChild(pause);
       // circle.addEventListener("click", () => handlePlayPauseControl(dataControls));
       // middleContainer.appendChild(circle);
-      createCirclePlay(dataControls)
+      // createCirclePlay(dataControls)
     }
 
     if (dataControls?.haveSmallPlay) {
@@ -2974,6 +2978,7 @@ try {
     pauseBottomControl.classList.add("fa-solid");
     pauseBottomControl.classList.add("fa-pause");
     pauseBottomControl.style.display = "none";
+
 
     playPauseContainer.style.color = dataControls?.controlColorIcon;
     playPauseContainer.style.fontSize = "16px";
@@ -3047,6 +3052,8 @@ try {
 
     if (dataControls?.haveAutoPlay) {
       bottomContainer.style.display = "none";
+    } else {
+      videoElement.pause()
     }
 
     timerContainer.appendChild(timer);
@@ -3083,7 +3090,15 @@ try {
     videoContainer.appendChild(controlsFullContainerVideo);
   };
   //-----------------------------------------------------------------------------
-  const handleContinue = async () => {
+
+
+  const handleContinue = async (dataContinue) => {
+    const time = localStorage.getItem("time");
+    console.log("handleContinue", { time })
+    videoElement.muted = false
+    videoElement.currentTime = time;
+    videoElement.play()
+    console.log("AAAAA", { dataContinue })
     const controlsContainer = document.getElementById("container_controls");
     const circle = document.getElementById("circle");
     const circlePlay = document.getElementById("icon_play_control");
@@ -3095,27 +3110,23 @@ try {
       "icon_pause_bottom_control"
     );
 
-    const time = localStorage.getItem("time");
-    console.log("handleContinue", { time })
-    videoElement.currentTime = time;
-    playPauseVideo();
+    // if (circle) circle.style.visibility = "hidden";
+    // if (circlePlay) circlePlay.style.display = "none";
+    // if (circlePause) circlePause.style.display = "block";
+    // if (circlePlayBottom) circlePlayBottom.style.display = "none";
+    // if (circlePauseBottom) circlePauseBottom.style.display = "block";
+    // if (controlsContainer) controlsContainer.style.visibility = "visible";
 
-    if (circle) circle.style.visibility = "hidden";
-    if (circlePlay) circlePlay.style.display = "none";
-    if (circlePause) circlePause.style.display = "block";
-    if (circlePlayBottom) circlePlayBottom.style.display = "none";
-    if (circlePauseBottom) circlePauseBottom.style.display = "block";
-    if (controlsContainer) controlsContainer.style.visibility = "visible";
-
-    if (videoInfo?.data?.haveAutoPlay && !videoInfo?.data?.haveControls) {
-      createCirclePlay(videoInfo?.data);
+    if (dataContinue?.haveAutoPlay && !dataContinue?.haveControls) {
+      createCirclePlay(dataContinue);
     }
 
     await Promise.resolve(localStorage.getItem("clickPlay")).then((resp) => {
+      console.log({ resp })
       if (!resp) {
         if (!state.clickPlay) {
           const sendData = {
-            id_video: videoInfo?.id_video,
+            id_video: dataContinue?.id_video,
             id_sessao: globalState?.newSessionUserId,
             lastSession: globalState?.loadedSessionUserFromStorage,
             play: true,
@@ -3123,14 +3134,14 @@ try {
           sendData.clickButton = true;
           handleUpdateMetric(sendData);
           localStorage.setItem("clickPlay", true);
-          setClicks(videoInfo?.id_user);
+          setClicks(dataContinue?.id_user);
         }
       }
     });
   };
 
   //-----------------------------------------------------------------------------
-  const handleRestart = () => {
+  const handleRestart = (dataRestart) => {
     const circle = document.getElementById("circle");
     const circlePlay = document.getElementById("icon_play_control");
     const circlePause = document.getElementById("icon_pause_control");
@@ -3146,7 +3157,7 @@ try {
     if (circlePause) circlePause.style.display = "block";
     if (circlePlayBottom) circlePlayBottom.style.display = "none";
     if (circlePauseBottom) circlePauseBottom.style.display = "block";
-    handleUnmuteRestart();
+    handleUnmuteRestart(dataRestart);
   };
 
   //--------------------------------------------------------------------------
@@ -3316,15 +3327,15 @@ try {
 
     //create a event when the user click in the continueButton the video will play the saved value
     continueButton.addEventListener("click", () => {
+      handleContinue(dataContinueDefault)
       createCirclePlay(dataContinueDefault)
-      handleContinue()
       continueContainer.remove()
-    }
-    );
+
+    });
 
     restartButton.addEventListener("click", () => {
       createCirclePlay(dataContinueDefault)
-      handleRestart()
+      handleRestart(dataContinueDefault)
       continueContainer.remove()
 
     }
@@ -3526,12 +3537,12 @@ try {
 
     // função para avançar o vídeo para o tempo guardado antes de reiniciar a página.
     continueButtonContinue.addEventListener("click", () =>
-      handleContinue(continueContainer)
+      handleContinue(dataContinueSmall)
     );
 
     // função para reiniciar o vídeo para 0.
     continueButtonRestart.addEventListener("click", () =>
-      handleRestart(continueContainer)
+      handleRestart(dataContinueSmall)
     );
 
     // adicionando o icone de continuar de onde parou e de reiniciar ao inicio do botão, antes do texto.
@@ -4961,11 +4972,14 @@ try {
 
     circleContainer.addEventListener("click", () => {
       if (videoElement.paused) {
+        videoElement.muted = false;
         if (play) play.style.display = "block";
         if (pause) pause.style.display = "none";
+        videoElement.play()
       } else {
         if (play) play.style.display = "none";
         if (pause) pause.style.display = "block";
+        videoElement.pause()
       }
     })
     circleContainer.addEventListener("mousemove", () => {
