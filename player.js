@@ -54,6 +54,7 @@ try {
 
         .ActiveSound {
           font-size: 1.2rem;
+          padding: 1rem;
 
           @media (max-width: 605px) {
             font-size: 1rem !important;
@@ -67,6 +68,7 @@ try {
 
         .videoStarted {
           font-size: 1.2rem;
+          padding: 1rem;
 
           @media (max-width: 605px) {
             font-size: 1rem !important;
@@ -778,6 +780,11 @@ try {
   //CREATE ELEMENTS============================================================================================================
 
   const createThumb = (dataThumb) => {
+    const exists = document.getElementById("thumbPause");
+    if (exists) {
+      exists.style.zIndex = 5;
+      return
+    }
     const thumbPause = document.createElement("img");
     thumbPause.style.position = "absolute";
     thumbPause.style.zIndex = 1;
@@ -1184,6 +1191,7 @@ try {
     const thumbPause = document.getElementById("thumbPause");
     // const circleContainer = document.getElementById("circle-container");
     const thumbInitial = document.getElementById("thumbInitial");
+    thumbInitial.style.zIndex = 5;
     const thumbButton = document.getElementById("idThumb");
     const circlePlay = document.getElementById("icon_play_control");
     const circlePause = document.getElementById("icon_pause_control");
@@ -2536,9 +2544,14 @@ try {
   //--------------------------------------------------------------------------
   const createInitialThumb = (dataThumbInitial) => {
     const existsThumbInitial = document.getElementById("thumbInitial");
-    if (existsThumbInitial) return
+    if (existsThumbInitial) {
+      existsThumbInitial.style.zIndex = 5;
+      return
+    }
+
     const thumbInitial = document.createElement("img");
     thumbInitial.style.position = "absolute";
+    thumbInitial.style.zIndex = 5;
     thumbInitial.style.top = 0;
 
     if (dataThumbInitial?.haveBorder) {
@@ -2548,7 +2561,6 @@ try {
       thumbInitial.style.borderRadius = "12px";
     }
 
-    thumbInitial.style.zIndex = 2;
     thumbInitial.id = "thumbInitial";
     if (dataThumbInitial?.haveAutoPlay) {
       thumbInitial.style.display = "none";
@@ -2572,7 +2584,10 @@ try {
   //====
   const createFinalThumb = (dataFinalThumb) => {
     const exists = document.getElementById("thumbFinal")
-    if (exists) return
+    if (exists) {
+      exists.style.zIndex = 5;
+      return
+    }
 
     console.log({ dataFinalThumb })
     const thumbFinal = document.createElement("img");
