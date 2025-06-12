@@ -369,6 +369,7 @@ try {
   videoContainer.className = "video-container";
   videoContainer.style.display = "flex";
   videoContainer.style.position = "relative";
+  videoContainer.style.backgroundColor = "#363636";
   let isAuto = false;
 
   const controlsContainer = document.createElement("div");
@@ -1232,9 +1233,6 @@ try {
           }
         );
       }
-
-      console.log("TTTTT", dataPlayPause)
-
       if (!dataPlayPause?.haveControls && dataPlayPause?.haveFakeBar) {
         console.log("SSSS")
         await Promise.resolve(sessionStorage.getItem("fakeBar")).then(
@@ -1259,24 +1257,24 @@ try {
       }
 
       if (videoElement?.paused) {
-        playPauseVideo();
-        if (dataPlayPause?.thumb) {
-          if (thumbPause) thumbPause.style.display = "none";
-          if (thumbButton) {
-            thumbButton.style.display = "none";
-            thumbButton.style.cursor = "pointer";
-          }
+        videoElement.play();
+        // if (dataPlayPause?.thumb) {
+        if (thumbPause) thumbPause.style.display = "none";
+        if (thumbButton) {
+          thumbButton.style.display = "none";
+          thumbButton.style.cursor = "pointer";
+          // }
         }
 
       } else {
         videoElement.pause();
-        if (dataPlayPause?.thumb) {
-          if (thumbPause) thumbPause.style.display = "block";
-          if (thumbButton) {
-            thumbButton.style.display = "block";
-            thumbButton.style.cursor = "pointer";
-          }
+        // if (dataPlayPause?.thumb) {
+        if (thumbPause) thumbPause.style.display = "block";
+        if (thumbButton) {
+          thumbButton.style.display = "block";
+          thumbButton.style.cursor = "pointer";
         }
+        // }
 
         if (dataPlayPause.thumbInicio) {
           if (thumbInitial) thumbInitial.style.display = "none";
@@ -2998,6 +2996,7 @@ try {
     playPauseContainer.style.color = dataControls?.controlColorIcon;
     playPauseContainer.style.fontSize = "16px";
     playPauseContainer.style.cursor = "pointer";
+    playPauseContainer.title = "Tocar / Pausar";
 
     const rewindContainer = document.createElement("div");
     rewindContainer.style.display = !dataControls?.haveRewind && "none";
@@ -3012,6 +3011,7 @@ try {
     forwardBottomControl.classList.add("fa-solid");
     forwardBottomControl.classList.add("fa-forward");
     forwardContainer.appendChild(forwardBottomControl);
+
     const mutedContainer = document.createElement("div");
     mutedContainer.id = "muted_container";
 
@@ -3036,10 +3036,14 @@ try {
     forwardContainer.style.color = dataControls?.controlColorIcon;
     forwardContainer.style.fontSize = "16px";
     forwardContainer.style.cursor = "pointer";
+    forwardContainer.title = "Avançar";
+    rewindContainer.title = "Voltar";
+
     mutedContainer.style.color = dataControls?.controlColorIcon;
     mutedContainer.style.fontSize = "16px";
     mutedContainer.style.cursor = "pointer";
     mutedContainer.addEventListener("click", handleMute);
+    mutedContainer.title = "Ligar ou desligar o áudio";
 
     playPauseContainer.appendChild(pauseBottomControl);
 
@@ -3049,6 +3053,8 @@ try {
     timerContainer.style.color = dataControls?.controlColorIcon;
     timerContainer.style.fontSize = "14px";
 
+    timerContainer.title = "Tempo do video";
+
     const timer = document.createElement("span");
     timer.id = "timer";
     timer.textContent = "00:00";
@@ -3056,6 +3062,57 @@ try {
 
     const duration = document.createElement("span");
     duration.id = "duration";
+
+    const fullScreenContainer = document.createElement("div");
+    // fullScreenContainer.classList.add("control__timer");
+    fullScreenContainer.style.color = dataControls?.controlColorIcon;
+    fullScreenContainer.style.position = "relative";
+    fullScreenContainer.style.fontSize = "14px";
+    fullScreenContainer.style.width = "17px";
+    fullScreenContainer.style.height = "17px";
+    fullScreenContainer.style.cursor = "pointer";
+    fullScreenContainer.style.marginRight = "1rem";
+    fullScreenContainer.style.borderRadius = "5px";
+
+
+    const fullScreemButton = document.createElement("i");
+    fullScreemButton.id = "fullscreembutton";
+    fullScreemButton.classList.add("fa-solid");
+    fullScreemButton.style.position = "relative";
+    fullScreemButton.style.fontSize = "14px";
+    fullScreemButton.style.zIndex = 100;
+    fullScreemButton.style.border = '2px solid';
+    fullScreemButton.style.width = '14px';
+    fullScreemButton.style.height = '14px';
+    fullScreemButton.style.borderRadius = "2px";
+    fullScreemButton.style.bordercolor = dataControls?.controlColorIcon;
+    fullScreemButton.style.backgroundColor = "transparent"
+    fullScreemButton.title = "Clique para alter entre tela cheia e janela";
+
+
+    let isFullScreem = false
+
+    fullScreemButton.addEventListener("click", () => {
+      if (isFullScreem) {
+        videoContainer.style.display = 'relative'
+        videoContainer.style.top = 'auto';
+        videoContainer.style.left = 'auto';
+        videoContainer.style.width = "auto"
+        videoContainer.style.height = "auto"
+        isFullScreem = false
+      } else {
+        videoContainer.style.display = 'absolute'
+        videoContainer.style.top = '0';
+        videoContainer.style.left = '0';
+        videoContainer.style.width = window.screen.width
+        videoContainer.style.height = window.screen.height
+        isFullScreem = true
+      }
+    })
+
+
+    fullScreenContainer.appendChild(fullScreemButton)
+
 
     videoElement.onloadedmetadata = function () {
       duration.textContent = formatTime(
@@ -3081,6 +3138,7 @@ try {
     forwardContainer.addEventListener("click", handleForward);
 
     controlBox.appendChild(innerControls);
+
     innerControls.appendChild(leftControls);
 
     leftControls.appendChild(playPauseContainer);
@@ -3088,6 +3146,9 @@ try {
     leftControls.appendChild(forwardContainer);
     leftControls.appendChild(mutedContainer);
     leftControls.appendChild(timerContainer);
+
+
+    innerControls.appendChild(fullScreenContainer);
 
     bottomContainer.appendChild(controlBox);
     containerControl.appendChild(topContainer);
