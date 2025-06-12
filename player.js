@@ -807,7 +807,6 @@ try {
     thumbPause.style.cursor = "pointer";
     thumbPause.style.zIndex = 0;
     thumbPause.addEventListener("click", () => {
-      alert("Aqui")
       handlePlayPause(dataThumb)
     });
     videoContainer.appendChild(thumbPause);
@@ -1260,8 +1259,6 @@ try {
       }
     }
     if (videoElement?.paused) {
-
-      alert("Aqui 1")
       videoElement.play();
       // if (dataPlayPause?.thumb) {
       if (thumbPause) thumbPause.style.display = "none";
@@ -2580,6 +2577,7 @@ try {
     thumbInitial.addEventListener("click", () => {
       // handleUnmuteRestart();
       thumbInitial.style.display = "none";
+      videoElement.play();
     });
 
     videoContainer.appendChild(thumbInitial);
