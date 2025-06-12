@@ -806,7 +806,10 @@ try {
     thumbPause.src = dataThumb?.thumb;
     thumbPause.style.cursor = "pointer";
     thumbPause.style.zIndex = 0;
-    thumbPause.addEventListener("click", () => handlePlayPause(dataThumb));
+    thumbPause.addEventListener("click", () => {
+      alert("Aqui")
+      handlePlayPause(dataThumb)
+    });
     videoContainer.appendChild(thumbPause);
   };
   //----------------------------------------------------------------------------
@@ -1255,32 +1258,34 @@ try {
           }
         );
       }
+    }
+    if (videoElement?.paused) {
 
-      if (videoElement?.paused) {
-        videoElement.play();
-        // if (dataPlayPause?.thumb) {
-        if (thumbPause) thumbPause.style.display = "none";
-        if (thumbButton) {
-          thumbButton.style.display = "none";
-          thumbButton.style.cursor = "pointer";
-          // }
-        }
-
-      } else {
-        videoElement.pause();
-        // if (dataPlayPause?.thumb) {
-        if (thumbPause) thumbPause.style.display = "block";
-        if (thumbButton) {
-          thumbButton.style.display = "block";
-          thumbButton.style.cursor = "pointer";
-        }
+      alert("Aqui 1")
+      videoElement.play();
+      // if (dataPlayPause?.thumb) {
+      if (thumbPause) thumbPause.style.display = "none";
+      if (thumbButton) {
+        thumbButton.style.display = "none";
+        thumbButton.style.cursor = "pointer";
         // }
+      }
 
-        if (dataPlayPause.thumbInicio) {
-          if (thumbInitial) thumbInitial.style.display = "none";
-        }
+    } else {
+      videoElement.pause();
+      // if (dataPlayPause?.thumb) {
+      if (thumbPause) thumbPause.style.display = "block";
+      if (thumbButton) {
+        thumbButton.style.display = "block";
+        thumbButton.style.cursor = "pointer";
+      }
+      // }
+
+      if (dataPlayPause.thumbInicio) {
+        if (thumbInitial) thumbInitial.style.display = "none";
       }
     }
+
   };
 
   //-------------------------------------------------------------------------------
