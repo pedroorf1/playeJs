@@ -3097,6 +3097,7 @@ try {
 
     fullScreemButton.addEventListener("click", () => {
       if (isFullScreem) {
+        document.exitFullscreen();
         videoContainer.style.display = 'relative'
         videoContainer.style.top = 'auto';
         videoContainer.style.left = 'auto';
@@ -3104,11 +3105,22 @@ try {
         videoContainer.style.height = "auto"
         isFullScreem = false
       } else {
-        videoContainer.style.display = 'absolute'
+        if (videoContainer.requestFullscreen) {
+          videoContainer.requestFullscreen();
+        } else if (videoContainer.mozRequestFullScreen) { // Firefox
+          videoContainer.mozRequestFullScreen();
+        } else if (videoContainer.webkitRequestFullscreen) { // Chrome, Safari e Opera
+          videoContainer.webkitRequestFullscreen();
+        } else if (videoContainer.msRequestFullscreen) { // IE/Edge
+          videoContainer.msRequestFullscreen();
+        }
+        videoContainer.style.display = 'fixed'
         videoContainer.style.top = '0';
         videoContainer.style.left = '0';
         videoContainer.style.width = window.screen.width
         videoContainer.style.height = window.screen.height
+
+
         isFullScreem = true
       }
     })
