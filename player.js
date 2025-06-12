@@ -16,6 +16,24 @@ try {
   let api_utl = "";
   let scriptsUrl = "";
 
+  function verifyEnvironment() {
+    const hostname = window.location.hostname;
+
+    console.log({ hostname })
+
+    if (hostname === 'localhost' || hostname === '127.0.0.1' || hostname == "") {
+      return 'LOCAL'
+    } else if (hostname.includes('dev')) {
+      return 'DEV'
+    } else {
+      return 'PROD'
+    }
+  }
+
+  console.log("TestEnvironment:::", verifyEnvironment())
+
+  ENV_TYPES[verifyEnvironment()]
+
   function loadEnvs() {
     if (ENVIRONMENT == ENV_TYPES["DEV"]) {
       api_utl = "https://dev-api.hostvsl.com.br/api/";
